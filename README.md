@@ -1,2 +1,2 @@
 # Desarrollo-De-Videojuegos
-Proyecto desarrollo de videojuegos para dispositivos moviles de Juan Quiroga y Ana Góemz
+Proyecto desarrollo de videojuegos para dispositivos moviles de Juan Quiroga y Ana Gómez
