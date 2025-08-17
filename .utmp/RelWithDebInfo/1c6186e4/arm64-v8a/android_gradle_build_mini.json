@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "D:\\SOFIA\\UNIVERSIDAD\\SEMESTRE IX\\DESARROLLO DE VIDEOJUEGOS\\GUIA1-18AGO\\Desarrollo-De-Videojuegos\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\CMakeLists.txt",
+    "D:\\SOFIA\\UNIVERSIDAD\\SEMESTRE IX\\DESARROLLO DE VIDEOJUEGOS\\GUIA1-18AGO\\Desarrollo-De-Videojuegos\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\GameActivity\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "D:\\SOFIA\\ADOBE\\6000.0.55f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\SOFIA\\UNIVERSIDAD\\SEMESTRE IX\\DESARROLLO DE VIDEOJUEGOS\\GUIA1-18AGO\\Desarrollo-De-Videojuegos\\.utmp\\RelWithDebInfo\\1c6186e4\\arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "D:\\SOFIA\\ADOBE\\6000.0.55f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\SOFIA\\UNIVERSIDAD\\SEMESTRE IX\\DESARROLLO DE VIDEOJUEGOS\\GUIA1-18AGO\\Desarrollo-De-Videojuegos\\.utmp\\RelWithDebInfo\\1c6186e4\\arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "game::@d02bb112ea9f9c2ed29f": {
+      "artifactName": "game",
+      "abi": "arm64-v8a",
+      "output": "D:\\SOFIA\\UNIVERSIDAD\\SEMESTRE IX\\DESARROLLO DE VIDEOJUEGOS\\GUIA1-18AGO\\Desarrollo-De-Videojuegos\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\1c6186e4\\obj\\arm64-v8a\\libgame.so",
+      "runtimeFiles": []
+    }
+  }
+}

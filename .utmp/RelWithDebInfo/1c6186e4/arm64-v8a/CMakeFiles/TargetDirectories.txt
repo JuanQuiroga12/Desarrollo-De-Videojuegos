@@ -1,0 +1,5 @@
+D:/SOFIA/UNIVERSIDAD/SEMESTRE IX/DESARROLLO DE VIDEOJUEGOS/GUIA1-18AGO/Desarrollo-De-Videojuegos/.utmp/RelWithDebInfo/1c6186e4/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/SOFIA/UNIVERSIDAD/SEMESTRE IX/DESARROLLO DE VIDEOJUEGOS/GUIA1-18AGO/Desarrollo-De-Videojuegos/.utmp/RelWithDebInfo/1c6186e4/arm64-v8a/CMakeFiles/rebuild_cache.dir
+D:/SOFIA/UNIVERSIDAD/SEMESTRE IX/DESARROLLO DE VIDEOJUEGOS/GUIA1-18AGO/Desarrollo-De-Videojuegos/.utmp/RelWithDebInfo/1c6186e4/arm64-v8a/GameActivity/CMakeFiles/game.dir
+D:/SOFIA/UNIVERSIDAD/SEMESTRE IX/DESARROLLO DE VIDEOJUEGOS/GUIA1-18AGO/Desarrollo-De-Videojuegos/.utmp/RelWithDebInfo/1c6186e4/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+D:/SOFIA/UNIVERSIDAD/SEMESTRE IX/DESARROLLO DE VIDEOJUEGOS/GUIA1-18AGO/Desarrollo-De-Videojuegos/.utmp/RelWithDebInfo/1c6186e4/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
