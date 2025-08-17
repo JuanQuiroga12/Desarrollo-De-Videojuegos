@@ -246,7 +246,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 166775321}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 79887288}
+        m_TargetAssemblyTypeName: Controles, Assembly-CSharp
+        m_MethodName: TranslateDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &166775321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,7 +648,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 265392248}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 79887288}
+        m_TargetAssemblyTypeName: Controles, Assembly-CSharp
+        m_MethodName: RotateRight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &265392248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,7 +1054,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 406515780}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 79887288}
+        m_TargetAssemblyTypeName: Controles, Assembly-CSharp
+        m_MethodName: Scale
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &406515780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2666,7 +2702,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2046143994}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 79887288}
+        m_TargetAssemblyTypeName: Controles, Assembly-CSharp
+        m_MethodName: TranslateRight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2046143994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2796,7 +2844,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 1
+          m_FloatArgument: 0.5
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
