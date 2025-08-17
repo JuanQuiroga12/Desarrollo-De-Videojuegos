@@ -119,6 +119,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &79887287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 79887289}
+  - component: {fileID: 79887288}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &79887288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79887287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10f02f190bf0d9344b07982643509ed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rabbit: {fileID: 1683034736}
+--- !u!4 &79887289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79887287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.06061266, y: 0.1666365, z: -0.3301224}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &166775318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,7 +1857,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1544675230273928, guid: bf75e17054aa8d648b2b9228a11e4d50, type: 3}
       propertyPath: m_Name
-      value: prf_Rabbit11
+      value: Rabbit
       objectReference: {fileID: 0}
     - target: {fileID: 4361756542342498, guid: bf75e17054aa8d648b2b9228a11e4d50, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1859,6 +1904,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf75e17054aa8d648b2b9228a11e4d50, type: 3}
+--- !u!1 &1683034736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1544675230273928, guid: bf75e17054aa8d648b2b9228a11e4d50, type: 3}
+  m_PrefabInstance: {fileID: 1683034735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1760558439
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,3 +2801,4 @@ SceneRoots:
   - {fileID: 1683034735}
   - {fileID: 655670005}
   - {fileID: 2041859878}
+  - {fileID: 79887289}
