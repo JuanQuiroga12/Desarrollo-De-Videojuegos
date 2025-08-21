@@ -5,9 +5,27 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GUIA1.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Menu.unity
+    guid: 5967d18f81cc7df49af8272336076e27
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Touch.unity
+    guid: c2ef3de8eb8f5cf47b43d59b483cd5b5
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Multitouch.unity
+    guid: d6e6d44978ac9054ca5561ee44c7d9b0
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Vpad.unity
+    guid: bac87f98e5dfbc14390d9f769873fb0c
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Accelerometer.unity
+    guid: 814fef96bb7569b439766a080375cea6
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Gestures.unity
+    guid: ffa1b28b4f235be4fb7ff95b99ed2810
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
