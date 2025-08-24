@@ -1,0 +1,2 @@
+D:\Unity\Desarrollo-De-Videojuegos-Clon1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+D:\Unity\Desarrollo-De-Videojuegos-Clon1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
