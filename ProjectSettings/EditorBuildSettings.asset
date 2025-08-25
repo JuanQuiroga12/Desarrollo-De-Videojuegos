@@ -15,11 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/GUIA2/Touch.unity
     guid: c2ef3de8eb8f5cf47b43d59b483cd5b5
   - enabled: 1
-    path: Assets/Scenes/GUIA2/Multitouch.unity
-    guid: d6e6d44978ac9054ca5561ee44c7d9b0
-  - enabled: 1
     path: Assets/Scenes/GUIA2/Vpad.unity
     guid: bac87f98e5dfbc14390d9f769873fb0c
+  - enabled: 1
+    path: Assets/Scenes/GUIA2/Multitouch.unity
+    guid: d6e6d44978ac9054ca5561ee44c7d9b0
   - enabled: 1
     path: Assets/Scenes/GUIA2/Accelerometer.unity
     guid: 814fef96bb7569b439766a080375cea6
