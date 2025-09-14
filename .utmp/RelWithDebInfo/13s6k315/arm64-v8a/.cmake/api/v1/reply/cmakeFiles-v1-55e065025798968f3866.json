@@ -41,7 +41,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
 		},
 		{
 			"isExternal" : true,
@@ -307,7 +307,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -541,7 +541,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -692,7 +692,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -786,20 +786,20 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
 		},
 		{
 			"path" : "GameActivity/CMakeLists.txt"
 		},
 		{
 			"isExternal" : true,
-			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity/game-activityConfig.cmake"
+			"path" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity/game-activityConfig.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/4i3h4l10/arm64-v8a",
+		"build" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/.utmp/RelWithDebInfo/13s6k315/arm64-v8a",
 		"source" : "D:/Unity/Desarrollo-De-Videojuegos-Clon1/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp"
 	},
 	"version" : 
