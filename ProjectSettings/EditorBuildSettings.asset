@@ -26,9 +26,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/GUIA2/Gestures.unity
     guid: ffa1b28b4f235be4fb7ff95b99ed2810
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Guia 3.unity
     guid: ad4b6b322025b9a47b55b79565e9fd7d
+  - enabled: 1
+    path: Assets/Scenes/LoginScene.unity
+    guid: 7066c8b29bc778e429200d72b2e3bd20
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: 18a0fcdbfb17b3842b6fc348e93ba825
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

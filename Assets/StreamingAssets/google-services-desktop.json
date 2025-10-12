@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "708505059401",
+    "firebase_url": "https://proyecto-isometric-default-rtdb.firebaseio.com",
+    "project_id": "proyecto-isometric",
+    "storage_bucket": "proyecto-isometric.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708505059401:android:a6dd1c4d2fc3b1d200bf98",
+        "android_client_info": {
+          "package_name": "com.UMNG.ProyectoIsometric"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB18iA5VblPl3HRU2XRCI1kruA2o5XJnC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
