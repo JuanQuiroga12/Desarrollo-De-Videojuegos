@@ -1,0 +1,666 @@
+0001/01/01 00:00:00.000 -1 -1 Info  --------- beginning of main
+2025/11/09 23:34:34.771 22244 22244 Info oyectoIsometric Using CollectorTypeCMC GC.
+2025/11/09 23:34:34.773 22244 22244 Error oyectoIsometric Not starting debugger since process cannot load the jdwp agent.
+2025/11/09 23:34:34.775 22244 22244 Debug nativeloader Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+2025/11/09 23:34:34.776 22244 22244 Debug ActivityThread setConscryptValidator
+2025/11/09 23:34:34.776 22244 22244 Debug ActivityThread setConscryptValidator - put
+2025/11/09 23:34:34.788 22244 22244 Debug nativeloader Configuring clns-7 for other apk /data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64:/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.UMNG.ProyectoIsometric
+2025/11/09 23:34:34.792 22244 22244 Verbose GraphicsEnvironment Currently set values for:
+2025/11/09 23:34:34.792 22244 22244 Verbose GraphicsEnvironment   angle_gl_driver_selection_pkgs=[]
+2025/11/09 23:34:34.792 22244 22244 Verbose GraphicsEnvironment   angle_gl_driver_selection_values=[]
+2025/11/09 23:34:34.792 22244 22244 Verbose GraphicsEnvironment Global.Settings values are invalid: number of packages: 0, number of values: 0
+2025/11/09 23:34:34.792 22244 22244 Verbose GraphicsEnvironment App is not on the allowlist for updatable production driver.
+2025/11/09 23:34:34.796 22244 22244 Info FirebaseApp Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+2025/11/09 23:34:34.798 22244 22244 Info FirebaseInitProvider FirebaseApp initialization successful
+2025/11/09 23:34:34.804 22244 22244 Debug nativeloader Load /data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64/libgame.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): ok
+2025/11/09 23:34:34.806 22244 22244 Debug AppCompatDelegate Checking for metadata for AppLocalesMetadataHolderService : Service not found
+2025/11/09 23:34:34.812 22244 22262 Warn oyectoIsometric ClassLoaderContext classpath size mismatch. expected=1, found=0 (DLC[];PCL[base.apk*2610929939]{PCL[/system/framework/org.apache.http.legacy.jar*3637333363]#PCL[/system/framework/com.android.media.remotedisplay.jar*2042759013]#PCL[/system/framework/com.android.location.provider.jar*3414091812]#PCL[/system/system_ext/framework/org.carconnectivity.android.digitalkey.rangingintent.jar*560278203]#PCL[/system/system_ext/framework/org.carconnectivity.android.digitalkey.secureelement.jar*3277496667]#PCL[/system_ext/framework/org.carconnectivity.android.digitalkey.timesync.jar*1887653037]#PCL[/system_ext/framework/androidx.window.extensions.jar*393752484]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3240773605]} | DLC[];PCL[])
+2025/11/09 23:34:34.813 22244 22262 Info DynamiteModule Considering local module com.google.android.gms.measurement.dynamite:155 and remote module com.google.android.gms.measurement.dynamite:165
+2025/11/09 23:34:34.813 22244 22262 Info DynamiteModule Selected remote version of com.google.android.gms.measurement.dynamite, version >= 165
+2025/11/09 23:34:34.813 22244 22262 Verbose DynamiteModule Dynamite loader version >= 2, using loadModule2NoCrashUtils
+2025/11/09 23:34:34.814 22244 22244 Debug gti.InputConnection InputConnection created
+2025/11/09 23:34:34.817 22244 22244 Info DecorView setWindowBackground: isPopOver=false color=fffafafa d=android.graphics.drawable.ColorDrawable@4d37b0f
+2025/11/09 23:34:34.818 22244 22262 Warn System ClassLoader referenced unknown path: 
+2025/11/09 23:34:34.818 22244 22262 Debug nativeloader Configuring clns-8 for other apk . target_sdk_version=36, uses_libraries=, library_path=/data/app/~~8ncPmljCtawxZwjBJdr5AQ==/com.google.android.gms-G2TiHQlDP2vMXOb2nlaVwA==/lib/arm64:/data/app/~~8ncPmljCtawxZwjBJdr5AQ==/com.google.android.gms-G2TiHQlDP2vMXOb2nlaVwA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+2025/11/09 23:34:34.819 22244 22244 Debug nativeloader Load /data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64/libmain.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): ok
+2025/11/09 23:34:34.831 22244 22244 Info IL2CPP JNI_OnLoad
+2025/11/09 23:34:34.831 22244 22244 Verbose Unity Context Type: GameActivity
+2025/11/09 23:34:34.832 22244 22262 Warn oyectoIsometric ClassLoaderContext classpath element checksum mismatch. expected=2610929939, found=4005099606 (DLC[];PCL[base.apk*2610929939]{PCL[/system/framework/org.apache.http.legacy.jar*3637333363]#PCL[/system/framework/com.android.media.remotedisplay.jar*2042759013]#PCL[/system/framework/com.android.location.provider.jar*3414091812]#PCL[/system/system_ext/framework/org.carconnectivity.android.digitalkey.rangingintent.jar*560278203]#PCL[/system/system_ext/framework/org.carconnectivity.android.digitalkey.secureelement.jar*3277496667]#PCL[/system_ext/framework/org.carconnectivity.android.digitalkey.timesync.jar*1887653037]#PCL[/system_ext/framework/androidx.window.extensions.jar*393752484]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3240773605]} | DLC[];PCL[/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk*4005099606])
+2025/11/09 23:34:34.832 22244 22244 Warn WindowOnBackDispatcher OnBackInvokedCallback is not enabled for the application.
+2025/11/09 23:34:34.832 22244 22244 Warn WindowOnBackDispatcher Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+2025/11/09 23:34:34.832 22244 22244 Info GameActivity Looking for library libgame.so
+2025/11/09 23:34:34.833 22244 22244 Info GameActivity Found library libgame.so. Loading...
+2025/11/09 23:34:34.833 22244 22244 Debug GameActivity GameActivity_register
+2025/11/09 23:34:34.833 22244 22244 Debug GameActivity SDK version: 35
+2025/11/09 23:34:34.834 22244 22271 Info Unity UnityApplication::CreateInstance
+2025/11/09 23:34:34.834 22244 22271 Info Unity GameActivity Package Version '3.0.5'
+2025/11/09 23:34:34.834 22244 22271 Info Unity Starting Game Loop
+2025/11/09 23:34:34.837 22244 22271 Info Unity Handle cmd APP_CMD_START(11)
+2025/11/09 23:34:34.839 22244 22271 Info Unity Handle cmd APP_CMD_RESUME(12)
+2025/11/09 23:34:34.841 22244 22244 Info ViewRootImpl dVRR is disabled
+2025/11/09 23:34:34.842 22244 22244 Info InsetsController setRequestedVisibleTypes: visible=false, mask=statusBars navigationBars captionBar, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.hide:1452 android.view.InsetsController.hide:1368 android.view.ViewRootImpl.controlInsetsForCompatibility:3953 android.view.ViewRootImpl.setView:1955 android.view.WindowManagerGlobal.addView:578 android.view.WindowManagerImpl.addView:158 android.app.ActivityThread.handleResumeActivity:6060 
+2025/11/09 23:34:34.844 22244 22244 Debug InputTransport Input channel constructed: '7f5b0da', fd=130
+2025/11/09 23:34:34.844 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.setView:1999, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,0][0,0] mVisible=false mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:34.844 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e synced displayState. AttachInfo displayState=2
+2025/11/09 23:34:34.845 22244 22244 Debug InputTransport setImprovementEvent.. GameApp 1 1  375.781  377.092 8785681.000 4192.454 2964.065
+2025/11/09 23:34:34.845 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e setView = com.android.internal.policy.DecorView@6b4ef65 IsHRR=false TM=true
+2025/11/09 23:34:34.845 22244 22244 Info IDS_TAG Clearing training data of android.app.Application@1e1b92f
+2025/11/09 23:34:34.845 22244 22244 Info IDS_TAG Starting IDS observe window
+2025/11/09 23:34:34.845 22244 22244 Info IDS_TAG Getting Shared Preference for android.app.Application@1e1b92f uid = 10433
+2025/11/09 23:34:34.846 22244 22244 Info IDS_TAG App android.app.Application@1e1b92f has not finished training
+2025/11/09 23:34:34.846 22244 22244 Info IDS_TAG Closing IDS observe window
+2025/11/09 23:34:34.846 22244 22244 Info IDS_TAG Getting Shared Preference for android.app.Application@1e1b92f uid = 10433
+2025/11/09 23:34:34.847 22244 22244 Info IDS_TAG IDS count updated to 1 for android.app.Application@1e1b92f
+2025/11/09 23:34:34.847 22244 22244 Info SurfaceView@a64ec96 onWindowVisibilityChanged(0) true com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 V.E...... ......I. 0,0-0,0 #7f08012f app:id/unitySurfaceView} of VRI[UnityPlayerGameActivity]@ccfc32e
+2025/11/09 23:34:34.847 22244 22244 Debug SurfaceView 174386326 updateSurface: has no frame
+2025/11/09 23:34:34.848 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.848 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.848 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:34.852 22244 22244 Error oyectoIsometric Unable to open libpenguin.so: dlopen failed: library "libpenguin.so" not found.
+2025/11/09 23:34:34.852 22244 22244 Info BufferQueueProducer [](id:56e400000000,api:0,p:0,c:22244) setDequeueTimeout:2077252342
+2025/11/09 23:34:34.852 22244 22244 Info BLASTBufferQueue_Java new BLASTBufferQueue, mName= VRI[UnityPlayerGameActivity]@ccfc32e mNativeObject= 0xb400007b2557ecb0 sc.mNativeObject= 0xb400007905577b10 caller= android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3397 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751 android.view.Choreographer$CallbackRecord.run:1760 android.view.Choreographer.doCallbacks:1216 android.view.Choreographer.doFrame:1142 android.view.Choreographer$FrameDisplayEventReceiver.run:1707 
+2025/11/09 23:34:34.852 22244 22244 Info BLASTBufferQueue_Java update, w= 1080 h= 2316 mName = VRI[UnityPlayerGameActivity]@ccfc32e mNativeObject= 0xb400007b2557ecb0 sc.mNativeObject= 0xb400007905577b10 format= -3 caller= android.graphics.BLASTBufferQueue.<init>:88 android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3397 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 
+2025/11/09 23:34:34.852 22244 22244 Warn libc Access denied finding property "vendor.display.enable_optimal_refresh_rate"
+2025/11/09 23:34:34.852 22244 22244 Warn libc Access denied finding property "vendor.gpp.create_frc_extension"
+2025/11/09 23:34:34.852 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Relayout returned: old=(0,0,1080,2316) new=(0,0,1080,2316) relayoutAsync=false req=(1080,2316)0 dur=3 res=0x3 s={true 0xb4000079e5588ae0} ch=true seqId=0
+2025/11/09 23:34:34.853 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e performConfigurationChange setNightDimText nightDimLevel=0
+2025/11/09 23:34:34.853 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.853 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.853 22244 22244 Debug SurfaceView 174386326 updateSurface: has no frame
+2025/11/09 23:34:34.853 22244 22244 Info SurfaceView@a64ec96 windowStopped(false) true com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 V.E...... ......ID 0,0-1080,2316 #7f08012f app:id/unitySurfaceView} of VRI[UnityPlayerGameActivity]@ccfc32e
+2025/11/09 23:34:34.853 22244 22244 Debug SurfaceView 174386326 updateSurface: has no frame
+2025/11/09 23:34:34.853 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e applyTransactionOnDraw applyImmediately
+2025/11/09 23:34:34.853 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.853 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.853 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.853 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.853 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e reportNextDraw android.view.ViewRootImpl.performTraversals:5193 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751 android.view.Choreographer$CallbackRecord.run:1760 
+2025/11/09 23:34:34.853 22244 22244 Info SurfaceView 174386326 Changes: creating=true format=true size=true visible=true alpha=false hint=false visible=true left=true top=true z=false attached=true lifecycleStrategy=false
+2025/11/09 23:34:34.854 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:34.854 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:34.854 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:34.854 22244 22271 Info Unity Handle cmd APP_CMD_CONTENT_RECT_CHANGED(5)
+2025/11/09 23:34:34.854 22244 22244 Info BufferQueueProducer [](id:56e400000001,api:0,p:0,c:22244) setDequeueTimeout:2077252342
+2025/11/09 23:34:34.855 22244 22244 Info BLASTBufferQueue_Java update, w= 1080 h= 2316 mName = null mNativeObject= 0xb400007b25581870 sc.mNativeObject= 0xb400007905579f10 format= 4 caller= android.view.SurfaceView.createBlastSurfaceControls:1642 android.view.SurfaceView.updateSurface:1318 android.view.SurfaceView.lambda$new$0:268 android.view.SurfaceView.$r8$lambda$NfZyM_TG8F8lqzaOVZ7noREFjzU:0 android.view.SurfaceView$$ExternalSyntheticLambda1.onPreDraw:0 android.view.ViewTreeObserver.dispatchOnPreDraw:1226 
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView 174386326 Cur surface: Surface(name=null mNativeObject=0)/@0x17d7275
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView@a64ec96 pST: sr = Rect(0, 0 - 1080, 2316) sw = 1080 sh = 2316
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView@a64ec96 onSSPAndSRT: pl = 0 pt = 0 sx = 1.0 sy = 1.0
+2025/11/09 23:34:34.855 22244 22244 Debug SurfaceView 174386326 performSurfaceTransaction UI Thread position = [0, 0, 1080, 2316] surfaceSize = 1080x2316
+2025/11/09 23:34:34.855 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e applyTransactionOnDraw applyImmediately
+2025/11/09 23:34:34.855 22244 22244 Warn libc Access denied finding property "vendor.display.enable_optimal_refresh_rate"
+2025/11/09 23:34:34.855 22244 22244 Warn libc Access denied finding property "vendor.gpp.create_frc_extension"
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView@a64ec96 updateSurface: mVisible = true mSurface.isValid() = true
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView@a64ec96 updateSurface: mSurfaceCreated = false surfaceChanged = true visibleChanged = true
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView 174386326 visibleChanged -- surfaceCreated
+2025/11/09 23:34:34.855 22244 22244 Info SurfaceView@a64ec96 surfaceCreated 2 #8 com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 V.E...... ......ID 0,0-1080,2316 #7f08012f app:id/unitySurfaceView}
+2025/11/09 23:34:34.856 22244 22244 Info SurfaceView 174386326 surfaceChanged -- format=4 w=1080 h=2316
+2025/11/09 23:34:34.856 22244 22244 Info SurfaceView@a64ec96 surfaceChanged (1080,2316) 2 #8 com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 V.E...... ......ID 0,0-1080,2316 #7f08012f app:id/unitySurfaceView}
+2025/11/09 23:34:34.856 22244 22244 Info SurfaceView 174386326 surfaceRedrawNeeded
+2025/11/09 23:34:34.856 22244 22271 Info Unity Handle cmd APP_CMD_INIT_WINDOW(1)
+2025/11/09 23:34:34.856 22244 22244 Info SurfaceView 174386326 finishedDrawing
+2025/11/09 23:34:34.856 22244 22244 Verbose SurfaceView Layout: x=0 y=0 w=1080 h=2316, frame=Rect(0, 0 - 1080, 2316)
+2025/11/09 23:34:34.856 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e applyTransactionOnDraw applyImmediately
+2025/11/09 23:34:34.856 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e Setup new sync=wmsSync-VRI[UnityPlayerGameActivity]@ccfc32e#1
+2025/11/09 23:34:34.856 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Creating new active sync group VRI[UnityPlayerGameActivity]@ccfc32e#2
+2025/11/09 23:34:34.864 22244 22244 Info BLASTBufferQueue [VRI[UnityPlayerGameActivity]@ccfc32e#0](f:0,a:0,s:0) onFrameAvailable the first frame is available
+2025/11/09 23:34:34.864 22244 22244 Info SurfaceComposerClient apply transaction with the first frame. layerId: 1199, bufferData(ID: 95537252532224, frameNumber: 1)
+2025/11/09 23:34:34.864 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e reportDrawFinished seqId=0
+2025/11/09 23:34:34.864 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.864 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.864 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.864 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.865 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleInsetsControlChanged:2888, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,0][0,0] mVisible=false mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:34.868 22244 22273 Error oyectoIsometric No package ID 6a found for resource ID 0x6a0b000f.
+2025/11/09 23:34:34.869 22244 22273 Info FA App measurement initialized, version: 143003
+2025/11/09 23:34:34.869 22244 22273 Info FA To enable debug logging run: adb shell setprop log.tag.FA VERBOSE
+2025/11/09 23:34:34.869 22244 22273 Info FA To enable faster debug mode event logging run:
+2025/11/09 23:34:34.869 22244 22273 Info FA   adb shell setprop debug.firebase.analytics.app com.UMNG.ProyectoIsometric
+2025/11/09 23:34:34.870 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=statusBars navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:34.870 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:34.870 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized mSyncSeqId = 0
+2025/11/09 23:34:34.870 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e reportNextDraw android.view.ViewRootImpl.handleResized:2864 android.view.ViewRootImpl.-$$Nest$mhandleResized:0 android.view.ViewRootImpl$W.resized:13691 android.app.servertransaction.WindowStateResizeItem.execute:64 android.app.servertransaction.WindowStateTransactionItem.execute:59 
+2025/11/09 23:34:34.873 22244 22271 Info Unity MemoryManager: Using 'Dynamic Heap' Allocator.
+2025/11/09 23:34:34.877 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.877 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.877 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.877 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.877 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e Setup new sync=wmsSync-VRI[UnityPlayerGameActivity]@ccfc32e#3
+2025/11/09 23:34:34.877 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Creating new active sync group VRI[UnityPlayerGameActivity]@ccfc32e#4
+2025/11/09 23:34:34.881 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e reportDrawFinished seqId=0
+2025/11/09 23:34:34.890 22244 22244 Debug InputMethodManagerUtils startInputInner - Id : 0
+2025/11/09 23:34:34.890 22244 22244 Info InputMethodManager startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+2025/11/09 23:34:34.899 22244 22256 Debug InputTransport Input channel constructed: 'ClientS', fd=149
+2025/11/09 23:34:34.900 22244 22271 Info Unity SystemInfo CPU = ARM64 FP ASIMD AES, Cores = 8, Memory = 11204mb
+2025/11/09 23:34:34.900 22244 22271 Info Unity SystemInfo ARM big.LITTLE configuration: 4 big (mask: 0xf0), 4 little (mask: 0xf)
+2025/11/09 23:34:34.900 22244 22271 Info Unity ApplicationInfo 'com.UMNG.ProyectoIsometric', Version '0.1.1', Min API Level '24', Target API Level '36'
+2025/11/09 23:34:34.900 22244 22271 Info Unity Built from '6000.0/respin/6000.0.59f1-063c55f2fd0f' branch, Version '6000.0.59f2 (ef281c76c3c1)', Build type 'Release', Scripting Backend 'il2cpp', CPU 'arm64-v8a', Stripping 'Enabled'
+2025/11/09 23:34:34.900 22244 22273 Info FA Tag Manager is not found and thus will not be used
+2025/11/09 23:34:34.903 22244 22271 Info Unity Device Model 'samsung SM-S908U1', OS 'Android OS 15 (API 35)'
+2025/11/09 23:34:34.907 22244 22244 Info BLASTBufferQueue_Java update, w= 1080 h= 2316 mName = VRI[UnityPlayerGameActivity]@ccfc32e mNativeObject= 0xb400007b2557ecb0 sc.mNativeObject= 0xb4000079055775d0 format= -3 caller= android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3386 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751 
+2025/11/09 23:34:34.907 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Relayout returned: old=(0,0,1080,2316) new=(0,0,1080,2316) relayoutAsync=false req=(1080,2316)0 dur=5 res=0x0 s={true 0xb4000079e5588ae0} ch=false seqId=0
+2025/11/09 23:34:34.907 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e updateBoundsLayer: t=android.view.SurfaceControl$Transaction@c14a36e sc=Surface(name=Bounds for - com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity@0)/@0x3a94a0f frame=3
+2025/11/09 23:34:34.907 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e applyTransactionOnDraw applyImmediately
+2025/11/09 23:34:34.907 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.907 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.907 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.907 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.920 22244 22244 Info InsetsSourceConsumer applyRequestedVisibilityToControl: visible=false, type=ime, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity
+2025/11/09 23:34:34.920 22244 22244 Info BLASTBufferQueue_Java update, w= 1080 h= 2316 mName = VRI[UnityPlayerGameActivity]@ccfc32e mNativeObject= 0xb400007b2557ecb0 sc.mNativeObject= 0xb400007905577b10 format= -3 caller= android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3386 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751 
+2025/11/09 23:34:34.920 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Relayout returned: old=(0,0,1080,2316) new=(0,0,1080,2316) relayoutAsync=false req=(1080,2316)0 dur=2 res=0x0 s={true 0xb4000079e5588ae0} ch=false seqId=0
+2025/11/09 23:34:34.920 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.920 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.920 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.920 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.920 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.920 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.981 22244 22271 Info Unity Company Name: UMNG
+2025/11/09 23:34:34.981 22244 22271 Info Unity Product Name: Proyecto Isometric
+2025/11/09 23:34:34.985 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:34.985 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:34.987 22244 22271 Debug vulkan searching for layers in '/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64'
+2025/11/09 23:34:34.987 22244 22271 Debug vulkan searching for layers in '/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!/lib/arm64-v8a'
+2025/11/09 23:34:34.991 22244 22271 Warn Adreno-AppProfiles Could not find QSPM HAL service. Skipping adreno profile processing.
+2025/11/09 23:34:34.991 22244 22271 Info AdrenoVK-0 ===== BEGIN DUMP OF OVERRIDDEN SETTINGS =====
+2025/11/09 23:34:34.991 22244 22271 Info AdrenoVK-0 ===== END DUMP OF OVERRIDDEN SETTINGS =====
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 QUALCOMM build          : 2e251f7ab9, Iee84b1ed59
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Build Date              : 05/16/25
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Shader Compiler Version : EV031.36.08.28
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Local Branch            : 
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.1.0.R1.11.00.00.816.269
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Remote Branch           : NONE
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Reconstruct Branch      : NOTHING
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Build Config            : S P 12.1.1 AArch64
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Driver Version          : 0615.87.2
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 PFP                     : 0x01730181
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 ME                      : 0x00000000
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Application Name    : Proyecto Isometric
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Application Version : 0x00000001
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Engine Name         : Unity
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Engine Version      : 0x00000001
+2025/11/09 23:34:34.992 22244 22271 Info AdrenoVK-0 Api Version         : 0x00401000
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 QUALCOMM build          : 2e251f7ab9, Iee84b1ed59
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Build Date              : 05/16/25
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Shader Compiler Version : EV031.36.08.28
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Local Branch            : 
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.1.0.R1.11.00.00.816.269
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Remote Branch           : NONE
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Reconstruct Branch      : NOTHING
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Build Config            : S P 12.1.1 AArch64
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Driver Version          : 0615.87.2
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 PFP                     : 0x01730181
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 ME                      : 0x00000000
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Application Name    : Proyecto Isometric
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Application Version : 0x00000001
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Engine Name         : Unity
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Engine Version      : 0x00000001
+2025/11/09 23:34:34.994 22244 22271 Info AdrenoVK-0 Api Version         : 0x00401000
+2025/11/09 23:34:35.002 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x38
+2025/11/09 23:34:35.002 22244 22271 Error Gralloc4 isSupported(1, 1, 56, 1, ...) failed with 5
+2025/11/09 23:34:35.002 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 56 usage b00: 5
+2025/11/09 23:34:35.002 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.002 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x3b
+2025/11/09 23:34:35.002 22244 22271 Error Gralloc4 isSupported(1, 1, 59, 1, ...) failed with 5
+2025/11/09 23:34:35.002 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 59 usage b00: 5
+2025/11/09 23:34:35.002 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.002 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x38
+2025/11/09 23:34:35.002 22244 22271 Error Gralloc4 isSupported(1, 1, 56, 1, ...) failed with 5
+2025/11/09 23:34:35.002 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 56 usage b00: 5
+2025/11/09 23:34:35.002 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.002 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x3b
+2025/11/09 23:34:35.002 22244 22271 Error Gralloc4 isSupported(1, 1, 59, 1, ...) failed with 5
+2025/11/09 23:34:35.002 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 59 usage b00: 5
+2025/11/09 23:34:35.002 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.008 22244 22271 Verbose MediaRouter Selecting route: RouteInfo{ name=Dispositivo, description=null, status=null, category=RouteCategory{ name=Sistema types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
+2025/11/09 23:34:35.008 22244 22271 Info MediaRouter Skip setBluetoothA2dpOn(): types=8388615, isPlaybackActive()=false, BT route=null
+2025/11/09 23:34:35.014 22244 22271 Info AAudio AAudioStreamBuilder_openStream() called ----------------------------------------
+2025/11/09 23:34:35.014 22244 22271 Info AudioStreamBuilder rate   =  24000, channels  = 2, channelMask = 0x80000003, format   = 5, sharing = SH, dir = OUTPUT
+2025/11/09 23:34:35.014 22244 22271 Info AudioStreamBuilder device =      0, sessionId = -1, perfMode = 12, callback: ON with frames = 512
+2025/11/09 23:34:35.014 22244 22271 Info AudioStreamBuilder usage  =      0, contentType = 0, inputPreset = 0, allowedCapturePolicy = 0
+2025/11/09 23:34:35.014 22244 22271 Info AudioStreamBuilder privacy sensitive = false, opPackageName = (null), attributionTag = (null)
+2025/11/09 23:34:35.014 22244 22271 Debug oyectoIsometric PlayerBase::PlayerBase()
+2025/11/09 23:34:35.103 22244 22271 Debug AudioStreamInternal_Client configureDataInformation() original HW burst = 48, minMicros = 2000 => SW burst = 48
+2025/11/09 23:34:35.103 22244 22271 Debug IsochronousClockModel setFramesPerBurst() - mFramesPerBurst = 48 - mBurstPeriodNanos = 2000000
+2025/11/09 23:34:35.103 22244 22271 Debug AAudioStream setState(s#1) from 0 to 2
+2025/11/09 23:34:35.103 22244 22271 Debug AAudioFlowGraph configure() source format = 0x00000005, channels = 2, sample rate = 24000, sink format = 0x00000005, channels = 2, sample rate = 24000, useMonoBlend = 0, audioBalance = 0.000000, useVolumeRamps 0
+2025/11/09 23:34:35.105 22244 22271 Info AAudio AAudioStreamBuilder_openStream() returns 0 = AAUDIO_OK for s#1 ----------------
+2025/11/09 23:34:35.107 22244 22271 Debug AAudio AAudioStream_requestStart(s#1) called --------------
+2025/11/09 23:34:35.107 22244 22271 Debug AAudioStream setState(s#1) from 2 to 3
+2025/11/09 23:34:35.141 22244 22271 Debug AAudio AAudioStream_requestStart(s#1) returned 0 ---------
+2025/11/09 23:34:35.143 22244 22244 Debug MediaRouter onRestoreRoute() : route=RouteInfo{ name=Dispositivo, description=null, status=null, category=RouteCategory{ name=Sistema types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
+2025/11/09 23:34:35.143 22244 22244 Verbose MediaRouter Selecting route: RouteInfo{ name=Dispositivo, description=null, status=null, category=RouteCategory{ name=Sistema types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
+2025/11/09 23:34:35.143 22244 22339 Debug AudioStreamInternalPlay_Client callbackLoop() entering >>>>>>>>>>>>>>>
+2025/11/09 23:34:35.143 22244 22339 Debug AudioStreamInternal_Client onEventFromServer - got AAUDIO_SERVICE_EVENT_STARTED
+2025/11/09 23:34:35.143 22244 22339 Debug AAudioStream setState(s#1) from 3 to 4
+2025/11/09 23:34:35.222 22244 22244 Info InsetsController cancelAnimation: types=statusBars navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:87 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 
+2025/11/09 23:34:35.223 22244 22278 Warn InteractionJankMonitor Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.UMNG.ProyectoIsometric
+2025/11/09 23:34:35.247 22244 22271 Info IL2CPP Locale es-US
+2025/11/09 23:34:35.274 22244 22271 Debug SensorManager registerListener :: 11, lsm6dso LSM6DSO Accelerometer Non-wakeup, 200000, 0, 
+2025/11/09 23:34:35.274 22244 22271 Info Unity     HasWindow = 1, HasFocus = 0
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_RESIZED(3)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_REDRAW_NEEDED(4)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_GAINED_FOCUS(7)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.274 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.276 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x38
+2025/11/09 23:34:35.276 22244 22271 Error Gralloc4 isSupported(1, 1, 56, 1, ...) failed with 5
+2025/11/09 23:34:35.276 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 56 usage b00: 5
+2025/11/09 23:34:35.276 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.276 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x3b
+2025/11/09 23:34:35.276 22244 22271 Error Gralloc4 isSupported(1, 1, 59, 1, ...) failed with 5
+2025/11/09 23:34:35.276 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 59 usage b00: 5
+2025/11/09 23:34:35.276 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.276 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x38
+2025/11/09 23:34:35.276 22244 22271 Error Gralloc4 isSupported(1, 1, 56, 1, ...) failed with 5
+2025/11/09 23:34:35.276 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 56 usage b00: 5
+2025/11/09 23:34:35.276 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.276 22244 22271 Error qdgralloc GetSize: Unrecognized pixel format: 0x3b
+2025/11/09 23:34:35.276 22244 22271 Error Gralloc4 isSupported(1, 1, 59, 1, ...) failed with 5
+2025/11/09 23:34:35.276 22244 22271 Error GraphicBufferAllocator Failed to allocate (4 x 4) layerCount 1 format 59 usage b00: 5
+2025/11/09 23:34:35.276 22244 22271 Error AHardwareBuffer GraphicBuffer(w=4, h=4, lc=1) failed (Unknown error -5), handle=0x0
+2025/11/09 23:34:35.368 22244 22330 Info BLASTBufferQueue [SurfaceView[com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity]@0#1](f:0,a:0,s:0) onFrameAvailable the first frame is available
+2025/11/09 23:34:35.368 22244 22330 Info SurfaceComposerClient apply transaction with the first frame. layerId: 1204, bufferData(ID: 95537252532258, frameNumber: 1)
+2025/11/09 23:34:35.377 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:35.377 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:35.377 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:35.377 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:35.388 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:35.388 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:37.374 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:37.380 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:bcc0b3d1: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+2025/11/09 23:34:37.380 22244 22244 Info InputMethodManager_LC hsifw() - flag : 0
+2025/11/09 23:34:37.380 22244 22244 Info InputMethodManager_LC hsifw() - mService.hideSoftInput
+2025/11/09 23:34:37.464 22244 22271 Debug nativeloader Load /data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64/libFirebaseCppApp-13_3_0.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): ok
+2025/11/09 23:34:37.490 22244 22244 Info BLASTBufferQueue_Java update, w= 1080 h= 2316 mName = VRI[UnityPlayerGameActivity]@ccfc32e mNativeObject= 0xb400007b2557ecb0 sc.mNativeObject= 0xb40000790557bdd0 format= -3 caller= android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3386 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751 
+2025/11/09 23:34:37.491 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e Relayout returned: old=(0,0,1080,2316) new=(0,0,1080,2316) relayoutAsync=false req=(1080,2316)0 dur=4 res=0x0 s={true 0xb4000079e5588ae0} ch=false seqId=0
+2025/11/09 23:34:37.491 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e updateBoundsLayer: t=android.view.SurfaceControl$Transaction@c14a36e sc=Surface(name=Bounds for - com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity@0)/@0x3a94a0f frame=5
+2025/11/09 23:34:37.491 22244 22244 Debug VRI[UnityPlayerGameActivity]@ccfc32e applyTransactionOnDraw applyImmediately
+2025/11/09 23:34:37.492 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:37.492 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:37.492 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:37.492 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:37.520 22244 22271 Info Unity [LoginManager] Validando referencias UI...
+2025/11/09 23:34:37.520 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.520 22244 22271 Info Unity LoginManager:ValidateUIReferences()
+2025/11/09 23:34:37.520 22244 22271 Info Unity LoginManager:Start()
+2025/11/09 23:34:37.520 22244 22271 Info Unity 
+2025/11/09 23:34:37.521 22244 22271 Info Unity [LoginManager] Botón Login: Activo
+2025/11/09 23:34:37.521 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.521 22244 22271 Info Unity LoginManager:ValidateUIReferences()
+2025/11/09 23:34:37.521 22244 22271 Info Unity LoginManager:Start()
+2025/11/09 23:34:37.521 22244 22271 Info Unity 
+2025/11/09 23:34:37.522 22244 22271 Info Unity [LoginManager] Botón Register: Activo
+2025/11/09 23:34:37.522 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.522 22244 22271 Info Unity LoginManager:ValidateUIReferences()
+2025/11/09 23:34:37.522 22244 22271 Info Unity LoginManager:Start()
+2025/11/09 23:34:37.522 22244 22271 Info Unity 
+2025/11/09 23:34:37.522 22244 22271 Info Unity [LoginManager] Botón Offline: Activo
+2025/11/09 23:34:37.522 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.522 22244 22271 Info Unity LoginManager:Start()
+2025/11/09 23:34:37.522 22244 22271 Info Unity 
+2025/11/09 23:34:37.523 22244 22271 Info Unity [LoginManager] Verificando dependencias de Firebase...
+2025/11/09 23:34:37.523 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.523 22244 22271 Info Unity LoginManager:InitializeFirebase()
+2025/11/09 23:34:37.523 22244 22271 Info Unity LoginManager:Start()
+2025/11/09 23:34:37.523 22244 22271 Info Unity 
+2025/11/09 23:34:37.526 22244 22271 Error Unity InvalidOperationException: Don't call other Firebase functions while CheckDependencies is running.
+2025/11/09 23:34:37.526 22244 22271 Error Unity   at Firebase.FirebaseApp.SetCheckDependenciesThread (System.Int32 threadId) [0x00000] in <00000000000000000000000000000000>:0 
+2025/11/09 23:34:37.526 22244 22271 Error Unity   at Firebase.FirebaseApp.CheckDependenciesAsync () [0x00000] in <00000000000000000000000000000000>:0 
+2025/11/09 23:34:37.526 22244 22271 Error Unity   at Firebase.FirebaseApp.CheckAndFixDependenciesAsync () [0x00000] in <00000000000000000000000000000000>:0 
+2025/11/09 23:34:37.526 22244 22271 Error Unity   at LoginManager.InitializeFirebase () [0x00000] in <00000000000000000000000000000000>:0 
+2025/11/09 23:34:37.526 22244 22271 Error Unity   at LoginManager.Start () [0x00000] in <00000000000000000000000000000000>:0 
+2025/11/09 23:34:37.526 22244 22271 Error Unity 
+2025/11/09 23:34:37.602 22244 22271 Info Unity RenderGraph is now enabled.
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.Rendering.Universal.UniversalRenderPipeline:.ctor(UniversalRenderPipelineAsset)
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset:CreatePipeline()
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.Rendering.RenderPipelineAsset:InternalCreatePipeline()
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.Rendering.RenderPipelineManager:TryPrepareRenderPipeline(RenderPipelineAsset)
+2025/11/09 23:34:37.602 22244 22271 Info Unity UnityEngine.Rendering.RenderPipelineManager:DoRenderLoop_Internal(RenderPipelineAsset, IntPtr, Object)
+2025/11/09 23:34:37.602 22244 22271 Info Unity 
+2025/11/09 23:34:37.639 22244 22271 Debug nativeloader Load /data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/lib/arm64/lib_burst_generated.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): ok
+2025/11/09 23:34:37.640 22244 22271 Debug nativeloader Load liblib_burst_0_0.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): dlopen failed: library "liblib_burst_0_0.so" not found
+2025/11/09 23:34:37.640 22244 22271 Debug nativeloader Load lib_burst_0_0.so using class loader ns clns-7 (caller=/data/app/~~KVGjWTALGtESR7NMi0i_jw==/com.UMNG.ProyectoIsometric-m5lG29UAjHnISiwCzVTsXw==/base.apk!classes2.dex): dlopen failed: library "lib_burst_0_0.so" not found
+2025/11/09 23:34:37.653 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:37.653 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:37.779 22244 22271 Info firebase Using Auth Prod for testing.
+2025/11/09 23:34:37.784 22244 22271 Info Unity [NetworkManager] ✅ Firebase inicializado correctamente
+2025/11/09 23:34:37.784 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.784 22244 22271 Info Unity Firebase.Extensions.<>c__DisplayClass4_1`1:<ContinueWithOnMainThread>b__1()
+2025/11/09 23:34:37.784 22244 22271 Info Unity Firebase.<>c__DisplayClass5_0`1:<RunAsync>b__0()
+2025/11/09 23:34:37.784 22244 22271 Info Unity Firebase.ExceptionAggregator:Wrap(Action)
+2025/11/09 23:34:37.784 22244 22271 Info Unity Firebase.Dispatcher:PollJobs()
+2025/11/09 23:34:37.784 22244 22271 Info Unity Firebase.Platform.FirebaseHandler:Update()
+2025/11/09 23:34:37.784 22244 22271 Info Unity 
+2025/11/09 23:34:37.789 22244 22271 Info Unity Using Auth Prod for testing.
+2025/11/09 23:34:37.789 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.789 22244 22271 Info Unity Firebase.AppUtilPINVOKE:PollCallbacks()
+2025/11/09 23:34:37.789 22244 22271 Info Unity Firebase.AppUtil:PollCallbacks()
+2025/11/09 23:34:37.789 22244 22271 Info Unity Firebase.Platform.FirebaseHandler:Update()
+2025/11/09 23:34:37.789 22244 22271 Info Unity 
+2025/11/09 23:34:37.792 22244 22271 Info Unity [NetworkManager] ✅ Usuario autenticado: yO6e9PFOardsNKA2tVGE359pJn52
+2025/11/09 23:34:37.792 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:37.792 22244 22271 Info Unity Firebase.Extensions.<>c__DisplayClass4_1`1:<ContinueWithOnMainThread>b__1()
+2025/11/09 23:34:37.792 22244 22271 Info Unity Firebase.<>c__DisplayClass5_0`1:<RunAsync>b__0()
+2025/11/09 23:34:37.792 22244 22271 Info Unity Firebase.ExceptionAggregator:Wrap(Action)
+2025/11/09 23:34:37.792 22244 22271 Info Unity Firebase.Dispatcher:PollJobs()
+2025/11/09 23:34:37.792 22244 22271 Info Unity Firebase.Platform.FirebaseHandler:Update()
+2025/11/09 23:34:37.792 22244 22271 Info Unity 
+2025/11/09 23:34:41.109 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 0
+2025/11/09 23:34:41.109 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[UnityPlayerGameActivity]@ccfc32e
+2025/11/09 23:34:41.164 22244 22271 Warn Unity Hiding input field is not supported when using Game Activity.
+2025/11/09 23:34:41.164 22244 22271 Warn Unity TMPro.TMP_InputField:ActivateInputFieldInternal()
+2025/11/09 23:34:41.164 22244 22271 Warn Unity TMPro.TMP_InputField:LateUpdate()
+2025/11/09 23:34:41.164 22244 22271 Warn Unity 
+2025/11/09 23:34:41.164 22244 22271 Warn Unity [ line -1642825128]
+2025/11/09 23:34:41.164 22244 22271 Warn Unity 
+2025/11/09 23:34:41.164 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:41.164 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:41.165 22244 22244 Debug gti.InputConnection setState: '', selection=(0,0), composing region=(-1,-1)
+2025/11/09 23:34:41.166 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:41.166 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:41.166 22244 22244 Info InputMethodManager_LC showSoftInput(View,I)
+2025/11/09 23:34:41.168 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:ba1453ec: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+2025/11/09 23:34:41.169 22244 22244 Info InputMethodManager_LC ssi(): flags=0 view=com.UMNG.ProyectoIsometric reason=SHOW_SOFT_INPUT
+2025/11/09 23:34:41.169 22244 22244 Info InputMethodManager_LC ssi() view is not EditText
+2025/11/09 23:34:41.169 22244 22244 Debug InputMethodManagerUtils startInputInner - Id : 0
+2025/11/09 23:34:41.169 22244 22244 Info InputMethodManager startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+2025/11/09 23:34:41.174 22244 22244 Debug InputMethodManager showSoftInput() view=com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 VFE...... .F....ID 0,0-1080,2316 #7f08012f app:id/unitySurfaceView aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+2025/11/09 23:34:41.178 22244 22257 Debug InputTransport Input channel constructed: 'ClientS', fd=207
+2025/11/09 23:34:41.190 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 1
+2025/11/09 23:34:41.198 22244 22244 Debug gti.InputConnection Request cursor updates: 2
+2025/11/09 23:34:41.210 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:41.210 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:41.210 22244 22244 Debug gti.InputConnection Request cursor updates: 3
+2025/11/09 23:34:41.235 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:41.235 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:41.251 22244 22244 Debug InsetsController show(ime(), fromIme=true)
+2025/11/09 23:34:41.252 22244 22244 Info InsetsController setRequestedVisibleTypes: visible=true, mask=ime, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.show:1340 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8056 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634 
+2025/11/09 23:34:41.254 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=ime, animType=0, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:41.261 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.261 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.262 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.262 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.262 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.262 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.262 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:41.262 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:41.264 22244 22271 Info Unity Handle cmd APP_CMD_SOFTWARE_KB_VIS_CHANGED(6)
+2025/11/09 23:34:41.264 22244 22271 Info Unity     Keyboard Visible = True
+2025/11/09 23:34:41.266 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:41.266 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:41.266 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.266 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.266 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.269 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.269 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.270 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.270 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.270 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:41.270 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:41.296 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.296 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.296 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:41.614 22244 22244 Info InsetsController cancelAnimation: types=ime, animType=0, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:87 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 
+2025/11/09 23:34:41.614 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:ba1453ec: onShown
+2025/11/09 23:34:42.500 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e onDisplayChanged oldDisplayState=2 newDisplayState=2
+2025/11/09 23:34:42.808 22244 22244 Debug gti.InputConnection setComposingText='J' newCursorPosition=1
+2025/11/09 23:34:42.809 22244 22244 Debug gti.InputConnection setComposingRegion: 0:1
+2025/11/09 23:34:42.809 22244 22244 Debug gti.InputConnection setSelection: 1:1
+2025/11/09 23:34:42.952 22244 22244 Debug gti.InputConnection setComposingText='Ju' newCursorPosition=1
+2025/11/09 23:34:42.952 22244 22244 Debug gti.InputConnection setComposingRegion: 0:2
+2025/11/09 23:34:42.952 22244 22244 Debug gti.InputConnection setSelection: 2:2
+2025/11/09 23:34:43.059 22244 22244 Debug gti.InputConnection setComposingText='Jua' newCursorPosition=1
+2025/11/09 23:34:43.060 22244 22244 Debug gti.InputConnection setComposingRegion: 0:3
+2025/11/09 23:34:43.060 22244 22244 Debug gti.InputConnection setSelection: 3:3
+2025/11/09 23:34:43.163 22244 22244 Debug gti.InputConnection setComposingText='Juan' newCursorPosition=1
+2025/11/09 23:34:43.163 22244 22244 Debug gti.InputConnection setComposingRegion: 0:4
+2025/11/09 23:34:43.163 22244 22244 Debug gti.InputConnection setSelection: 4:4
+2025/11/09 23:34:43.728 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 0
+2025/11/09 23:34:43.762 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e onDisplayChanged oldDisplayState=2 newDisplayState=2
+2025/11/09 23:34:43.775 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 1
+2025/11/09 23:34:43.797 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:43.799 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:27f5628b: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+2025/11/09 23:34:43.799 22244 22244 Info InputMethodManager_LC hsifw() - flag : 0
+2025/11/09 23:34:43.799 22244 22244 Info InputMethodManager_LC hsifw() - mService.hideSoftInput
+2025/11/09 23:34:43.804 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:43.804 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:43.807 22244 22244 Debug InsetsController hide(ime(), fromIme=true)
+2025/11/09 23:34:43.807 22244 22244 Info InsetsController setRequestedVisibleTypes: visible=false, mask=ime, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.hide:1452 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8063 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634 
+2025/11/09 23:34:43.808 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=ime, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:43.813 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.813 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.813 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.813 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.813 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.813 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.818 22244 22271 Info Unity Handle cmd APP_CMD_SOFTWARE_KB_VIS_CHANGED(6)
+2025/11/09 23:34:43.818 22244 22271 Info Unity     Keyboard Visible = False
+2025/11/09 23:34:43.818 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.822 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:43.823 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:43.823 22244 22244 Debug gti.InputConnection setState: '', selection=(0,0), composing region=(-1,-1)
+2025/11/09 23:34:43.823 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:43.823 22244 22244 Debug gti.InputConnection closeConnection
+2025/11/09 23:34:43.823 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:43.823 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:43.823 22244 22244 Debug InputMethodManagerUtils startInputInner - Id : 0
+2025/11/09 23:34:43.823 22244 22244 Info InputMethodManager startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+2025/11/09 23:34:43.825 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:43.825 22244 22244 Info InputMethodManager_LC showSoftInput(View,I)
+2025/11/09 23:34:43.825 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:36d78582: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+2025/11/09 23:34:43.825 22244 22244 Info InputMethodManager_LC ssi(): flags=0 view=com.UMNG.ProyectoIsometric reason=SHOW_SOFT_INPUT
+2025/11/09 23:34:43.825 22244 22244 Info InputMethodManager_LC ssi() view is not EditText
+2025/11/09 23:34:43.826 22244 22244 Debug InputMethodManager showSoftInput() view=com.unity3d.player.UnityPlayerGameActivity$GameActivitySurfaceView{a64ec96 VFE...... .F....ID 0,0-1080,2316 #7f08012f app:id/unitySurfaceView aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+2025/11/09 23:34:43.826 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:43.826 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:43.826 22244 22244 Warn RemoteInputConnectionImpl requestCursorUpdates on inactive InputConnection
+2025/11/09 23:34:43.827 22244 22257 Debug InputTransport Input channel constructed: 'ClientS', fd=209
+2025/11/09 23:34:43.832 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.836 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:43.836 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:43.836 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:43.836 22244 22244 Warn RemoteInputConnectionImpl getExtractedText on inactive InputConnection
+2025/11/09 23:34:43.837 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.837 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.837 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.837 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.837 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:43.837 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.838 22244 22244 Warn RemoteInputConnectionImpl getExtractedText on inactive InputConnection
+2025/11/09 23:34:43.842 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.850 22244 22244 Debug gti.InputConnection Request cursor updates: 2
+2025/11/09 23:34:43.853 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.859 22244 22244 Debug gti.InputConnection Request cursor updates: 3
+2025/11/09 23:34:43.859 22244 22244 Debug InsetsController show(ime(), fromIme=true)
+2025/11/09 23:34:43.860 22244 22244 Info InsetsController setRequestedVisibleTypes: visible=true, mask=ime, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.show:1340 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8056 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634 
+2025/11/09 23:34:43.860 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:27f5628b: onCancelled at PHASE_CLIENT_ANIMATION_CANCEL
+2025/11/09 23:34:43.860 22244 22244 Info InsetsController cancelAnimation: types=ime, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.cancelExistingControllers:1858 android.view.InsetsController.controlAnimationUncheckedInner:1664 android.view.InsetsController.controlAnimationUnchecked:1502 
+2025/11/09 23:34:43.860 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=ime, animType=0, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:43.863 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.863 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.863 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.863 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.863 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.863 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.866 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:43.866 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:43.867 22244 22244 Info InsetsController cancelAnimation: types=navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyControlRevoked:1923 android.view.InsetsSourceConsumer.setControl:154 android.view.InsetsController.onControlsChanged:1154 
+2025/11/09 23:34:43.867 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.869 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.869 22244 22271 Info Unity Handle cmd APP_CMD_SOFTWARE_KB_VIS_CHANGED(6)
+2025/11/09 23:34:43.869 22244 22271 Info Unity     Keyboard Visible = True
+2025/11/09 23:34:43.869 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.869 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.869 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.869 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:43.870 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:43.881 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.881 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.881 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.881 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.881 22244 22244 Debug gti.InputConnection onApplyWindowInsetstrue
+2025/11/09 23:34:43.881 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:43.900 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.900 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:43.900 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:44.216 22244 22244 Info InsetsController cancelAnimation: types=ime, animType=0, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:87 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 
+2025/11/09 23:34:44.216 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:36d78582: onShown
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection Commit: 1, new pos = 1
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection setComposingText='1' newCursorPosition=1
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection setComposingRegion: 0:1
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection setSelection: 1:1
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:44.816 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:45.089 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e onDisplayChanged oldDisplayState=2 newDisplayState=2
+2025/11/09 23:34:45.106 22244 22244 Debug gti.InputConnection Commit: 2, new pos = 1
+2025/11/09 23:34:45.107 22244 22244 Debug gti.InputConnection setComposingText='2' newCursorPosition=1
+2025/11/09 23:34:45.107 22244 22244 Debug gti.InputConnection setComposingRegion: 1:2
+2025/11/09 23:34:45.107 22244 22244 Debug gti.InputConnection setSelection: 2:2
+2025/11/09 23:34:45.107 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:45.107 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:45.109 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:45.110 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:45.138 22244 22250 Debug InputTransport Input channel destroyed: 'ClientS', fd=207
+2025/11/09 23:34:45.138 22244 22250 Debug InputTransport Input channel destroyed: 'ClientS', fd=209
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection Commit: 2, new pos = 1
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection setComposingText='2' newCursorPosition=1
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection setComposingRegion: 2:3
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection setSelection: 3:3
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:45.247 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:45.248 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:45.248 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:46.776 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[UnityPlayerGameActivity]@ccfc32e
+2025/11/09 23:34:46.779 22244 22244 Debug gti.InputConnection processKeyEvent(key=67) text=122
+2025/11/09 23:34:46.780 22244 22244 Debug gti.InputConnection processKeyEvent: exit after DEL, text=12
+2025/11/09 23:34:46.780 22244 22244 Debug gti.InputConnection processKeyEvent(key=67) text=12
+2025/11/09 23:34:46.863 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:46.863 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:47.291 22244 22244 Debug gti.InputConnection Commit: 3, new pos = 1
+2025/11/09 23:34:47.292 22244 22244 Debug gti.InputConnection setComposingText='3' newCursorPosition=1
+2025/11/09 23:34:47.292 22244 22244 Debug gti.InputConnection setComposingRegion: 2:3
+2025/11/09 23:34:47.292 22244 22244 Debug gti.InputConnection setSelection: 3:3
+2025/11/09 23:34:47.293 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:47.293 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:47.293 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:47.293 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.042 22244 22244 Debug gti.InputConnection Commit: 4, new pos = 1
+2025/11/09 23:34:48.042 22244 22244 Debug gti.InputConnection setComposingText='4' newCursorPosition=1
+2025/11/09 23:34:48.042 22244 22244 Debug gti.InputConnection setComposingRegion: 3:4
+2025/11/09 23:34:48.042 22244 22244 Debug gti.InputConnection setSelection: 4:4
+2025/11/09 23:34:48.043 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.043 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.045 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.046 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.442 22244 22244 Debug gti.InputConnection Commit: 5, new pos = 1
+2025/11/09 23:34:48.442 22244 22244 Debug gti.InputConnection setComposingText='5' newCursorPosition=1
+2025/11/09 23:34:48.442 22244 22244 Debug gti.InputConnection setComposingRegion: 4:5
+2025/11/09 23:34:48.443 22244 22244 Debug gti.InputConnection setSelection: 5:5
+2025/11/09 23:34:48.443 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.443 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.445 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.445 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.715 22244 22244 Debug gti.InputConnection Commit: 6, new pos = 1
+2025/11/09 23:34:48.715 22244 22244 Debug gti.InputConnection setComposingText='6' newCursorPosition=1
+2025/11/09 23:34:48.716 22244 22244 Debug gti.InputConnection setComposingRegion: 5:6
+2025/11/09 23:34:48.716 22244 22244 Debug gti.InputConnection setSelection: 6:6
+2025/11/09 23:34:48.716 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.716 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:48.717 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:48.717 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:49.170 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 0
+2025/11/09 23:34:49.172 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[UnityPlayerGameActivity]@ccfc32e
+2025/11/09 23:34:49.205 22244 22244 Debug GameActivity ************** mainWorkCallback *********
+2025/11/09 23:34:49.206 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:8603ee5e: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+2025/11/09 23:34:49.206 22244 22244 Info InputMethodManager_LC hsifw() - flag : 0
+2025/11/09 23:34:49.206 22244 22244 Info InputMethodManager_LC hsifw() - mService.hideSoftInput
+2025/11/09 23:34:49.208 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e onDisplayChanged oldDisplayState=2 newDisplayState=2
+2025/11/09 23:34:49.211 22244 22244 Debug gti.InputConnection finishComposingText
+2025/11/09 23:34:49.211 22244 22244 Debug gti.InputConnection setComposingRegion: -1:-1
+2025/11/09 23:34:49.215 22244 22244 Debug gti.InputConnection Request cursor updates: 0
+2025/11/09 23:34:49.220 22244 22244 Debug InsetsController hide(ime(), fromIme=true)
+2025/11/09 23:34:49.220 22244 22244 Info InsetsController setRequestedVisibleTypes: visible=false, mask=ime, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.hide:1452 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8063 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634 
+2025/11/09 23:34:49.221 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=ime, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:49.232 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.232 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.232 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.232 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.232 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.232 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.238 22244 22271 Info Unity Handle cmd APP_CMD_SOFTWARE_KB_VIS_CHANGED(6)
+2025/11/09 23:34:49.238 22244 22271 Info Unity     Keyboard Visible = False
+2025/11/09 23:34:49.238 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=true mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:49.238 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:49.239 22244 22244 Info InsetsController controlAnimationUncheckedInner: Added types=navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 
+2025/11/09 23:34:49.239 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,1308][1080,2316] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:49.239 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:49.239 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.239 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.239 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.239 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.239 22244 22244 Debug gti.InputConnection onApplyWindowInsetsfalse
+2025/11/09 23:34:49.239 22244 22244 Verbose GameActivity onImeInsetsChanged from Text Listener
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.244 22244 22271 Info Unity Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+2025/11/09 23:34:49.249 22244 22244 Debug WindowOnBackDispatcher onBackInvoked, owner=VRI[UnityPlayerGameActivity]@ccfc32e, callback=android.view.ViewRootImpl$$ExternalSyntheticLambda15@881b75f
+2025/11/09 23:34:49.249 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme key 0
+2025/11/09 23:34:49.250 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme key 1
+2025/11/09 23:34:49.539 22244 22244 Info InsetsController cancelAnimation: types=ime, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:87 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 
+2025/11/09 23:34:49.541 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:4ba7c853: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_ON_ANIMATION_STATE_CHANGED fromUser false
+2025/11/09 23:34:49.541 22244 22244 Info InputMethodManager_LC notifyImeHidden: IInputMethodManagerGlobalInvoker.hideSoftInput
+2025/11/09 23:34:49.543 22244 22244 Info ImeTracker com.UMNG.ProyectoIsometric:8603ee5e: onHidden
+2025/11/09 23:34:49.580 22244 22244 Info InsetsController onStateChanged: host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1080, 2316), mDisplayCutout=DisplayCutout{insets=Rect(0, 75 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(512, 0 - 568, 75), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2316 physicalDisplayWidth=1080 physicalDisplayHeight=2316 density={2.8125} cutoutSpec={M 0,0 H -10 V 26.66666666666667 H 10 V 0 H 0 Z @dp} rotation={0} scale={1.0} physicalPixelDisplaySizeRatio={1.0}}} sideOverrides={}}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=11, center=Point(11, 11)}, RoundedCorner{position=TopRight, radius=11, center=Point(1069, 11)}, RoundedCorner{position=BottomRight, radius=11, center=Point(1069, 2305)}, RoundedCorner{position=BottomLeft, radius=11, center=Point(11, 2305)}]}  mRoundedCornerFrame=Rect(0, 0 - 1080, 2316), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(956, 0 - 1080, 75) rotation=0}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=1440 displayHeight=3088 physicalPixelDisplaySizeRatio=1.0 rotation=0 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {c0190000 mType=statusBars mFrame=[0,0][1080,75] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190005 mType=mandatorySystemGestures mFrame=[0,0][1080,109] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {c0190006 mType=tappableElement mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,0][0,0] mVisible=false mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {27 mType=displayCutout mFrame=[0,0][1080,75] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {78400001 mType=navigationBars mFrame=[0,2274][1080,2316] mVisible=false mFlags=SUPPRESS_SCRIM mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400004 mType=systemGestures mFrame=[0,0][84,2316] mVisible=true mFlags= mSideHint=LEFT mBoundingRects=null}, InsetsSource: {78400005 mType=mandatorySystemGestures mFrame=[0,2226][1080,2316] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {78400006 mType=tappableElement mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {78400024 mType=systemGestures mFrame=[996,0][1080,2316] mVisible=true mFlags= mSideHint=RIGHT mBoundingRects=null} }
+2025/11/09 23:34:49.580 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e handleResized, frames=ClientWindowFrames{frame=[0,0][1080,2316] display=[0,0][1080,2316] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+2025/11/09 23:34:49.589 22244 22244 Info InsetsController cancelAnimation: types=navigationBars, animType=1, host=com.UMNG.ProyectoIsometric/com.unity3d.player.UnityPlayerGameActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:87 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 
+2025/11/09 23:34:50.171 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 0
+2025/11/09 23:34:50.242 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e ViewPostIme pointer 1
+2025/11/09 23:34:50.308 22244 22271 Info Unity [LoginManager] 🔘 Botón Login presionado
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:50.308 22244 22271 Info Unity LoginManager:<SetupUICallbacks>b__33_0()
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.Events.UnityEvent:Invoke()
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1)
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointerButton(ButtonState&, PointerEventData)
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointer(PointerModel&)
+2025/11/09 23:34:50.308 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:Process()
+2025/11/09 23:34:50.308 22244 22271 Info Unity 
+2025/11/09 23:34:50.309 22244 22271 Error Unity [LoginManager] ❌ Firebase no inicializado
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:50.309 22244 22271 Error Unity LoginManager:ShowError(String)
+2025/11/09 23:34:50.309 22244 22271 Error Unity <OnLoginClicked>d__34:MoveNext()
+2025/11/09 23:34:50.309 22244 22271 Error Unity System.Runtime.CompilerServices.AsyncVoidMethodBuilder:Start(TStateMachine&)
+2025/11/09 23:34:50.309 22244 22271 Error Unity LoginManager:OnLoginClicked()
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.Events.UnityEvent:Invoke()
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1)
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointerButton(ButtonState&, PointerEventData)
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointer(PointerModel&)
+2025/11/09 23:34:50.309 22244 22271 Error Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:Process()
+2025/11/09 23:34:50.309 22244 22271 Error Unity 
+2025/11/09 23:34:50.309 22244 22271 Info Unity [LoginManager] Firebase no inicializado
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+2025/11/09 23:34:50.309 22244 22271 Info Unity LoginManager:ShowError(String)
+2025/11/09 23:34:50.309 22244 22271 Info Unity <OnLoginClicked>d__34:MoveNext()
+2025/11/09 23:34:50.309 22244 22271 Info Unity System.Runtime.CompilerServices.AsyncVoidMethodBuilder:Start(TStateMachine&)
+2025/11/09 23:34:50.309 22244 22271 Info Unity LoginManager:OnLoginClicked()
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.Events.UnityEvent:Invoke()
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1)
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointerButton(ButtonState&, PointerEventData)
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:ProcessPointer(PointerModel&)
+2025/11/09 23:34:50.309 22244 22271 Info Unity UnityEngine.InputSystem.UI.InputSystemUIInputModule:Process()
+2025/11/09 23:34:50.309 22244 22271 Info Unity 
+2025/11/09 23:34:53.244 22244 22244 Info VRI[UnityPlayerGameActivity]@ccfc32e call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[UnityPlayerGameActivity]@ccfc32e

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
@@ -27,12 +27,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI turnTimerText;
     [SerializeField] private TMPro.TextMeshProUGUI currentTurnText;
 
+    private bool isNetworkGame = false;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -58,78 +59,83 @@ public class GameManager : MonoBehaviour
     {
         gameState = new GameStateData();
 
-        // Obtener nombres de usuario del sistema de login
-        if (LoginManager.Instance != null)
+        // Obtener datos desde PlayerPrefs
+        string player1Name = PlayerPrefs.GetString("Player1Name", "Jugador 1");
+        string player2Name = PlayerPrefs.GetString("Player2Name", "Jugador 2");
+        isNetworkGame = PlayerPrefs.GetString("IsOnlineMode", "false") == "True";
+
+        gameState.player1.username = player1Name;
+        gameState.player2.username = player2Name;
+
+        Debug.Log($"[GameManager] Modo: {(isNetworkGame ? "Online" : "Offline")}");
+
+        // Suscribirse a eventos de red
+        if (isNetworkGame && NetworkManager.Instance != null)
         {
-            gameState.player1.username = LoginManager.Instance.GetPlayer1Name();
-            gameState.player2.username = LoginManager.Instance.GetPlayer2Name();
-        }
-        else
-        {
-            gameState.player1.username = "Jugador 1";
-            gameState.player2.username = "Jugador 2";
+            NetworkManager.Instance.OnTurnChanged += HandleTurnChanged;
+            NetworkManager.Instance.OnGameStateUpdated += HandleGameStateUpdate;
         }
 
-        // Esperar a que el mapa esté generado
         StartCoroutine(SetupPlayers());
     }
 
     IEnumerator SetupPlayers()
     {
-        // Esperar a que el mapa esté listo
+        // Esperar a que el mapa estÃ© listo
         while (MapGenerator.Instance == null || MapGenerator.Instance.GetMapWidth() == 0)
         {
             yield return null;
         }
 
-        // Esperar un frame adicional para asegurarse de que todo está inicializado
-        yield return new WaitForSeconds(0.5f);
-
-        // Validar que MapGenerator está disponible
-        if (MapGenerator.Instance == null)
+        while (GridVisualizer.Instance == null)
         {
-            Debug.LogError("MapGenerator.Instance es null después de esperar!");
-            yield break;
+            yield return null;
         }
 
-        // Instanciar jugador 1
+        yield return new WaitForSeconds(0.5f);
+
+        // Instanciar jugadores
         Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
+        player1StartPos.y = 0f;
+
         GameObject player1Obj = Instantiate(player1Prefab, player1StartPos, Quaternion.identity);
+        player1Obj.name = "Player1";
         player1Controller = player1Obj.GetComponent<PlayerController>();
 
         if (player1Controller != null)
         {
             player1Controller.SetPlayerData(gameState.player1);
-        }
-        else
-        {
-            Debug.LogError("Player1Controller component no encontrado!");
+            player1Controller.SetPlayerNumber(1);
+
+            int playerNumber = NetworkManager.Instance != null ? NetworkManager.Instance.GetPlayerNumber() : 1;
+            player1Controller.SetIsLocalPlayer(playerNumber == 1);
         }
 
         // Instanciar jugador 2
         Vector3 player2StartPos = MapGenerator.Instance.GetWorldPosition(8, 8);
+        player2StartPos.y = 0f;
+
         GameObject player2Obj = Instantiate(player2Prefab, player2StartPos, Quaternion.identity);
+        player2Obj.name = "Player2";
         player2Controller = player2Obj.GetComponent<PlayerController>();
 
         if (player2Controller != null)
         {
             player2Controller.SetPlayerData(gameState.player2);
-        }
-        else
-        {
-            Debug.LogError("Player2Controller component no encontrado!");
+            player2Controller.SetPlayerNumber(2);
+
+            int playerNumber = NetworkManager.Instance != null ? NetworkManager.Instance.GetPlayerNumber() : 1;
+            player2Controller.SetIsLocalPlayer(playerNumber == 2);
         }
 
-        // Configurar cámaras si es necesario
         SetupCameras();
-
-        // Iniciar el juego
         StartGame();
+
+        Debug.Log("[GameManager] Jugadores configurados correctamente");
     }
 
     void SetupCameras()
     {
-        // Configurar cámara isométrica
         Camera mainCamera = Camera.main;
         if (mainCamera != null)
         {
@@ -146,8 +152,14 @@ public class GameManager : MonoBehaviour
         isGameActive = true;
         currentTurnTime = turnDuration;
 
-        // Iniciar con el turno del jugador 1
+        if (player1Controller != null)
+        {
+            player1Controller.StartTurn();
+        }
+
         StartTurn(1);
+
+        Debug.Log("[GameManager] Â¡Juego iniciado!");
     }
 
     void StartTurn(int playerNumber)
@@ -157,27 +169,40 @@ public class GameManager : MonoBehaviour
 
         if (playerNumber == 1)
         {
-            player1Controller.StartTurn();
+            if (player1Controller != null)
+            {
+                player1Controller.StartTurn();
+            }
+            if (player2Controller != null)
+            {
+                player2Controller.GetPlayerData().isMyTurn = false;
+            }
             if (currentTurnText != null)
                 currentTurnText.text = $"Turno de: {gameState.player1.username}";
         }
         else
         {
-            player2Controller.StartTurn();
+            if (player2Controller != null)
+            {
+                player2Controller.StartTurn();
+            }
+            if (player1Controller != null)
+            {
+                player1Controller.GetPlayerData().isMyTurn = false;
+            }
             if (currentTurnText != null)
                 currentTurnText.text = $"Turno de: {gameState.player2.username}";
         }
 
-        // Si es un juego en red, sincronizar el estado
-        if (NetworkManager.Instance != null && NetworkManager.Instance.IsNetworkGame())
+        // Sincronizar con Firebase
+        if (isNetworkGame && NetworkManager.Instance != null)
         {
-            NetworkManager.Instance.SendGameState(gameState);
+            NetworkManager.Instance.SendTurnChange(playerNumber);
         }
     }
 
     public void EndCurrentTurn()
     {
-        // Cambiar al siguiente jugador
         int nextPlayer = gameState.currentTurn == 1 ? 2 : 1;
         StartTurn(nextPlayer);
     }
@@ -193,68 +218,53 @@ public class GameManager : MonoBehaviour
 
         if (currentTurnTime <= 0)
         {
-            // Tiempo agotado, cambiar turno
             EndCurrentTurn();
         }
     }
 
-    public void ApplyDamageAt(Vector2Int position, int damage)
+    void HandleTurnChanged(int playerNumber)
     {
-        // Verificar si hay un jugador en esa posición
-        if (player1Controller.GetPlayerData().gridPosition == position)
-        {
-            player1Controller.TakeDamage(damage);
+        Debug.Log($"[GameManager] Turno cambiado a Jugador {playerNumber} desde red");
 
-            // Efecto visual de daño
-            ShowDamageEffect(MapGenerator.Instance.GetWorldPosition(position.x, position.y), damage);
-        }
-        else if (player2Controller.GetPlayerData().gridPosition == position)
+        if (gameState.currentTurn != playerNumber)
         {
-            player2Controller.TakeDamage(damage);
-
-            // Efecto visual de daño
-            ShowDamageEffect(MapGenerator.Instance.GetWorldPosition(position.x, position.y), damage);
+            gameState.currentTurn = playerNumber;
+            UpdateTurnUI(playerNumber);
         }
     }
 
-    void ShowDamageEffect(Vector3 position, int damage)
+    void HandleGameStateUpdate(DofusGameState gameState)
     {
-        // Aquí puedes instanciar un efecto de partículas o texto flotante
-        // Por ahora solo un log
-        Debug.Log($"¡Daño de {damage} puntos en posición {position}!");
+        Debug.Log("[GameManager] Estado del juego actualizado desde red");
+
+        if (!string.IsNullOrEmpty(gameState.data))
+        {
+            var newState = GameStateData.FromJson(gameState.data);
+            UpdateGameState(newState);
+        }
     }
 
-    public List<PlayerController> GetPlayersInArea(Vector2Int center, int radius)
+    void UpdateTurnUI(int playerNumber)
     {
-        List<PlayerController> playersInArea = new List<PlayerController>();
-
-        for (int x = -radius; x <= radius; x++)
+        if (playerNumber == 1)
         {
-            for (int y = -radius; y <= radius; y++)
-            {
-                Vector2Int checkPos = new Vector2Int(center.x + x, center.y + y);
-
-                if (player1Controller.GetPlayerData().gridPosition == checkPos)
-                {
-                    playersInArea.Add(player1Controller);
-                }
-                if (player2Controller.GetPlayerData().gridPosition == checkPos)
-                {
-                    playersInArea.Add(player2Controller);
-                }
-            }
+            if (currentTurnText != null)
+                currentTurnText.text = $"Turno de: {gameState.player1.username}";
         }
-
-        return playersInArea;
+        else
+        {
+            if (currentTurnText != null)
+                currentTurnText.text = $"Turno de: {gameState.player2.username}";
+        }
     }
 
     void CheckGameOver()
     {
-        if (!player1Controller.GetPlayerData().IsAlive())
+        if (player1Controller != null && !player1Controller.GetPlayerData().IsAlive())
         {
             EndGame(gameState.player2.username);
         }
-        else if (!player2Controller.GetPlayerData().IsAlive())
+        else if (player2Controller != null && !player2Controller.GetPlayerData().IsAlive())
         {
             EndGame(gameState.player1.username);
         }
@@ -266,28 +276,16 @@ public class GameManager : MonoBehaviour
         gameState.gameEnded = true;
         gameState.winner = winnerName;
 
-        // Mostrar panel de fin de juego
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
             if (winnerText != null)
             {
-                winnerText.text = $"¡{winnerName} ha ganado!";
+                winnerText.text = $"Â¡{winnerName} ha ganado!";
             }
         }
 
-        // Guardar estadísticas si es necesario
-        SaveGameStats();
-    }
-
-    void SaveGameStats()
-    {
-        // Aquí puedes implementar el guardado usando Firebase como se muestra en el documento
-        string gameStateJson = gameState.ToJson();
-        PlayerPrefs.SetString("LastGameState", gameStateJson);
-        PlayerPrefs.Save();
-
-        Debug.Log("Estado del juego guardado: " + gameStateJson);
+        Debug.Log($"[GameManager] Juego terminado. Ganador: {winnerName}");
     }
 
     public void RestartGame()
@@ -297,6 +295,11 @@ public class GameManager : MonoBehaviour
 
     public void ReturnToMenu()
     {
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.LeaveRoom();
+        }
+
         SceneManager.LoadScene("LoginScene");
     }
 
@@ -309,8 +312,92 @@ public class GameManager : MonoBehaviour
     {
         gameState = newState;
 
-        // Actualizar controladores con los nuevos datos
-        player1Controller.SetPlayerData(gameState.player1);
-        player2Controller.SetPlayerData(gameState.player2);
+        if (player1Controller != null)
+            player1Controller.SetPlayerData(gameState.player1);
+        if (player2Controller != null)
+            player2Controller.SetPlayerData(gameState.player2);
+    }
+
+    // âœ… CORREGIDO: Usar ShowDamage() en lugar de ShowDamageNumber()
+    public void ApplyDamageAt(Vector2Int targetPos, int damage)
+    {
+        PlayerController targetPlayer = GetPlayerAtPosition(targetPos);
+
+        if (targetPlayer != null)
+        {
+            targetPlayer.TakeDamage(damage);
+            Debug.Log($"[GameManager] DaÃ±o de {damage} aplicado en posiciÃ³n {targetPos}");
+
+            // âœ… CORREGIDO: Usar ShowDamage()
+            if (VisualEffectsManager.Instance != null)
+            {
+                Vector3 worldPos = MapGenerator.Instance.GetWorldPosition(targetPos.x, targetPos.y);
+                worldPos.y = 1f; // Elevar el popup para que sea visible
+                VisualEffectsManager.Instance.ShowDamage(worldPos, damage);
+            }
+        }
+        else
+        {
+            Debug.Log($"[GameManager] No hay jugador en posiciÃ³n {targetPos}");
+        }
+    }
+
+    public List<PlayerController> GetPlayersInArea(Vector2Int centerPos, int radius)
+    {
+        List<PlayerController> playersInArea = new List<PlayerController>();
+
+        if (player1Controller != null)
+        {
+            Vector2Int p1Pos = player1Controller.GetPlayerData().gridPosition;
+            int distance = Mathf.Abs(p1Pos.x - centerPos.x) + Mathf.Abs(p1Pos.y - centerPos.y);
+
+            if (distance <= radius)
+            {
+                playersInArea.Add(player1Controller);
+            }
+        }
+
+        if (player2Controller != null)
+        {
+            Vector2Int p2Pos = player2Controller.GetPlayerData().gridPosition;
+            int distance = Mathf.Abs(p2Pos.x - centerPos.x) + Mathf.Abs(p2Pos.y - centerPos.y);
+
+            if (distance <= radius)
+            {
+                playersInArea.Add(player2Controller);
+            }
+        }
+
+        Debug.Log($"[GameManager] {playersInArea.Count} jugadores encontrados en Ã¡rea centrada en {centerPos} con radio {radius}");
+        return playersInArea;
+    }
+
+    public PlayerController GetPlayerAtPosition(Vector2Int position)
+    {
+        if (player1Controller != null && player1Controller.GetPlayerData().gridPosition == position)
+        {
+            return player1Controller;
+        }
+
+        if (player2Controller != null && player2Controller.GetPlayerData().gridPosition == position)
+        {
+            return player2Controller;
+        }
+
+        return null;
+    }
+
+    public PlayerController GetPlayerController(int playerNumber)
+    {
+        return playerNumber == 1 ? player1Controller : player2Controller;
+    }
+
+    void OnDestroy()
+    {
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnTurnChanged -= HandleTurnChanged;
+            NetworkManager.Instance.OnGameStateUpdated -= HandleGameStateUpdate;
+        }
     }
 }

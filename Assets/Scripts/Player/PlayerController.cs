@@ -424,4 +424,14 @@ public class PlayerController : MonoBehaviour
     {
         playerData = data;
     }
+
+    public void SetPlayerNumber(int number)
+    {
+        playerNumber = number;
+    }
+
+    public void SetIsLocalPlayer(bool isLocal)
+    {
+        isLocalPlayer = isLocal;
+    }
 }

@@ -1,526 +1,550 @@
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using Firebase;
+using Firebase.Database;
+using Firebase.Auth;
+using Firebase.Extensions;
 
 public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager Instance { get; private set; }
 
-    [Header("Network Settings")]
-    [SerializeField] private int port = 7777;
-    [SerializeField] private float syncInterval = 0.1f; // Sincronizar cada 100ms
+    [Header("Firebase")]
+    private FirebaseAuth auth;
+    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;
+    private bool firebaseInitialized = false; // ✅ NUEVO
 
-    [Header("Connection Status")]
-    [SerializeField] private bool isHost = false;
-    [SerializeField] private bool isConnected = false;
-    [SerializeField] private string connectionStatus = "Desconectado";
+    [Header("Room Settings")]
+    public string currentRoomId;
+    public bool isHost = false;
+    public string playerId;
+    public int playerNumber = -1; // 1 o 2
 
-    // Networking
-    private TcpListener tcpListener;
-    private TcpClient tcpClient;
-    private NetworkStream stream;
-    private Thread tcpListenerThread;
-    private bool isListening = false;
+    // ✅ Eventos
+    public event Action<DofusRoomData> OnRoomUpdated;
+    public event Action<string> OnPlayerJoined;
+    public event Action<string> OnPlayerLeft;
+    public event Action OnGameStarted;
+    public event Action<DofusGameState> OnGameStateUpdated;
+    public event Action<int> OnTurnChanged;
 
-    // Sincronizaci�n
-    private float lastSyncTime = 0f;
-    private Queue<string> messageQueue = new Queue<string>();
+    [Header("References")]
+    private DatabaseReference roomsRef;
+    public DatabaseReference currentRoomRef;
+    private List<System.Object> roomListeners = new List<System.Object>();
 
     void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        InitializeFirebase();
+    }
+
+    private void InitializeFirebase()
+    {
+        Debug.Log("[NetworkManager] 🔥 Iniciando Firebase...");
+
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Result == DependencyStatus.Available)
+            {
+                database = FirebaseDatabase.DefaultInstance;
+                databaseRef = database.RootReference;
+                roomsRef = databaseRef.Child("dofus_rooms");
+                auth = FirebaseAuth.DefaultInstance;
+
+                firebaseInitialized = true; // ✅ MARCAR COMO INICIALIZADO
+
+                SignInAnonymously();
+
+                Debug.Log("[NetworkManager] ✅ Firebase inicializado correctamente");
+            }
+            else
+            {
+                Debug.LogError($"[NetworkManager] ❌ No se pudo inicializar Firebase: {task.Result}");
+                firebaseInitialized = false;
+            }
+        });
+    }
+
+    // ✅ NUEVO MÉTODO PÚBLICO
+    public bool IsFirebaseReady()
+    {
+        return firebaseInitialized && auth != null && databaseRef != null;
+    }
+
+    // ✅ ESPERAR AUTENTICACIÓN
+    private async Task<bool> WaitForAuthentication(float timeout = 10f)
+    {
+        float elapsed = 0f;
+
+        while (string.IsNullOrEmpty(playerId) && elapsed < timeout)
+        {
+            await Task.Delay(100);
+            elapsed += 0.1f;
+        }
+
+        if (string.IsNullOrEmpty(playerId))
+        {
+            Debug.LogError("[NetworkManager] ⏱️ Timeout esperando autenticación");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void SignInAnonymously()
+    {
+        auth.SignInAnonymouslyAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                Debug.LogError("[NetworkManager] ❌ Error al autenticar: " + task.Exception);
+                return;
+            }
+
+            playerId = auth.CurrentUser.UserId;
+            Debug.Log($"[NetworkManager] ✅ Usuario autenticado: {playerId}");
+        });
+    }
+
+    // ✅ CREAR SALA
+    public async Task<string> CreateRoom(string hostName)
+    {
+        // Esperar autenticación
+        if (string.IsNullOrEmpty(playerId))
+        {
+            Debug.Log("[NetworkManager] ⏳ Esperando autenticación...");
+            bool authenticated = await WaitForAuthentication();
+
+            if (!authenticated)
+            {
+                Debug.LogError("[NetworkManager] ❌ No se pudo autenticar al usuario");
+                return null;
+            }
+
+            Debug.Log("[NetworkManager] ✅ Usuario autenticado exitosamente");
+        }
+
+        // Validar que no esté ya en una sala
+        if (!string.IsNullOrEmpty(currentRoomId))
+        {
+            Debug.LogWarning($"[NetworkManager] Ya estás en la sala {currentRoomId}");
+            return currentRoomId;
+        }
+
+        // Crear nueva sala
+        string roomId = GenerateRoomId();
+        currentRoomRef = roomsRef.Child(roomId);
+        currentRoomId = roomId;
+        isHost = true;
+        playerNumber = 1;
+
+        DofusRoomData roomData = new DofusRoomData
+        {
+            roomId = roomId,
+            hostId = playerId,
+            hostName = hostName,
+            player1Id = playerId,
+            player1Name = hostName,
+            player2Id = "",
+            player2Name = "",
+            player1Ready = false,
+            player2Ready = false,
+            gameStarted = false,
+            createdAt = ServerValue.Timestamp
+        };
+
+        try
+        {
+            await currentRoomRef.SetValueAsync(roomData.ToDictionary());
+            SetupRoomListeners();
+
+            // Guardar en PlayerPrefs
+            PlayerPrefs.SetString("CurrentRoomId", roomId);
+            PlayerPrefs.SetString("CurrentUserId", playerId);
+            PlayerPrefs.SetString("Player1Name", hostName);
+            PlayerPrefs.SetString("PlayerNumber", "1");
+            PlayerPrefs.SetString("IsOnlineMode", "True");
+            PlayerPrefs.Save();
+
+            Debug.Log($"[NetworkManager] ✅ Sala creada: {roomId}");
+            return roomId;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[NetworkManager] ❌ Error al crear sala: {e.Message}");
+
+            // Limpiar estado
+            currentRoomId = null;
+            currentRoomRef = null;
+            isHost = false;
+            playerNumber = -1;
+
+            return null;
+        }
+    }
+
+    // ✅ UNIRSE A SALA
+    public async Task<string> JoinRoom(string roomId = null, string playerName = null)
+    {
+        // Esperar autenticación
+        if (string.IsNullOrEmpty(playerId))
+        {
+            Debug.Log("[NetworkManager] ⏳ Esperando autenticación...");
+            bool authenticated = await WaitForAuthentication();
+
+            if (!authenticated)
+            {
+                Debug.LogError("[NetworkManager] ❌ No se pudo autenticar al usuario");
+                return null;
+            }
+        }
+
+        // Si no se especifica sala, buscar una disponible
+        if (string.IsNullOrEmpty(roomId))
+        {
+            var availableRoom = await FindAvailableRoom();
+            if (availableRoom == null)
+            {
+                Debug.Log("[NetworkManager] No hay salas disponibles");
+                return null;
+            }
+            roomId = availableRoom.roomId;
+        }
+
+        if (string.IsNullOrEmpty(roomId))
+        {
+            Debug.LogError("[NetworkManager] ❌ roomId es null o vacío");
+            return null;
+        }
+
+        // Validar que no estemos ya en una sala
+        if (!string.IsNullOrEmpty(currentRoomId))
+        {
+            if (currentRoomId == roomId)
+            {
+                Debug.LogWarning($"[NetworkManager] Ya estás en la sala {roomId}");
+                return roomId;
+            }
+            else
+            {
+                Debug.LogWarning($"[NetworkManager] Saliendo de sala {currentRoomId}...");
+                await LeaveRoom();
+            }
+        }
+
+        currentRoomId = roomId;
+        currentRoomRef = roomsRef.Child(roomId);
+
+        // Obtener datos de la sala
+        var roomSnapshot = await currentRoomRef.GetValueAsync();
+        if (!roomSnapshot.Exists)
+        {
+            Debug.LogError($"[NetworkManager] ❌ La sala {roomId} no existe");
+            currentRoomId = null;
+            currentRoomRef = null;
+            return null;
+        }
+
+        var roomData = DofusRoomData.FromSnapshot(roomSnapshot);
+
+        if (roomData.gameStarted)
+        {
+            Debug.LogWarning("[NetworkManager] ⚠️ El juego ya ha comenzado");
+            currentRoomId = null;
+            currentRoomRef = null;
+            return null;
+        }
+
+        if (!string.IsNullOrEmpty(roomData.player2Id))
+        {
+            Debug.LogWarning("[NetworkManager] ⚠️ La sala está llena");
+            currentRoomId = null;
+            currentRoomRef = null;
+            return null;
+        }
+
+        // Unirse como jugador 2
+        playerNumber = 2;
+        string finalPlayerName = string.IsNullOrEmpty(playerName) ? "Jugador 2" : playerName;
+
+        await currentRoomRef.Child("player2Id").SetValueAsync(playerId);
+        await currentRoomRef.Child("player2Name").SetValueAsync(finalPlayerName);
+
+        SetupRoomListeners();
+
+        // Guardar en PlayerPrefs
+        PlayerPrefs.SetString("CurrentRoomId", roomId);
+        PlayerPrefs.SetString("CurrentUserId", playerId);
+        PlayerPrefs.SetString("Player1Name", roomData.player1Name);
+        PlayerPrefs.SetString("Player2Name", finalPlayerName);
+        PlayerPrefs.SetString("PlayerNumber", "2");
+        PlayerPrefs.SetString("IsOnlineMode", "True");
+        PlayerPrefs.Save();
+
+        Debug.Log($"[NetworkManager] ✅ Unido a sala: {roomId} como {finalPlayerName}");
+        return roomId;
+    }
+
+    // ✅ BUSCAR SALA DISPONIBLE
+    private async Task<DofusRoomData> FindAvailableRoom()
+    {
+        var snapshot = await roomsRef.GetValueAsync();
+
+        if (!snapshot.Exists)
+        {
+            Debug.Log("[NetworkManager] No hay salas en Firebase");
+            return null;
+        }
+
+        foreach (var roomSnapshot in snapshot.Children)
+        {
+            var roomData = DofusRoomData.FromSnapshot(roomSnapshot);
+
+            if (string.IsNullOrEmpty(roomData.roomId))
+                continue;
+
+            if (!roomData.gameStarted && string.IsNullOrEmpty(roomData.player2Id))
+            {
+                Debug.Log($"[NetworkManager] ✅ Sala disponible: {roomData.roomId}");
+                return roomData;
+            }
+        }
+
+        Debug.Log("[NetworkManager] No hay salas disponibles");
+        return null;
+    }
+
+    // ✅ LISTENERS
+    private void SetupRoomListeners()
+    {
+        if (currentRoomRef == null)
+            return;
+
+        currentRoomRef.ValueChanged += HandleRoomValueChanged;
+        roomListeners.Add(currentRoomRef);
+
+        currentRoomRef.Child("gameState").ValueChanged += HandleGameStateChanged;
+        roomListeners.Add(currentRoomRef.Child("gameState"));
+    }
+
+    private void HandleRoomValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null)
+        {
+            Debug.LogError($"[NetworkManager] ❌ Error en sala: {e.DatabaseError.Message}");
+            return;
+        }
+
+        if (e.Snapshot.Exists)
+        {
+            var roomData = DofusRoomData.FromSnapshot(e.Snapshot);
+            OnRoomUpdated?.Invoke(roomData);
+
+            if (roomData.gameStarted)
+            {
+                Debug.Log("[NetworkManager] 🎮 ¡Juego iniciado!");
+                OnGameStarted?.Invoke();
+            }
+        }
+    }
+
+    private void HandleGameStateChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (e.DatabaseError != null || !e.Snapshot.Exists)
+            return;
+
+        var gameState = DofusGameState.FromSnapshot(e.Snapshot);
+        OnGameStateUpdated?.Invoke(gameState);
+
+        if (e.Snapshot.Child("currentTurn").Exists)
+        {
+            int turn = Convert.ToInt32(e.Snapshot.Child("currentTurn").Value);
+            OnTurnChanged?.Invoke(turn);
+        }
+    }
+
+    // ✅ MARCAR JUGADOR LISTO
+    public async Task SetPlayerReady()
+    {
+        if (currentRoomRef == null)
+            return;
+
+        string readyField = playerNumber == 1 ? "player1Ready" : "player2Ready";
+        await currentRoomRef.Child(readyField).SetValueAsync(true);
+
+        Debug.Log($"[NetworkManager] ✅ Jugador {playerNumber} listo");
+    }
+
+    // ✅ INICIAR JUEGO (SOLO HOST)
+    public async Task StartGame()
+    {
+        if (!isHost)
+        {
+            Debug.LogWarning("[NetworkManager] ⚠️ Solo el host puede iniciar");
+            return;
+        }
+
+        await currentRoomRef.Child("gameStarted").SetValueAsync(true);
+        await currentRoomRef.Child("gameState").Child("currentTurn").SetValueAsync(1);
+
+        Debug.Log("[NetworkManager] ✅ Juego iniciado");
+    }
+
+    // ✅ SINCRONIZAR ESTADO
+    public async Task SendGameState(GameStateData gameState)
+    {
+        if (currentRoomRef == null)
+            return;
+
+        string json = JsonUtility.ToJson(gameState);
+        await currentRoomRef.Child("gameState").Child("data").SetValueAsync(json);
+    }
+
+    public async Task SendTurnChange(int nextPlayer)
+    {
+        if (currentRoomRef == null)
+            return;
+
+        await currentRoomRef.Child("gameState").Child("currentTurn").SetValueAsync(nextPlayer);
+    }
+
+    // ✅ SALIR DE SALA
+    public async Task LeaveRoom()
+    {
+        if (string.IsNullOrEmpty(currentRoomId))
+            return;
+
+        if (isHost)
+        {
+            await currentRoomRef.RemoveValueAsync();
         }
         else
         {
-            Destroy(gameObject);
+            await currentRoomRef.Child("player2Id").SetValueAsync("");
+            await currentRoomRef.Child("player2Name").SetValueAsync("");
         }
-    }
 
-    void Start()
-    {
-        // Inicializar bas�ndose en el modo de login
-        if (LoginManager.Instance != null && LoginManager.Instance.IsOnlineMode())
+        // Limpiar listeners
+        foreach (var listener in roomListeners)
         {
-            ShowConnectionDialog();
+            if (listener is DatabaseReference dbRef)
+            {
+                dbRef.ValueChanged -= HandleRoomValueChanged;
+                dbRef.ValueChanged -= HandleGameStateChanged;
+            }
         }
-    }
+        roomListeners.Clear();
 
-    void Update()
-    {
-        // Procesar mensajes recibidos
-        ProcessMessages();
-
-        // Sincronizar estado del juego
-        if (isConnected && Time.time - lastSyncTime > syncInterval)
-        {
-            SyncGameState();
-            lastSyncTime = Time.time;
-        }
-    }
-
-    void ShowConnectionDialog()
-    {
-        // En una implementaci�n real, mostrar�as un di�logo
-        // Por ahora, autom�ticamente intentar ser host
-        StartAsHost();
-    }
-
-    public void StartAsHost()
-    {
-        isHost = true;
-        connectionStatus = "Iniciando como Host...";
-
-        // Iniciar servidor TCP
-        tcpListenerThread = new Thread(new ThreadStart(ListenForClients));
-        tcpListenerThread.IsBackground = true;
-        tcpListenerThread.Start();
-
-        Debug.Log($"Host iniciado en puerto {port}");
-        connectionStatus = $"Host - Esperando jugador en puerto {port}";
-    }
-
-    public void StartAsClient(string hostIP)
-    {
+        currentRoomId = null;
+        currentRoomRef = null;
         isHost = false;
-        connectionStatus = "Conectando...";
-
-        StartCoroutine(ConnectToHost(hostIP));
+        playerNumber = -1;
     }
 
-    void ListenForClients()
+    private string GenerateRoomId()
     {
-        try
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var random = new System.Random();
+        var result = new char[6];
+
+        for (int i = 0; i < result.Length; i++)
         {
-            tcpListener = new TcpListener(IPAddress.Any, port);
-            tcpListener.Start();
-            isListening = true;
-
-            Debug.Log("Servidor esperando conexiones...");
-
-            while (isListening)
-            {
-                using (tcpClient = tcpListener.AcceptTcpClient())
-                {
-                    Debug.Log("Cliente conectado!");
-                    isConnected = true;
-                    connectionStatus = "Host - Cliente conectado";
-
-                    stream = tcpClient.GetStream();
-
-                    // Manejar comunicaci�n con el cliente
-                    HandleClientCommunication();
-                }
-            }
-        }
-        catch (SocketException socketException)
-        {
-            Debug.LogError("SocketException: " + socketException.ToString());
-        }
-        finally
-        {
-            if (tcpListener != null)
-            {
-                tcpListener.Stop();
-            }
-        }
-    }
-
-    IEnumerator ConnectToHost(string hostIP)
-    {
-        try
-        {
-            tcpClient = new TcpClient();
-
-            // Intentar conectar
-            IAsyncResult result = tcpClient.BeginConnect(hostIP, port, null, null);
-            bool success = result.AsyncWaitHandle.WaitOne(5000, true);
-
-            if (!success)
-            {
-                throw new SocketException();
-            }
-
-            tcpClient.EndConnect(result);
-
-            isConnected = true;
-            connectionStatus = "Cliente - Conectado al host";
-            stream = tcpClient.GetStream();
-
-            Debug.Log($"Conectado al host: {hostIP}");
-
-            // Iniciar recepci�n de mensajes
-            StartCoroutine(ReceiveMessages());
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error al conectar: {e.Message}");
-            connectionStatus = "Error de conexi�n";
+            result[i] = chars[random.Next(chars.Length)];
         }
 
-        yield return null;
+        return new string(result);
     }
 
-    void HandleClientCommunication()
-    {
-        byte[] buffer = new byte[1024];
-
-        while (tcpClient != null && tcpClient.Connected)
-        {
-            try
-            {
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-                if (bytesRead > 0)
-                {
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-                    // Agregar mensaje a la cola para procesamiento
-                    lock (messageQueue)
-                    {
-                        messageQueue.Enqueue(message);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error en comunicaci�n: {e.Message}");
-                break;
-            }
-        }
-    }
-
-    IEnumerator ReceiveMessages()
-    {
-        byte[] buffer = new byte[1024];
-
-        while (isConnected && tcpClient != null && tcpClient.Connected)
-        {
-            if (stream.DataAvailable)
-            {
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-                if (bytesRead > 0)
-                {
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-                    // Agregar mensaje a la cola para procesamiento
-                    lock (messageQueue)
-                    {
-                        messageQueue.Enqueue(message);
-                    }
-                }
-            }
-
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
-
-    void ProcessMessages()
-    {
-        lock (messageQueue)
-        {
-            while (messageQueue.Count > 0)
-            {
-                string message = messageQueue.Dequeue();
-                ProcessNetworkMessage(message);
-            }
-        }
-    }
-
-    void ProcessNetworkMessage(string message)
-    {
-        try
-        {
-            // Parsear el mensaje JSON
-            NetworkMessage netMsg = JsonUtility.FromJson<NetworkMessage>(message);
-
-            switch (netMsg.type)
-            {
-                case "GameState":
-                    HandleGameStateUpdate(netMsg.data);
-                    break;
-
-                case "PlayerAction":
-                    HandlePlayerAction(netMsg.data);
-                    break;
-
-                case "SpellCast":
-                    HandleSpellCast(netMsg.data);
-                    break;
-
-                case "EndTurn":
-                    HandleEndTurn();
-                    break;
-
-                case "Chat":
-                    HandleChatMessage(netMsg.data);
-                    break;
-
-                default:
-                    Debug.LogWarning($"Tipo de mensaje desconocido: {netMsg.type}");
-                    break;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error procesando mensaje de red: {e.Message}");
-        }
-    }
-
-    void HandleGameStateUpdate(string data)
-    {
-        GameStateData gameState = GameStateData.FromJson(data);
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.UpdateGameState(gameState);
-        }
-    }
-
-    void HandlePlayerAction(string data)
-    {
-        PlayerActionData action = JsonUtility.FromJson<PlayerActionData>(data);
-
-        // Aplicar la acci�n del jugador remoto
-        PlayerController[] players = UnityEngine.Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
-        foreach (var player in players)
-        {
-            if (player.GetPlayerData().username == action.playerName)
-            {
-                if (action.actionType == "Move")
-                {
-                    Vector2Int targetPos = new Vector2Int(action.targetX, action.targetY);
-                    player.TryMoveTo(targetPos);
-                }
-                break;
-            }
-        }
-    }
-
-    void HandleSpellCast(string data)
-    {
-        SpellCastData spellCast = JsonUtility.FromJson<SpellCastData>(data);
-
-        // Aplicar el hechizo del jugador remoto
-        PlayerController[] players = UnityEngine.Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
-        foreach (var player in players)
-        {
-            if (player.GetPlayerData().username == spellCast.playerName)
-            {
-                player.TryCastSpell(spellCast.spellIndex);
-                break;
-            }
-        }
-    }
-
-    void HandleEndTurn()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.EndCurrentTurn();
-        }
-    }
-
-    void HandleChatMessage(string message)
-    {
-        // Mostrar mensaje en el UI del chat
-        var playerUI = UnityEngine.Object.FindFirstObjectByType<PlayerUI>();
-        if (playerUI != null)
-        {
-            playerUI.AddActionToLog($"[Chat] {message}");
-        }
-    }
-
-    public void SendGameState(GameStateData gameState)
-    {
-        if (!isConnected || stream == null) return;
-
-        NetworkMessage msg = new NetworkMessage
-        {
-            type = "GameState",
-            data = gameState.ToJson()
-        };
-
-        SendMessage(JsonUtility.ToJson(msg));
-    }
-
-    public void SendPlayerAction(string playerName, string actionType, int targetX, int targetY)
-    {
-        if (!isConnected || stream == null) return;
-
-        PlayerActionData action = new PlayerActionData
-        {
-            playerName = playerName,
-            actionType = actionType,
-            targetX = targetX,
-            targetY = targetY
-        };
-
-        NetworkMessage msg = new NetworkMessage
-        {
-            type = "PlayerAction",
-            data = JsonUtility.ToJson(action)
-        };
-
-        SendMessage(JsonUtility.ToJson(msg));
-    }
-
-    public void SendSpellCast(string playerName, int spellIndex, int targetX, int targetY)
-    {
-        if (!isConnected || stream == null) return;
-
-        SpellCastData spellCast = new SpellCastData
-        {
-            playerName = playerName,
-            spellIndex = spellIndex,
-            targetX = targetX,
-            targetY = targetY
-        };
-
-        NetworkMessage msg = new NetworkMessage
-        {
-            type = "SpellCast",
-            data = JsonUtility.ToJson(spellCast)
-        };
-
-        SendMessage(JsonUtility.ToJson(msg));
-    }
-
-    public void SendEndTurn()
-    {
-        if (!isConnected || stream == null) return;
-
-        NetworkMessage msg = new NetworkMessage
-        {
-            type = "EndTurn",
-            data = ""
-        };
-
-        SendMessage(JsonUtility.ToJson(msg));
-    }
-
-    public void SendChatMessage(string message)
-    {
-        if (!isConnected || stream == null) return;
-
-        NetworkMessage msg = new NetworkMessage
-        {
-            type = "Chat",
-            data = message
-        };
-
-        SendMessage(JsonUtility.ToJson(msg));
-    }
-
-    void SendMessage(string message)
-    {
-        try
-        {
-            if (stream != null && stream.CanWrite)
-            {
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                stream.Flush();
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error enviando mensaje: {e.Message}");
-        }
-    }
-
-    void SyncGameState()
-    {
-        if (isHost && GameManager.Instance != null)
-        {
-            SendGameState(GameManager.Instance.GetGameState());
-        }
-    }
-
-    public bool IsNetworkGame()
-    {
-        return isConnected;
-    }
-
-    public bool IsHostPlayer()
-    {
-        return isHost;
-    }
-
-    public string GetConnectionStatus()
-    {
-        return connectionStatus;
-    }
+    // ✅ MÉTODOS PÚBLICOS
+    public bool IsOnlineMode() => !string.IsNullOrEmpty(currentRoomId);
+    public bool IsConnected() => currentRoomRef != null;
+    public string GetRoomId() => currentRoomId;
+    public string GetUserId() => playerId;
+    public int GetPlayerNumber() => playerNumber;
 
     void OnDestroy()
     {
-        Disconnect();
+        LeaveRoom().ContinueWith(task => { });
     }
+}
 
-    public void Disconnect()
+// ✅ CLASES DE DATOS
+[Serializable]
+public class DofusRoomData
+{
+    public string roomId;
+    public string hostId;
+    public string hostName;
+    public string player1Id;
+    public string player1Name;
+    public string player2Id;
+    public string player2Name;
+    public bool player1Ready;
+    public bool player2Ready;
+    public bool gameStarted;
+    public object createdAt;
+
+    public Dictionary<string, object> ToDictionary()
     {
-        isListening = false;
-        isConnected = false;
-
-        if (stream != null)
+        return new Dictionary<string, object>
         {
-            stream.Close();
-            stream = null;
-        }
+            {"roomId", roomId},
+            {"hostId", hostId},
+            {"hostName", hostName},
+            {"player1Id", player1Id},
+            {"player1Name", player1Name},
+            {"player2Id", player2Id},
+            {"player2Name", player2Name},
+            {"player1Ready", player1Ready},
+            {"player2Ready", player2Ready},
+            {"gameStarted", gameStarted},
+            {"createdAt", createdAt}
+        };
+    }
 
-        if (tcpClient != null)
+    public static DofusRoomData FromSnapshot(DataSnapshot snapshot)
+    {
+        return new DofusRoomData
         {
-            tcpClient.Close();
-            tcpClient = null;
-        }
-
-        if (tcpListener != null)
-        {
-            tcpListener.Stop();
-            tcpListener = null;
-        }
-
-        if (tcpListenerThread != null)
-        {
-            tcpListenerThread.Abort();
-            tcpListenerThread = null;
-        }
-
-        connectionStatus = "Desconectado";
-        Debug.Log("Desconectado de la red");
+            roomId = snapshot.Child("roomId").Value?.ToString(),
+            hostId = snapshot.Child("hostId").Value?.ToString(),
+            hostName = snapshot.Child("hostName").Value?.ToString() ?? "Host",
+            player1Id = snapshot.Child("player1Id").Value?.ToString(),
+            player1Name = snapshot.Child("player1Name").Value?.ToString() ?? "Jugador 1",
+            player2Id = snapshot.Child("player2Id").Value?.ToString() ?? "",
+            player2Name = snapshot.Child("player2Name").Value?.ToString() ?? "",
+            player1Ready = Convert.ToBoolean(snapshot.Child("player1Ready").Value ?? false),
+            player2Ready = Convert.ToBoolean(snapshot.Child("player2Ready").Value ?? false),
+            gameStarted = Convert.ToBoolean(snapshot.Child("gameStarted").Value ?? false),
+            createdAt = snapshot.Child("createdAt").Value
+        };
     }
 }
 
-// Clases de datos para mensajes de red
-[System.Serializable]
-public class NetworkMessage
+[Serializable]
+public class DofusGameState
 {
-    public string type;
-    public string data;
-}
+    public int currentTurn;
+    public string data; // JSON del GameStateData
 
-[System.Serializable]
-public class PlayerActionData
-{
-    public string playerName;
-    public string actionType;
-    public int targetX;
-    public int targetY;
-}
-
-[System.Serializable]
-public class SpellCastData
-{
-    public string playerName;
-    public int spellIndex;
-    public int targetX;
-    public int targetY;
+    public static DofusGameState FromSnapshot(DataSnapshot snapshot)
+    {
+        return new DofusGameState
+        {
+            currentTurn = Convert.ToInt32(snapshot.Child("currentTurn").Value ?? 1),
+            data = snapshot.Child("data").Value?.ToString() ?? ""
+        };
+    }
 }

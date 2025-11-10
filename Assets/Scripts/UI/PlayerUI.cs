@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,12 +31,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private List<TextMeshProUGUI> spellCostTexts;
     [SerializeField] private List<Image> spellCooldownOverlays;
 
-    [Header("Spell Colors")]
-    [SerializeField] private Color fireColor = new Color(1f, 0.3f, 0f);
-    [SerializeField] private Color earthColor = new Color(0.6f, 0.4f, 0.2f);
-    [SerializeField] private Color waterColor = new Color(0f, 0.5f, 1f);
-    [SerializeField] private Color windColor = new Color(0.7f, 1f, 0.7f);
-
     [Header("Turn Indicator")]
     [SerializeField] private GameObject turnIndicatorPanel;
     [SerializeField] private TextMeshProUGUI currentTurnText;
@@ -64,7 +58,6 @@ public class PlayerUI : MonoBehaviour
 
     void InitializeUI()
     {
-        // Configurar barras de vida
         if (player1HealthBar != null)
         {
             player1HealthBar.maxValue = 200;
@@ -77,30 +70,31 @@ public class PlayerUI : MonoBehaviour
             player2HealthBar.value = 200;
         }
 
-        // Ocultar tooltip al inicio
         if (tooltipPanel != null)
             tooltipPanel.SetActive(false);
     }
 
     void SetupSpellButtons()
     {
-        if (spellButtons == null || spellButtons.Count == 0) return;
+        if (spellButtons == null || spellButtons.Count == 0)
+            return;
 
-        // Configurar botones de hechizos
         for (int i = 0; i < spellButtons.Count && i < 4; i++)
         {
             int spellIndex = i;
+
+            // ‚úÖ CONECTAR BOT√ìN CON LISTENER
             spellButtons[i].onClick.AddListener(() => OnSpellButtonClicked(spellIndex));
 
-            // Configurar colores de los iconos
+            // Configurar colores
             if (spellIcons != null && i < spellIcons.Count)
             {
                 switch (i)
                 {
-                    case 0: spellIcons[i].color = fireColor; break;
-                    case 1: spellIcons[i].color = earthColor; break;
-                    case 2: spellIcons[i].color = waterColor; break;
-                    case 3: spellIcons[i].color = windColor; break;
+                    case 0: spellIcons[i].color = new Color(1f, 0.3f, 0f); break;
+                    case 1: spellIcons[i].color = new Color(0.6f, 0.4f, 0.2f); break;
+                    case 2: spellIcons[i].color = new Color(0f, 0.5f, 1f); break;
+                    case 3: spellIcons[i].color = new Color(0.7f, 1f, 0.7f); break;
                 }
             }
 
@@ -116,7 +110,6 @@ public class PlayerUI : MonoBehaviour
                 }
             }
 
-            // Agregar eventos de hover para tooltips
             AddTooltipEvents(spellButtons[i], i);
         }
     }
@@ -125,13 +118,11 @@ public class PlayerUI : MonoBehaviour
     {
         EventTrigger trigger = button.gameObject.AddComponent<EventTrigger>();
 
-        // Mouse Enter
         EventTrigger.Entry enterEntry = new EventTrigger.Entry();
         enterEntry.eventID = EventTriggerType.PointerEnter;
         enterEntry.callback.AddListener((data) => { ShowSpellTooltip(spellIndex); });
         trigger.triggers.Add(enterEntry);
 
-        // Mouse Exit
         EventTrigger.Entry exitEntry = new EventTrigger.Entry();
         exitEntry.eventID = EventTriggerType.PointerExit;
         exitEntry.callback.AddListener((data) => { HideTooltip(); });
@@ -146,27 +137,23 @@ public class PlayerUI : MonoBehaviour
 
         switch (spellIndex)
         {
-            case 0: // Fuego
+            case 0:
                 tooltipTitle.text = "Fuego";
-                tooltipDescription.text = "Costo: 3 PA\nDaÒo: 40\nRango: 4\nLanza una bola de fuego al enemigo.";
+                tooltipDescription.text = "Costo: 3 PA\nDa√±o: 40\nRango: 4";
                 break;
-            case 1: // Tierra
+            case 1:
                 tooltipTitle.text = "Tierra";
-                tooltipDescription.text = "Costo: 2 PA\nDaÒo: 30\nRango: 3\nGolpea con el poder de la tierra.";
+                tooltipDescription.text = "Costo: 2 PA\nDa√±o: 30\nRango: 3";
                 break;
-            case 2: // Agua
+            case 2:
                 tooltipTitle.text = "Agua";
-                tooltipDescription.text = "Costo: 3 PA\nCuraciÛn: 20\n+1 PM\nSolo a ti mismo\nRestaura vida y movilidad.";
+                tooltipDescription.text = "Costo: 3 PA\nCuraci√≥n: 20\n+1 PM";
                 break;
-            case 3: // Viento
+            case 3:
                 tooltipTitle.text = "Viento";
-                tooltipDescription.text = "Costo: 2 PA\n¡rea: 3x3\nEfectos variables seg˙n objetivos\nManipula el campo de batalla.";
+                tooltipDescription.text = "Costo: 2 PA\n√Årea: 3x3";
                 break;
         }
-
-        // Posicionar tooltip cerca del cursor
-        Vector3 mousePos = Input.mousePosition;
-        tooltipPanel.transform.position = mousePos + new Vector3(100, -50, 0);
     }
 
     void HideTooltip()
@@ -179,18 +166,24 @@ public class PlayerUI : MonoBehaviour
     {
         if (endTurnButton != null)
         {
+            // ‚úÖ CONECTAR BOT√ìN DE PASAR TURNO
             endTurnButton.onClick.AddListener(OnEndTurnClicked);
         }
     }
 
     void OnSpellButtonClicked(int spellIndex)
     {
-        // Buscar el jugador activo
+        Debug.Log($"Hechizo {spellIndex} seleccionado");
+
         PlayerController activePlayer = GetActivePlayer();
         if (activePlayer != null)
         {
             activePlayer.TryCastSpell(spellIndex);
-            AddActionToLog($"{activePlayer.GetPlayerData().username} seleccionÛ hechizo {GetSpellName(spellIndex)}");
+            AddActionToLog($"{activePlayer.GetPlayerData().username} seleccion√≥ hechizo {GetSpellName(spellIndex)}");
+        }
+        else
+        {
+            Debug.LogWarning("No hay jugador activo");
         }
     }
 
@@ -208,21 +201,26 @@ public class PlayerUI : MonoBehaviour
 
     void OnEndTurnClicked()
     {
+        Debug.Log("Bot√≥n de pasar turno presionado");
+
         PlayerController activePlayer = GetActivePlayer();
         if (activePlayer != null)
         {
-            AddActionToLog($"{activePlayer.GetPlayerData().username} terminÛ su turno");
+            AddActionToLog($"{activePlayer.GetPlayerData().username} termin√≥ su turno");
             activePlayer.EndTurn();
+        }
+        else
+        {
+            Debug.LogWarning("No hay jugador activo para terminar turno");
         }
     }
 
-    // Reemplaza este mÈtodo:
     PlayerController GetActivePlayer()
     {
         PlayerController[] players = Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
         foreach (var player in players)
         {
-            if (player.GetPlayerData().isMyTurn)
+            if (player.GetPlayerData() != null && player.GetPlayerData().isMyTurn)
                 return player;
         }
         return null;
@@ -230,7 +228,8 @@ public class PlayerUI : MonoBehaviour
 
     public void UpdatePlayerStats(PlayerData playerData)
     {
-        // Determinar quÈ panel actualizar bas·ndose en el nombre del jugador
+        if (playerData == null) return;
+
         bool isPlayer1 = playerData.username == GameManager.Instance.GetGameState().player1.username;
 
         if (isPlayer1)
@@ -242,7 +241,6 @@ public class PlayerUI : MonoBehaviour
             UpdatePlayer2Stats(playerData);
         }
 
-        // Actualizar disponibilidad de hechizos
         UpdateSpellAvailability(playerData);
     }
 
@@ -252,9 +250,7 @@ public class PlayerUI : MonoBehaviour
             player1NameText.text = data.username;
 
         if (player1HealthBar != null)
-        {
             player1HealthBar.value = data.currentHealth;
-        }
 
         if (player1HealthText != null)
             player1HealthText.text = $"{data.currentHealth}/{data.maxHealth}";
@@ -272,9 +268,7 @@ public class PlayerUI : MonoBehaviour
             player2NameText.text = data.username;
 
         if (player2HealthBar != null)
-        {
             player2HealthBar.value = data.currentHealth;
-        }
 
         if (player2HealthText != null)
             player2HealthText.text = $"{data.currentHealth}/{data.maxHealth}";
@@ -290,7 +284,6 @@ public class PlayerUI : MonoBehaviour
     {
         if (!playerData.isMyTurn)
         {
-            // Desactivar todos los botones si no es el turno del jugador
             foreach (Button btn in spellButtons)
             {
                 btn.interactable = false;
@@ -298,13 +291,11 @@ public class PlayerUI : MonoBehaviour
             return;
         }
 
-        // Actualizar disponibilidad seg˙n PA
         for (int i = 0; i < spellButtons.Count && i < playerData.spells.Count; i++)
         {
             bool canCast = playerData.currentAttackPoints >= playerData.spells[i].apCost;
             spellButtons[i].interactable = canCast;
 
-            // Mostrar overlay de cooldown si no puede lanzar
             if (spellCooldownOverlays != null && i < spellCooldownOverlays.Count)
             {
                 spellCooldownOverlays[i].gameObject.SetActive(!canCast);
@@ -325,18 +316,15 @@ public class PlayerUI : MonoBehaviour
     {
         actionLog.Add($"[{System.DateTime.Now:HH:mm:ss}] {action}");
 
-        // Limitar el tamaÒo del log
         if (actionLog.Count > maxLogEntries)
         {
             actionLog.RemoveAt(0);
         }
 
-        // Actualizar el texto del log
         if (actionLogText != null)
         {
             actionLogText.text = string.Join("\n", actionLog);
 
-            // Auto-scroll al final
             if (actionLogScrollRect != null)
             {
                 Canvas.ForceUpdateCanvases();
@@ -347,15 +335,11 @@ public class PlayerUI : MonoBehaviour
 
     public void ShowDamagePopup(Vector3 worldPosition, int damage, Color color)
     {
-        // AquÌ puedes crear un texto flotante que muestre el daÒo
-        // Por ahora solo agregamos al log
-        AddActionToLog($"DaÒo infligido: {damage}");
+        AddActionToLog($"Da√±o infligido: {damage}");
     }
 
     public void ShowHealPopup(Vector3 worldPosition, int healing)
     {
-        // AquÌ puedes crear un texto flotante que muestre la curaciÛn
-        // Por ahora solo agregamos al log
-        AddActionToLog($"CuraciÛn recibida: {healing}");
+        AddActionToLog($"Curaci√≥n recibida: {healing}");
     }
 }

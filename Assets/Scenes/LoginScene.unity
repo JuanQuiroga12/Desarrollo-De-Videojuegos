@@ -1639,8 +1639,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1649317806}
   - {fileID: 1953265569}
+  - {fileID: 1649317806}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1763,6 +1763,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &1314616456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1314616458}
+  - component: {fileID: 1314616457}
+  m_Layer: 0
+  m_Name: NetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1314616457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314616456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf57ca06b7183aa4f8752125c4dab70a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRoomId: 
+  isHost: 0
+  playerId: 
+  playerNumber: 0
+--- !u!4 &1314616458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314616456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 373.30798, y: 300.5453, z: 80.638565}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1332194444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,7 +2342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1649317806
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2393,10 +2441,11 @@ MonoBehaviour:
   registerButton: {fileID: 1592945082}
   offlineButton: {fileID: 2097028457}
   statusText: {fileID: 876914705}
-  playerSelectionPanel: {fileID: 0}
-  player1NameText: {fileID: 0}
-  player2NameText: {fileID: 0}
-  startGameButton: {fileID: 0}
+  playerSelectionPanel: {fileID: 1649317805}
+  player1NameText: {fileID: 1743201090}
+  player2NameText: {fileID: 551793770}
+  startGameButton: {fileID: 787920917}
+  backButton: {fileID: 1623519462}
 --- !u!4 &1704536933
 Transform:
   m_ObjectHideFlags: 0
@@ -3796,3 +3845,4 @@ SceneRoots:
   - {fileID: 1111748507}
   - {fileID: 431281397}
   - {fileID: 1704536933}
+  - {fileID: 1314616458}
