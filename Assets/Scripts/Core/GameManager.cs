@@ -34,10 +34,23 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // ← AGREGAR ESTO
+            Debug.Log("[GameManager] ✅ Instancia creada y marcada como persistente");
         }
-        else
+        else if (Instance != this)
         {
+            Debug.Log("[GameManager] Destruyendo duplicado");
             Destroy(gameObject);
+            return;
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+            Debug.Log("[GameManager] Instancia limpiada en OnDestroy");
         }
     }
 
@@ -194,10 +207,14 @@ public class GameManager : MonoBehaviour
                 currentTurnText.text = $"Turno de: {gameState.player2.username}";
         }
 
-        // Sincronizar con Firebase
+        // ✅ CORREGIDO: Usar async void o esperar el Task
         if (isNetworkGame && NetworkManager.Instance != null)
         {
-            NetworkManager.Instance.SendTurnChange(playerNumber);
+            // Opción 1: Fire and forget (no esperar)
+            _ = NetworkManager.Instance.SendTurnChange(playerNumber);
+
+            // O Opción 2: Crear método async
+            // SendTurnChangeAsync(playerNumber);
         }
     }
 
@@ -293,11 +310,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void ReturnToMenu()
+    // ✅ CORREGIR TAMBIÉN en ReturnToMenu()
+    public async void ReturnToMenu() // ← Cambiar a async void
     {
         if (NetworkManager.Instance != null)
         {
-            NetworkManager.Instance.LeaveRoom();
+            await NetworkManager.Instance.LeaveRoom(); // ← Ahora SÍ espera
         }
 
         SceneManager.LoadScene("LoginScene");
@@ -390,14 +408,5 @@ public class GameManager : MonoBehaviour
     public PlayerController GetPlayerController(int playerNumber)
     {
         return playerNumber == 1 ? player1Controller : player2Controller;
-    }
-
-    void OnDestroy()
-    {
-        if (NetworkManager.Instance != null)
-        {
-            NetworkManager.Instance.OnTurnChanged -= HandleTurnChanged;
-            NetworkManager.Instance.OnGameStateUpdated -= HandleGameStateUpdate;
-        }
     }
 }

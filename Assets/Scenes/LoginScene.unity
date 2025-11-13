@@ -2441,6 +2441,7 @@ MonoBehaviour:
   registerButton: {fileID: 1592945082}
   offlineButton: {fileID: 2097028457}
   statusText: {fileID: 876914705}
+  errorText: {fileID: 0}
   playerSelectionPanel: {fileID: 1649317805}
   player1NameText: {fileID: 1743201090}
   player2NameText: {fileID: 551793770}

@@ -214,13 +214,19 @@ public class NetworkManager : MonoBehaviour
         // Si no se especifica sala, buscar una disponible
         if (string.IsNullOrEmpty(roomId))
         {
-            var availableRoom = await FindAvailableRoom();
-            if (availableRoom == null)
+            Debug.Log("[NetworkManager] 🔍 Buscando sala disponible...");
+
+            // ✅ NUEVO: Intentar unirse con transacción atómica
+            roomId = await TryJoinAvailableRoomAtomic(playerName);
+
+            if (string.IsNullOrEmpty(roomId))
             {
-                Debug.Log("[NetworkManager] No hay salas disponibles");
+                Debug.Log("[NetworkManager] ⚠️ No se pudo unir a ninguna sala existente");
                 return null;
             }
-            roomId = availableRoom.roomId;
+
+            Debug.Log($"[NetworkManager] ✅ Unido exitosamente a sala: {roomId}");
+            return roomId;
         }
 
         if (string.IsNullOrEmpty(roomId))
@@ -297,34 +303,246 @@ public class NetworkManager : MonoBehaviour
         return roomId;
     }
 
-    // ✅ BUSCAR SALA DISPONIBLE
-    private async Task<DofusRoomData> FindAvailableRoom()
+    // ✅ NUEVO MÉTODO: Intentar unirse a sala disponible con transacción atómica
+    private async Task<string> TryJoinAvailableRoomAtomic(string playerName)
     {
         var snapshot = await roomsRef.GetValueAsync();
 
-        if (!snapshot.Exists)
+        if (!snapshot.Exists || !snapshot.HasChildren)
         {
             Debug.Log("[NetworkManager] No hay salas en Firebase");
             return null;
         }
 
+        // Intentar unirse a cada sala disponible usando transacciones
         foreach (var roomSnapshot in snapshot.Children)
         {
-            var roomData = DofusRoomData.FromSnapshot(roomSnapshot);
-
-            if (string.IsNullOrEmpty(roomData.roomId))
-                continue;
-
-            if (!roomData.gameStarted && string.IsNullOrEmpty(roomData.player2Id))
+            try
             {
-                Debug.Log($"[NetworkManager] ✅ Sala disponible: {roomData.roomId}");
-                return roomData;
+                var roomData = DofusRoomData.FromSnapshot(roomSnapshot);
+
+                // Validar que la sala sea válida
+                if (string.IsNullOrEmpty(roomData.roomId) ||
+                    roomData.gameStarted ||
+                    !string.IsNullOrEmpty(roomData.player2Id))
+                {
+                    continue;
+                }
+
+                Debug.Log($"[NetworkManager] 🔄 Intentando unirse a sala {roomData.roomId}...");
+
+                // ✅ Usar transacción para unirse de forma atómica
+                bool joined = await JoinRoomWithTransaction(roomData.roomId, playerName);
+
+                if (joined)
+                {
+                    return roomData.roomId;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[NetworkManager] ⚠️ Error al intentar unirse a sala: {e.Message}");
+                continue; // Intentar con la siguiente sala
             }
         }
 
-        Debug.Log("[NetworkManager] No hay salas disponibles");
         return null;
     }
+
+    // ✅ NUEVO MÉTODO: Unirse a sala específica usando transacción (VERSION FINAL CORREGIDA)
+    private async Task<bool> JoinRoomWithTransaction(string roomId, string playerName)
+    {
+        currentRoomRef = roomsRef.Child(roomId);
+        int maxRetries = 3;
+        int retryDelay = 500; // ms
+
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            try
+            {
+                if (attempt > 0)
+                {
+                    Debug.Log($"[NetworkManager] 🔄 Reintento {attempt + 1}/{maxRetries} para sala {roomId}");
+                    await Task.Delay(retryDelay);
+                }
+
+                // ✅ Primero verificar que la sala existe antes de la transacción
+                var preCheckSnapshot = await currentRoomRef.GetValueAsync();
+
+                if (!preCheckSnapshot.Exists)
+                {
+                    Debug.Log($"[NetworkManager] ⚠️ Sala {roomId} no existe en pre-check");
+                    currentRoomRef = null;
+                    return false;
+                }
+
+                // Verificar condiciones antes de la transacción
+                var preCheckData = DofusRoomData.FromSnapshot(preCheckSnapshot);
+
+                if (preCheckData.gameStarted)
+                {
+                    Debug.Log($"[NetworkManager] ⚠️ Sala {roomId} ya comenzó el juego");
+                    currentRoomRef = null;
+                    return false;
+                }
+
+                if (!string.IsNullOrEmpty(preCheckData.player2Id))
+                {
+                    Debug.Log($"[NetworkManager] ⚠️ Sala {roomId} ya está llena");
+                    currentRoomRef = null;
+                    return false;
+                }
+
+                // ✅ Transacción atómica para ocupar el slot de player2
+                DataSnapshot resultSnapshot = await currentRoomRef.RunTransaction(mutableData =>
+                {
+                    // ✅ IMPORTANTE: Firebase llama a esta función DOS veces:
+                    // 1ra vez: mutableData.Value es null (placeholder local)
+                    // 2da vez: mutableData.Value tiene los datos reales del servidor
+
+                    // Si no hay datos en el segundo intento, la sala fue eliminada
+                    if (mutableData.Value == null)
+                    {
+                        // ✅ CAMBIO CLAVE: NO abortar inmediatamente, dejar que Firebase reintente
+                        // Solo retornar Success con datos null para que Firebase vuelva a llamar
+                        Debug.LogWarning($"[NetworkManager] ⚠️ MutableData null (Firebase recargando datos)");
+                        return TransactionResult.Success(mutableData);
+                    }
+
+                    var data = mutableData.Value as Dictionary<string, object>;
+                    if (data == null)
+                    {
+                        Debug.LogError("[NetworkManager] ❌ No se pudo convertir datos a Dictionary");
+                        return TransactionResult.Abort();
+                    }
+
+                    // Verificar disponibilidad dentro de la transacción
+                    bool gameStarted = data.ContainsKey("gameStarted") && Convert.ToBoolean(data["gameStarted"]);
+                    string player2Id = data.ContainsKey("player2Id") ? data["player2Id"]?.ToString() : "";
+
+                    if (gameStarted)
+                    {
+                        Debug.Log($"[NetworkManager] ⚠️ Sala {roomId} comenzó en transacción");
+                        return TransactionResult.Abort();
+                    }
+
+                    if (!string.IsNullOrEmpty(player2Id))
+                    {
+                        Debug.Log($"[NetworkManager] ⚠️ Sala {roomId} se llenó en transacción");
+                        return TransactionResult.Abort();
+                    }
+
+                    // ✅ Ocupar el slot de player2
+                    data["player2Id"] = playerId;
+                    data["player2Name"] = string.IsNullOrEmpty(playerName) ? "Jugador 2" : playerName;
+                    data["player2Ready"] = false;
+
+                    mutableData.Value = data;
+                    Debug.Log($"[NetworkManager] ✅ Transacción completada, player2 asignado");
+                    return TransactionResult.Success(mutableData);
+                });
+
+                // Verificar éxito de la transacción
+                if (resultSnapshot == null || !resultSnapshot.Exists)
+                {
+                    Debug.Log($"[NetworkManager] ⚠️ Transacción abortada para sala {roomId} (intento {attempt + 1})");
+
+                    // Si fue el último intento, fallar
+                    if (attempt == maxRetries - 1)
+                    {
+                        currentRoomRef = null;
+                        return false;
+                    }
+
+                    continue; // Reintentar
+                }
+
+                // ✅ Verificar que realmente se asignó player2
+                var finalData = DofusRoomData.FromSnapshot(resultSnapshot);
+                if (string.IsNullOrEmpty(finalData.player2Id) || finalData.player2Id != playerId)
+                {
+                    Debug.LogWarning($"[NetworkManager] ⚠️ Player2 no fue asignado correctamente (intento {attempt + 1})");
+
+                    if (attempt == maxRetries - 1)
+                    {
+                        currentRoomRef = null;
+                        return false;
+                    }
+
+                    continue; // Reintentar
+                }
+
+                // ✅ Transacción exitosa, configurar cliente local
+                currentRoomId = roomId;
+                playerNumber = 2;
+                isHost = false;
+
+                SetupRoomListeners();
+
+                // Guardar en PlayerPrefs
+                PlayerPrefs.SetString("CurrentRoomId", roomId);
+                PlayerPrefs.SetString("CurrentUserId", playerId);
+                PlayerPrefs.SetString("Player1Name", finalData.player1Name);
+                PlayerPrefs.SetString("Player2Name", string.IsNullOrEmpty(playerName) ? "Jugador 2" : playerName);
+                PlayerPrefs.SetString("PlayerNumber", "2");
+                PlayerPrefs.SetString("IsOnlineMode", "True");
+                PlayerPrefs.Save();
+
+                Debug.Log($"[NetworkManager] ✅ Unido a sala: {roomId} como {playerName}");
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[NetworkManager] ❌ Error en transacción (intento {attempt + 1}): {e.Message}");
+
+                // Si fue el último intento, fallar completamente
+                if (attempt == maxRetries - 1)
+                {
+                    currentRoomRef = null;
+                    currentRoomId = null;
+                    return false;
+                }
+
+                // Continuar con el siguiente intento
+                continue;
+            }
+        }
+
+        // Si llegamos aquí, todos los intentos fallaron
+        currentRoomRef = null;
+        currentRoomId = null;
+        return false;
+    }
+
+    // ✅ MÉTODO AUXILIAR: Unirse a sala específica (sin transacción)
+    private async Task<string> JoinSpecificRoom(string roomId, string playerName)
+    {
+        if (string.IsNullOrEmpty(roomId))
+        {
+            Debug.LogError("[NetworkManager] ❌ roomId es null o vacío");
+            return null;
+        }
+
+        // Validar que no estemos ya en una sala
+        if (!string.IsNullOrEmpty(currentRoomId))
+        {
+            if (currentRoomId == roomId)
+            {
+                Debug.LogWarning($"[NetworkManager] Ya estás en la sala {roomId}");
+                return roomId;
+            }
+            else
+            {
+                Debug.LogWarning($"[NetworkManager] Saliendo de sala {currentRoomId}...");
+                await LeaveRoom();
+            }
+        }
+
+        // Intentar unirse usando transacción
+        bool joined = await JoinRoomWithTransaction(roomId, playerName);
+        return joined ? roomId : null;
+    }
+
 
     // ✅ LISTENERS
     private void SetupRoomListeners()
@@ -421,36 +639,112 @@ public class NetworkManager : MonoBehaviour
     }
 
     // ✅ SALIR DE SALA
+    // ✅ SALIR DE SALA (versión mejorada)
     public async Task LeaveRoom()
     {
         if (string.IsNullOrEmpty(currentRoomId))
+        {
+            Debug.Log("[NetworkManager] No hay sala activa para abandonar");
             return;
-
-        if (isHost)
-        {
-            await currentRoomRef.RemoveValueAsync();
-        }
-        else
-        {
-            await currentRoomRef.Child("player2Id").SetValueAsync("");
-            await currentRoomRef.Child("player2Name").SetValueAsync("");
         }
 
-        // Limpiar listeners
+        Debug.Log($"[NetworkManager] 🚪 Abandonando sala: {currentRoomId}, isHost: {isHost}");
+
+        // ✅ PRIMERO: Limpiar listeners ANTES de modificar la base de datos
+        CleanupListeners();
+
+        try
+        {
+            if (isHost)
+            {
+                // El host elimina toda la sala
+                Debug.Log($"[NetworkManager] 🗑️ Host eliminando sala completa: {currentRoomId}");
+                await currentRoomRef.RemoveValueAsync();
+            }
+            else
+            {
+                // El jugador 2 solo limpia sus datos
+                Debug.Log($"[NetworkManager] 👋 Jugador 2 saliendo de la sala: {currentRoomId}");
+
+                // Limpiar datos del jugador 2
+                var updates = new Dictionary<string, object>
+            {
+                { "player2Id", "" },
+                { "player2Name", "" },
+                { "player2Ready", false }
+            };
+
+                await currentRoomRef.UpdateChildrenAsync(updates);
+            }
+
+            Debug.Log("[NetworkManager] ✅ Sala abandonada exitosamente");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[NetworkManager] ❌ Error al abandonar sala: {e.Message}\n{e.StackTrace}");
+
+            // Intentar con un método alternativo si falla
+            if (isHost)
+            {
+                try
+                {
+                    Debug.Log("[NetworkManager] 🔄 Intentando método alternativo para eliminar sala...");
+
+                    // Eliminar cada campo individualmente
+                    await currentRoomRef.Child("roomId").RemoveValueAsync();
+                    await currentRoomRef.Child("hostId").RemoveValueAsync();
+                    await currentRoomRef.Child("player1Id").RemoveValueAsync();
+                    await currentRoomRef.Child("player2Id").RemoveValueAsync();
+                    await currentRoomRef.Child("gameStarted").RemoveValueAsync();
+
+                    Debug.Log("[NetworkManager] ✅ Sala eliminada con método alternativo");
+                }
+                catch (Exception ex2)
+                {
+                    Debug.LogError($"[NetworkManager] ❌ También falló el método alternativo: {ex2.Message}");
+                }
+            }
+        }
+        finally
+        {
+            // Limpiar estado local SIEMPRE
+            currentRoomId = null;
+            currentRoomRef = null;
+            isHost = false;
+            playerNumber = -1;
+
+            // Limpiar PlayerPrefs
+            PlayerPrefs.DeleteKey("CurrentRoomId");
+            PlayerPrefs.DeleteKey("PlayerNumber");
+            PlayerPrefs.Save();
+
+            Debug.Log("[NetworkManager] 🧹 Estado local limpiado");
+        }
+    }
+
+    // ✅ NUEVO MÉTODO para limpiar listeners
+    private void CleanupListeners()
+    {
+        Debug.Log($"[NetworkManager] 🧹 Limpiando {roomListeners.Count} listeners...");
+
         foreach (var listener in roomListeners)
         {
             if (listener is DatabaseReference dbRef)
             {
-                dbRef.ValueChanged -= HandleRoomValueChanged;
-                dbRef.ValueChanged -= HandleGameStateChanged;
+                try
+                {
+                    dbRef.ValueChanged -= HandleRoomValueChanged;
+                    dbRef.ValueChanged -= HandleGameStateChanged;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[NetworkManager] ⚠️ Error al limpiar listener: {e.Message}");
+                }
             }
         }
-        roomListeners.Clear();
 
-        currentRoomId = null;
-        currentRoomRef = null;
-        isHost = false;
-        playerNumber = -1;
+        roomListeners.Clear();
+        Debug.Log("[NetworkManager] ✅ Listeners limpiados");
     }
 
     private string GenerateRoomId()

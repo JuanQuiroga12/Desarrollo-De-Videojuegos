@@ -44,7 +44,11 @@ public class LoginManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // ❌ ELIMINAR ESTO:
+            // DontDestroyOnLoad(gameObject);
+
+            // ✅ LoginManager DEBE destruirse al cambiar de escena
+            Debug.Log("[LoginManager] LoginManager creado (se destruirá al cambiar escena)");
         }
         else
         {
@@ -66,8 +70,11 @@ public class LoginManager : MonoBehaviour
         ValidateUIReferences();
         SetupUICallbacks();
 
-        // ✅ ESPERAR a que NetworkManager inicialice Firebase
-        StartCoroutine(WaitForFirebaseInitialization());
+        // ❌ ELIMINAR ESTA LÍNEA - Firebase ya se inicializa en NetworkManager
+        // StartCoroutine(WaitForFirebaseInitialization());
+
+        // ✅ REEMPLAZAR CON ESTO: Esperar a NetworkManager y luego inicializar Auth
+        StartCoroutine(WaitForNetworkManagerAuth());
 
         if (loginPanel == null)
         {
@@ -76,19 +83,20 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForFirebaseInitialization()
+    // ✅ NUEVO MÉTODO: Espera a que NetworkManager esté listo
+    private IEnumerator WaitForNetworkManagerAuth()
     {
-        Debug.Log("[LoginManager] ⏳ Esperando inicialización de Firebase...");
+        Debug.Log("[LoginManager] ⏳ Esperando a NetworkManager...");
 
-        // Esperar a que NetworkManager exista e inicialice Firebase
+        // Esperar a que NetworkManager exista y Firebase esté listo
         while (NetworkManager.Instance == null || !NetworkManager.Instance.IsFirebaseReady())
         {
             yield return new WaitForSeconds(0.1f);
         }
 
-        Debug.Log("[LoginManager] ✅ Firebase listo! Inicializando Auth...");
+        Debug.Log("[LoginManager] ✅ NetworkManager listo, configurando Auth local...");
 
-        // Ahora sí inicializar Auth
+        // Ahora SÍ inicializar Auth (ya no CheckDependencies, solo usar el existente)
         try
         {
             auth = FirebaseAuth.DefaultInstance;
@@ -98,12 +106,12 @@ public class LoginManager : MonoBehaviour
             {
                 auth.StateChanged += AuthStateChanged;
                 AuthStateChanged(this, null);
-                Debug.Log("[LoginManager] ✅ Auth inicializado correctamente");
+                Debug.Log("[LoginManager] ✅ Auth configurado correctamente");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"[LoginManager] ❌ Error al inicializar Auth: {e.Message}");
+            Debug.LogError($"[LoginManager] ❌ Error al configurar Auth: {e.Message}");
         }
     }
 
@@ -258,6 +266,10 @@ public class LoginManager : MonoBehaviour
                     NetworkManager.Instance.OnRoomUpdated += OnRoomUpdated;
                     NetworkManager.Instance.OnGameStarted += OnGameStarted;
 
+                    // ✅ NUEVO: Marcar al jugador como listo automáticamente
+                    await NetworkManager.Instance.SetPlayerReady();
+                    Debug.Log($"[LoginManager] Jugador {username} marcado como listo");
+
                     ShowPlayerSelection();
                 }
                 else
@@ -339,6 +351,7 @@ public class LoginManager : MonoBehaviour
                 player2NameText.text = "Jugador 2: Esperando...";
         }
 
+        // ✅ Esta parte ahora funcionará correctamente
         if (roomData.player1Ready && roomData.player2Ready)
         {
             if (startGameButton != null)
@@ -372,21 +385,60 @@ public class LoginManager : MonoBehaviour
 
     async void OnBackClicked()
     {
-        if (auth != null && user != null)
-        {
-            auth.SignOut();
-        }
+        Debug.Log("[LoginManager] 🔙 Volviendo al menú principal...");
 
-        if (NetworkManager.Instance != null)
+        try
         {
-            await NetworkManager.Instance.LeaveRoom();
-            NetworkManager.Instance.OnRoomUpdated -= OnRoomUpdated;
-            NetworkManager.Instance.OnGameStarted -= OnGameStarted;
-        }
+            // ✅ PRIMERO: Salir de la sala ANTES de cerrar sesión
+            if (NetworkManager.Instance != null)
+            {
+                Debug.Log("[LoginManager] 🚪 Abandonando sala de NetworkManager...");
 
-        if (loginPanel != null) loginPanel.SetActive(true);
-        if (playerSelectionPanel != null) playerSelectionPanel.SetActive(false);
-        UpdateStatus("Sesión cerrada");
+                // Desuscribirse de eventos ANTES de salir
+                NetworkManager.Instance.OnRoomUpdated -= OnRoomUpdated;
+                NetworkManager.Instance.OnGameStarted -= OnGameStarted;
+
+                // Salir de la sala (ANTES de cerrar sesión para que el usuario aún esté autenticado)
+                await NetworkManager.Instance.LeaveRoom();
+            }
+
+            // ✅ SEGUNDO: AHORA SÍ cerrar sesión de Firebase Auth (DESPUÉS de limpiar la sala)
+            if (auth != null && user != null)
+            {
+                Debug.Log("[LoginManager] 🚪 Cerrando sesión de Firebase Auth...");
+                auth.SignOut();
+            }
+
+            // Restaurar UI
+            if (loginPanel != null)
+            {
+                loginPanel.SetActive(true);
+                Debug.Log("[LoginManager] ✅ Panel de login restaurado");
+            }
+
+            if (playerSelectionPanel != null)
+            {
+                playerSelectionPanel.SetActive(false);
+                Debug.Log("[LoginManager] ✅ Panel de selección oculto");
+            }
+
+            // Limpiar campos
+            if (usernameInput != null) usernameInput.text = "";
+            if (passwordInput != null) passwordInput.text = "";
+
+            UpdateStatus("Sesión cerrada");
+            Debug.Log("[LoginManager] ✅ Vuelto al menú principal exitosamente");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[LoginManager] ❌ Error al volver al menú: {e.Message}\n{e.StackTrace}");
+
+            // Aun con error, intentar restaurar UI
+            if (loginPanel != null) loginPanel.SetActive(true);
+            if (playerSelectionPanel != null) playerSelectionPanel.SetActive(false);
+
+            ShowError("Error al cerrar sesión, pero has vuelto al menú");
+        }
     }
 
     void StartOfflineMode()
@@ -403,14 +455,66 @@ public class LoginManager : MonoBehaviour
 
         UpdateStatus("Iniciando offline...");
 
-        StartCoroutine(LoadGameSceneDelayed());
+        // ✅ IMPORTANTE: Desuscribirse de eventos ANTES de cargar
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnRoomUpdated -= OnRoomUpdated;
+            NetworkManager.Instance.OnGameStarted -= OnGameStarted;
+        }
+
+        // ✅ NUEVO: Destruir LoginManager INMEDIATAMENTE antes de cargar la escena
+        Debug.Log("[LoginManager] 🗑️ Destruyendo LoginManager ANTES de cargar GameScene");
+
+        // Desuscribirse del evento de cambio de escena
+        SceneManager.sceneLoaded -= OnGameSceneLoaded;
+
+        // Destruir INMEDIATAMENTE (no esperar coroutine)
+        Destroy(gameObject);
+
+        // DESPUÉS cargar la escena
+        SceneManager.LoadScene("GameScene");
     }
 
     private IEnumerator LoadGameSceneDelayed()
     {
         yield return new WaitForSeconds(0.5f);
         Debug.Log("[LoginManager] Cargando GameScene...");
+
+        // ✅ IMPORTANTE: Desactivar completamente el LoginManager ANTES de cargar
+        if (loginPanel != null) loginPanel.SetActive(false);
+        if (playerSelectionPanel != null) playerSelectionPanel.SetActive(false);
+
+        // ✅ Suscribirse al evento de carga
+        SceneManager.sceneLoaded += OnGameSceneLoaded;
+
         SceneManager.LoadScene("GameScene");
+    }
+
+    private void OnGameSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "GameScene")
+        {
+            Debug.Log("[LoginManager] 🧹 GameScene cargada");
+
+            // Desuscribirse del evento
+            SceneManager.sceneLoaded -= OnGameSceneLoaded;
+
+            // ✅ CRUCIAL: Esperar antes de destruir para no interferir con Awake() de GameManager
+            StartCoroutine(DestroyAfterGameSceneReady());
+        }
+    }
+
+    private IEnumerator DestroyAfterGameSceneReady()
+    {
+        // Esperar varios frames para que GameManager.Awake() se ejecute
+        yield return null; // Frame 1
+        yield return null; // Frame 2
+        yield return new WaitForSeconds(1f); // 1 segundo adicional
+
+        Debug.Log("[LoginManager] 🗑️ Destruyendo LoginManager DESPUÉS de que GameScene esté lista");
+
+        // Ahora sí, destruir de forma segura
+        Destroy(gameObject);
     }
 
     async void StartGame()
