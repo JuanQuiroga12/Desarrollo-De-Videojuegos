@@ -13,8 +13,6 @@ public class PlayerMovementVisualizer : MonoBehaviour
     [Header("Referencias")]
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] public PlayerData playerData;
-    [SerializeField] public PlayerController isLocalPlayer;
 
     [Header("Mobile Settings")]
     [SerializeField] private float doubleTapDelay = 0.5f;
@@ -44,6 +42,25 @@ public class PlayerMovementVisualizer : MonoBehaviour
         isMobile = Application.isMobilePlatform;
 
         Debug.Log($"[MovementVisualizer] Plataforma detectada: {(isMobile ? "MÓVIL" : "PC")}");
+    }
+
+    void Update()
+    {
+        // Solo procesar si es el turno del jugador
+        if (playerController == null || !playerController.GetPlayerData().isMyTurn)
+        {
+            ClearVisualization();
+            return;
+        }
+
+        if (isMobile)
+        {
+            HandleMobileInput();
+        }
+        else
+        {
+            HandlePCInput();
+        }
     }
 
     /// <summary>
@@ -284,33 +301,5 @@ public class PlayerMovementVisualizer : MonoBehaviour
     void OnDisable()
     {
         ClearVisualization();
-    }
-
-
-    void Update()
-    {
-        // ✅ NUEVO: Detectar hover del mouse sobre la grid
-        if (!isLocalPlayer || !playerData.isMyTurn) return;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 100f))
-        {
-            // Convertir posición del hit a coordenadas de grid
-            Vector2Int hoveredGridPos = MapGenerator.Instance.GetGridPosition(hit.point);
-
-            // Mostrar highlight en la tile
-            if (GridVisualizer.Instance != null)
-            {
-                GridVisualizer.Instance.HighlightTile(hoveredGridPos);
-            }
-
-            // Si se hace clic, intentar mover
-            if (Input.GetMouseButtonDown(0))
-            {
-                playerController.TryMoveTo(hoveredGridPos);
-            }
-        }
     }
 }

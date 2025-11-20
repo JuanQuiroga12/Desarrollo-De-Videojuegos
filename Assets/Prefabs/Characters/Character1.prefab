@@ -350,6 +350,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5920575211857952437}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1922371673662285059}
   m_SourcePrefab: {fileID: 100100000, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
 --- !u!1 &6046026495792925068 stripped
 GameObject:
@@ -520,7 +523,6 @@ MonoBehaviour:
       range: 3
       areaSize: 1
     isMyTurn: 0
-  isLocalPlayer: 1
   playerNumber: 1
   moveSpeed: 3
   rotationSpeed: 10
@@ -538,70 +540,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 246a53aeeac3f9347af576f3d507eed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: -1888551378489097931}
-  mainCamera: {fileID: 0}
-  playerData:
-    username: 
-    currentHealth: 200
-    maxHealth: 200
-    currentMovementPoints: 4
-    baseMovementPoints: 4
-    currentAttackPoints: 6
-    baseAttackPoints: 6
-    gridPosition: {x: 0, y: 0}
-    spells:
-    - spellName: Fuego
-      element: 0
-      spellType: 0
-      apCost: 3
-      damage: 40
-      healing: 0
-      movementBonus: 0
-      movementPenalty: 0
-      apBonus: 0
-      apPenalty: 0
-      range: 4
-      areaSize: 0
-    - spellName: Tierra
-      element: 1
-      spellType: 0
-      apCost: 2
-      damage: 30
-      healing: 0
-      movementBonus: 0
-      movementPenalty: 0
-      apBonus: 0
-      apPenalty: 0
-      range: 3
-      areaSize: 0
-    - spellName: Agua
-      element: 2
-      spellType: 1
-      apCost: 3
-      damage: 0
-      healing: 20
-      movementBonus: 1
-      movementPenalty: 0
-      apBonus: 0
-      apPenalty: 0
-      range: 0
-      areaSize: 0
-    - spellName: Viento
-      element: 3
-      spellType: 2
-      apCost: 2
-      damage: 0
-      healing: 0
-      movementBonus: 0
-      movementPenalty: 0
-      apBonus: 0
-      apPenalty: 0
-      range: 3
-      areaSize: 1
-    isMyTurn: 0
-  isLocalPlayer: {fileID: -1888551378489097931}
-  doubleTapDelay: 0.5
-  doubleTapRadius: 30
   reachableColor: {r: 0, g: 1, b: 0, a: 0.8}
   unreachableColor: {r: 1, g: 0, b: 0, a: 0.8}
   selectedColor: {r: 1, g: 1, b: 0, a: 0.9}
+  doubleTapTime: 0.5
+--- !u!114 &-1922371673662285059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6046026495792925068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 749edd5d3cb9bc84eaee89d64b9532d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spellRangeColor: {r: 1, g: 0.5, b: 0, a: 0.6}
+  targetableColor: {r: 1, g: 0, b: 0, a: 0.8}

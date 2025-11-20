@@ -76,6 +76,7 @@ public class PlayerUI : MonoBehaviour
 
     void SetupSpellButtons()
     {
+
         if (spellButtons == null || spellButtons.Count == 0)
             return;
 
@@ -109,6 +110,20 @@ public class PlayerUI : MonoBehaviour
                     case 3: spellCostTexts[i].text = "2 PA"; break;
                 }
             }
+
+            // Agregar esto en SetupSpellButtons() de PlayerUI.cs
+            spellButtons[i].onClick.AddListener(() =>
+            {
+                PlayerController activePlayer = GetActivePlayer();
+                if (activePlayer != null)
+                {
+                    SpellCastingSystem spellSystem = activePlayer.GetComponent<SpellCastingSystem>();
+                    if (spellSystem != null)
+                    {
+                        spellSystem.SelectSpell(spellIndex);
+                    }
+                }
+            });
 
             AddTooltipEvents(spellButtons[i], i);
         }

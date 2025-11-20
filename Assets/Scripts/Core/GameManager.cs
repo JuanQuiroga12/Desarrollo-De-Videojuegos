@@ -1,11 +1,18 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
+﻿using Firebase.Database;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    // Agregar estas variables al inicio de GameManager
+    private float serverTurnStartTime = 0f;
+    private bool isSyncingTime = false;
 
     [Header("Game State")]
     [SerializeField] private GameStateData gameState;
@@ -108,12 +115,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        // ✅ CORREGIDO: Altura de spawn de jugadores
-        const float PLAYER_SPAWN_HEIGHT = 0.41f; // ← Altura sobre el grid (ajusta este valor si es necesario)
+        const float PLAYER_SPAWN_HEIGHT = 0.41f;
 
-        // Instanciar jugadores
+        // ========== CONFIGURAR JUGADOR 1 ==========
         Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
-        player1StartPos.y = PLAYER_SPAWN_HEIGHT; // ← CAMBIADO de 0f a PLAYER_SPAWN_HEIGHT
+        player1StartPos.y = PLAYER_SPAWN_HEIGHT;
 
         GameObject player1Obj = Instantiate(player1Prefab, player1StartPos, Quaternion.identity);
         player1Obj.name = "Player1";
@@ -124,13 +130,33 @@ public class GameManager : MonoBehaviour
             player1Controller.SetPlayerData(gameState.player1);
             player1Controller.SetPlayerNumber(1);
 
-            int playerNumber = NetworkManager.Instance != null ? NetworkManager.Instance.GetPlayerNumber() : 1;
-            player1Controller.SetIsLocalPlayer(playerNumber == 1);
+            // ✅ CORREGIDO: Configurar isLocalPlayer correctamente
+            if (isNetworkGame && NetworkManager.Instance != null)
+            {
+                // Modo Online: jugador local según número de red
+                int myPlayerNumber = NetworkManager.Instance.GetPlayerNumber();
+                player1Controller.SetIsLocalPlayer(myPlayerNumber == 1);
+                player1Controller.isLocalPlayer = (myPlayerNumber == 1);
+                Debug.Log($"[GameManager] Player1 isLocalPlayer = {myPlayerNumber == 1} (Mi número: {myPlayerNumber})");
+            }
+            else
+            {
+                // Modo Offline: Player 1 siempre es local
+                player1Controller.SetIsLocalPlayer(true);
+                player1Controller.isLocalPlayer = true;
+                Debug.Log("[GameManager] Modo Offline: Player1 isLocalPlayer = true");
+            }
+
+            // Agregar sistema de movimiento
+            if (player1Obj.GetComponent<PlayerMovementSystem>() == null)
+            {
+                player1Obj.AddComponent<PlayerMovementSystem>();
+            }
         }
 
-        // Instanciar jugador 2
+        // ========== CONFIGURAR JUGADOR 2 ==========
         Vector3 player2StartPos = MapGenerator.Instance.GetWorldPosition(8, 8);
-        player2StartPos.y = PLAYER_SPAWN_HEIGHT; // ← CAMBIADO de 0f a PLAYER_SPAWN_HEIGHT
+        player2StartPos.y = PLAYER_SPAWN_HEIGHT;
 
         GameObject player2Obj = Instantiate(player2Prefab, player2StartPos, Quaternion.identity);
         player2Obj.name = "Player2";
@@ -141,14 +167,88 @@ public class GameManager : MonoBehaviour
             player2Controller.SetPlayerData(gameState.player2);
             player2Controller.SetPlayerNumber(2);
 
-            int playerNumber = NetworkManager.Instance != null ? NetworkManager.Instance.GetPlayerNumber() : 1;
-            player2Controller.SetIsLocalPlayer(playerNumber == 2);
+            // ✅ CORREGIDO: Configurar isLocalPlayer correctamente
+            if (isNetworkGame && NetworkManager.Instance != null)
+            {
+                // Modo Online: jugador local según número de red
+                int myPlayerNumber = NetworkManager.Instance.GetPlayerNumber();
+                player2Controller.SetIsLocalPlayer(myPlayerNumber == 2);
+                player2Controller.isLocalPlayer = (myPlayerNumber == 2);
+                Debug.Log($"[GameManager] Player2 isLocalPlayer = {myPlayerNumber == 2} (Mi número: {myPlayerNumber})");
+            }
+            else
+            {
+                // Modo Offline: Player 2 NO es local (CPU)
+                player2Controller.SetIsLocalPlayer(false);
+                player2Controller.isLocalPlayer = false;
+                Debug.Log("[GameManager] Modo Offline: Player2 isLocalPlayer = false (CPU)");
+            }
+
+            // Agregar sistema de movimiento
+            if (player2Obj.GetComponent<PlayerMovementSystem>() == null)
+            {
+                player2Obj.AddComponent<PlayerMovementSystem>();
+            }
         }
 
         SetupCameras();
         StartGame();
 
-        Debug.Log("[GameManager] Jugadores configurados correctamente");
+        Debug.Log("[GameManager] ✅ Jugadores configurados correctamente");
+        Debug.Log($"    - Modo: {(isNetworkGame ? "Online" : "Offline")}");
+        Debug.Log($"    - Player1 Local: {player1Controller?.isLocalPlayer}");
+        Debug.Log($"    - Player2 Local: {player2Controller?.isLocalPlayer}");
+    }
+
+    // Reemplazar el método SyncTurnTimer para que sea un IEnumerator normal (corutina de Unity)
+    // El error CS1624 ocurre porque no se puede usar 'async Task<IEnumerator>' con 'yield return'.
+    // Solución: Cambiar la firma a 'private IEnumerator SyncTurnTimer()' y usar corutinas normales.
+
+    private IEnumerator SyncTurnTimer()
+    {
+        while (isGameActive)
+        {
+            if (isNetworkGame && NetworkManager.Instance != null)
+            {
+                // Sincronizar cada 2 segundos
+                if (!isSyncingTime)
+                {
+                    isSyncingTime = true;
+
+                    // Si soy el host, envío el tiempo
+                    if (NetworkManager.Instance.isHost)
+                    {
+                        var updates = new Dictionary<string, object>
+                        {
+                            { "gameState/turnTimeRemaining", currentTurnTime },
+                            { "gameState/serverTime", Firebase.Database.ServerValue.Timestamp }
+                        };
+
+                        // Usar una tarea y esperar a que termine (no se puede usar await en corutinas, así que solo lanzamos la tarea)
+                        NetworkManager.Instance.currentRoomRef.UpdateChildrenAsync(updates);
+                    }
+                    // Si no soy host, leo el tiempo
+                    else
+                    {
+                        var task = NetworkManager.Instance.currentRoomRef
+                            .Child("gameState/turnTimeRemaining").GetValueAsync();
+
+                        while (!task.IsCompleted)
+                            yield return null;
+
+                        if (task.Exception == null && task.Result.Exists)
+                        {
+                            float serverTime = Convert.ToSingle(task.Result.Value);
+                            currentTurnTime = serverTime;
+                        }
+                    }
+
+                    isSyncingTime = false;
+                }
+            }
+
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     void SetupCameras()
@@ -163,6 +263,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
+    // Modificar StartGame() para iniciar la sincronización
     public void StartGame()
     {
         gameState.gameStarted = true;
@@ -175,6 +278,12 @@ public class GameManager : MonoBehaviour
         }
 
         StartTurn(1);
+
+        // ✅ NUEVO: Iniciar sincronización de tiempo
+        if (isNetworkGame)
+        {
+            StartCoroutine(SyncTurnTimer());
+        }
 
         Debug.Log("[GameManager] ¡Juego iniciado!");
     }
@@ -444,4 +553,6 @@ public class GameManager : MonoBehaviour
     {
         return playerNumber == 1 ? player1Controller : player2Controller;
     }
+
+
 }

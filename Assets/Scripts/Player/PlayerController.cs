@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private PlayerData playerData;
-    [SerializeField] private bool isLocalPlayer = true;
+    [SerializeField] public bool isLocalPlayer { get; set; } = true; // ← Agregar propiedad pública
+
     [SerializeField] private int playerNumber = 1;
 
     [Header("Movement")]
