@@ -1,215 +1,297 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Agregar este using
 
+/// <summary>
+/// Controlador de cámara isométrica estática.
+/// La cámara mantiene una vista de 45° fija y permite ajustar solo la distancia al objetivo.
+/// NO tiene controles de movimiento - es completamente estática.
+/// </summary>
 public class IsometricCameraController : MonoBehaviour
 {
+    [Header("Target")]
+    [Tooltip("Punto central que la cámara observará (centro del mapa)")]
+    public Transform target;
+
+    [Header("Isometric Settings")]
+    [Tooltip("Distancia desde el target (en unidades del mundo). Controla el zoom sin cambiar el ángulo.")]
+    [Range(5f, 50f)]
+    public float distance = 20f;
+
+    [Tooltip("Ángulo de inclinación de la cámara (45° para vista isométrica perfecta)")]
+    [Range(30f, 60f)]
+    public float pitch = 45f;
+
+    [Tooltip("Rotación horizontal de la cámara (0° = norte, 45° = isométrico clásico)")]
+    [Range(0f, 360f)]
+    public float yaw = 45f;
+
     [Header("Camera Settings")]
-    [SerializeField] private float cameraDistance = 15f;
-    [SerializeField] private float cameraHeight = 10f;
-    [SerializeField] private float cameraAngle = 45f;
-    [SerializeField] private float rotationSpeed = 50f;
+    [Tooltip("Si está activo, usa proyección ortográfica en lugar de perspectiva")]
+    public bool useOrthographic = false;
 
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float zoomSpeed = 5f;
-    [SerializeField] private float minZoom = 5f;
-    [SerializeField] private float maxZoom = 25f;
+    [Tooltip("Tamaño de la vista ortográfica (solo si useOrthographic = true)")]
+    [Range(1f, 30f)]
+    public float orthographicSize = 15f;
 
-    [Header("Boundaries")]
-    [SerializeField] private bool useBoundaries = true;
-    [SerializeField] private float minX = -5f;
-    [SerializeField] private float maxX = 15f;
-    [SerializeField] private float minZ = -5f;
-    [SerializeField] private float maxZ = 15f;
+    [Header("Debug")]
+    [Tooltip("Mostrar gizmos de debug en el editor")]
+    public bool showDebugGizmos = true;
 
-    [Header("Edge Scrolling")]
-    [SerializeField] private bool useEdgeScrolling = true;
-    [SerializeField] private float edgeScrollSize = 20f;
-
-    private Vector3 targetPosition;
-    private float currentRotation = 45f;
     private Camera cam;
+    private Vector3 targetOffset = Vector3.zero; // Offset opcional del centro
+
+    void Awake()
+    {
+        cam = GetComponent<Camera>();
+
+        if (cam == null)
+        {
+            cam = gameObject.AddComponent<Camera>();
+            Debug.LogWarning("[IsometricCameraController] No había Camera, se agregó automáticamente");
+        }
+    }
 
     void Start()
     {
-        cam = GetComponent<Camera>();
-        if (cam == null)
-            cam = Camera.main;
+        // Si no hay target, buscar el centro del mapa
+        if (target == null)
+        {
+            target = FindMapCenter();
+        }
 
-        // Configurar posición inicial
-        SetupInitialPosition();
+        // Configurar la cámara inicial
+        UpdateCameraPosition();
+
+        Debug.Log($"[IsometricCameraController] Inicializado - Target: {(target != null ? target.name : "null")}, Distance: {distance}, Pitch: {pitch}°, Yaw: {yaw}°");
     }
 
-    void SetupInitialPosition()
+    void LateUpdate()
     {
-        // Centrar la cámara en el mapa
-        if (MapGenerator.Instance != null)
+        // Actualizar posición cada frame (por si cambia el target o los parámetros en el editor)
+        if (target != null)
         {
-            float centerX = MapGenerator.Instance.GetMapWidth() / 2f;
-            float centerZ = MapGenerator.Instance.GetMapHeight() / 2f;
-            targetPosition = new Vector3(centerX, 0, centerZ);
+            UpdateCameraPosition();
+        }
+    }
+
+    /// <summary>
+    /// Actualiza la posición y rotación de la cámara según los parámetros configurados.
+    /// La altura se calcula automáticamente basándose en el pitch y la distancia.
+    /// </summary>
+    private void UpdateCameraPosition()
+    {
+        if (target == null)
+        {
+            Debug.LogWarning("[IsometricCameraController] No hay target asignado");
+            return;
+        }
+
+        // Convertir ángulos a radianes
+        float pitchRad = pitch * Mathf.Deg2Rad;
+        float yawRad = yaw * Mathf.Deg2Rad;
+
+        // Calcular la posición de la cámara en coordenadas esféricas
+        // La altura (Y) se calcula automáticamente desde el pitch y la distancia
+        float height = distance * Mathf.Sin(pitchRad);
+        float horizontalDistance = distance * Mathf.Cos(pitchRad);
+
+        // Calcular posición X y Z basándose en el yaw (rotación horizontal)
+        float x = horizontalDistance * Mathf.Sin(yawRad);
+        float z = horizontalDistance * Mathf.Cos(yawRad);
+
+        // Posición final de la cámara
+        Vector3 targetPosition = target.position + targetOffset;
+        Vector3 cameraPosition = targetPosition + new Vector3(x, height, z);
+
+        // Aplicar posición
+        transform.position = cameraPosition;
+
+        // Hacer que la cámara mire al target
+        transform.LookAt(targetPosition);
+
+        // Configurar proyección
+        if (useOrthographic)
+        {
+            cam.orthographic = true;
+            cam.orthographicSize = orthographicSize;
         }
         else
         {
-            targetPosition = new Vector3(5, 0, 5);
+            cam.orthographic = false;
+            // El FOV se puede ajustar manualmente en el Inspector si es necesario
+        }
+    }
+
+    /// <summary>
+    /// Encuentra el centro del mapa generado por MapGenerator.
+    /// </summary>
+    private Transform FindMapCenter()
+    {
+        if (MapGenerator.Instance != null)
+        {
+            int centerX = MapGenerator.Instance.GetMapWidth() / 2;
+            int centerY = MapGenerator.Instance.GetMapHeight() / 2;
+            Vector3 centerPos = MapGenerator.Instance.GetWorldPosition(centerX, centerY);
+
+            // Crear un GameObject vacío en el centro del mapa
+            GameObject centerObj = new GameObject("MapCenter");
+            centerObj.transform.position = centerPos;
+
+            Debug.Log($"[IsometricCameraController] Centro del mapa creado en: {centerPos}");
+            return centerObj.transform;
         }
 
+        Debug.LogWarning("[IsometricCameraController] No se encontró MapGenerator, usando posición (0,0,0)");
+
+        // Fallback: crear target en el origen
+        GameObject fallbackCenter = new GameObject("MapCenter_Fallback");
+        fallbackCenter.transform.position = Vector3.zero;
+        return fallbackCenter.transform;
+    }
+
+    /// <summary>
+    /// Establece un nuevo target para la cámara.
+    /// </summary>
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        UpdateCameraPosition();
+        Debug.Log($"[IsometricCameraController] Nuevo target: {newTarget.name}");
+    }
+
+    /// <summary>
+    /// Cambia la distancia de la cámara (zoom in/out).
+    /// </summary>
+    public void SetDistance(float newDistance)
+    {
+        distance = Mathf.Clamp(newDistance, 5f, 50f);
         UpdateCameraPosition();
     }
 
-    void Update()
+    /// <summary>
+    /// Cambia el ángulo de inclinación de la cámara.
+    /// </summary>
+    public void SetPitch(float newPitch)
     {
-        HandleKeyboardInput();
-        HandleMouseInput();
-        HandleEdgeScrolling();
+        pitch = Mathf.Clamp(newPitch, 30f, 60f);
         UpdateCameraPosition();
     }
 
-    void HandleKeyboardInput()
+    /// <summary>
+    /// Cambia la rotación horizontal de la cámara.
+    /// </summary>
+    public void SetYaw(float newYaw)
     {
-        // Usar el nuevo Input System
-        Vector2 movement = Vector2.zero;
+        yaw = newYaw % 360f;
+        UpdateCameraPosition();
+    }
 
-        // Leer input del teclado usando el nuevo sistema
-        if (Keyboard.current != null)
+    /// <summary>
+    /// Ajusta el offset del centro (útil para seguir a un jugador específico).
+    /// </summary>
+    public void SetTargetOffset(Vector3 offset)
+    {
+        targetOffset = offset;
+        UpdateCameraPosition();
+    }
+
+    /// <summary>
+    /// Resetea a vista isométrica clásica (45°, 45° yaw).
+    /// </summary>
+    public void ResetToIsometric()
+    {
+        pitch = 45f;
+        yaw = 45f;
+        distance = 20f;
+        UpdateCameraPosition();
+        Debug.Log("[IsometricCameraController] Vista reseteada a isométrica clásica");
+    }
+
+    /// <summary>
+    /// Gizmos para visualizar la configuración en el editor.
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!showDebugGizmos || target == null) return;
+
+        // Dibujar línea desde la cámara al target
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(transform.position, target.position + targetOffset);
+
+        // Dibujar esfera en el target
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(target.position + targetOffset, 0.5f);
+
+        // Dibujar círculo de distancia
+        Gizmos.color = Color.yellow;
+        DrawCircle(target.position + targetOffset, distance, 32);
+
+        // Dibujar indicador de dirección
+        Gizmos.color = Color.red;
+        Vector3 forward = transform.forward * 3f;
+        Gizmos.DrawRay(transform.position, forward);
+    }
+
+    /// <summary>
+    /// Dibuja un círculo en el plano XZ para visualizar la distancia.
+    /// </summary>
+    private void DrawCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
         {
-            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
-                movement.y += 1;
-            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
-                movement.y -= 1;
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-                movement.x -= 1;
-            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-                movement.x += 1;
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(
+                Mathf.Cos(angle) * radius,
+                0,
+                Mathf.Sin(angle) * radius
+            );
 
-            if (movement != Vector2.zero)
-            {
-                Vector3 forward = new Vector3(1, 0, 1).normalized;
-                Vector3 right = new Vector3(1, 0, -1).normalized;
-
-                Vector3 finalMovement = (forward * movement.y + right * movement.x) * moveSpeed * Time.deltaTime;
-                targetPosition += finalMovement;
-
-                // Aplicar límites
-                if (useBoundaries)
-                {
-                    targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
-                    targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
-                }
-            }
-
-            // Rotación con Q y E
-            if (Keyboard.current.qKey.isPressed)
-            {
-                currentRotation -= rotationSpeed * Time.deltaTime;
-            }
-            if (Keyboard.current.eKey.isPressed)
-            {
-                currentRotation += rotationSpeed * Time.deltaTime;
-            }
+            Gizmos.DrawLine(prevPoint, newPoint);
+            prevPoint = newPoint;
         }
     }
 
-    void HandleMouseInput()
+    #region Editor Helpers
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Botones de ayuda en el Inspector (solo en Editor).
+    /// </summary>
+    [ContextMenu("Reset to Classic Isometric (45°, 45°)")]
+    private void EditorResetIsometric()
     {
-        // Zoom con rueda del mouse usando el nuevo sistema
-        if (Mouse.current != null)
-        {
-            float scroll = Mouse.current.scroll.ReadValue().y / 120f; // Normalizar el scroll
-            if (scroll != 0)
-            {
-                cameraDistance -= scroll * zoomSpeed;
-                cameraDistance = Mathf.Clamp(cameraDistance, minZoom, maxZoom);
-                cameraHeight = cameraDistance * 0.66f;
-            }
-
-            // Movimiento con click medio
-            if (Mouse.current.middleButton.isPressed)
-            {
-                Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-                float mouseX = mouseDelta.x * 0.01f;
-                float mouseY = mouseDelta.y * 0.01f;
-
-                Vector3 forward = new Vector3(1, 0, 1).normalized;
-                Vector3 right = new Vector3(1, 0, -1).normalized;
-
-                Vector3 movement = (-forward * mouseY - right * mouseX) * moveSpeed * 0.5f;
-                targetPosition += movement;
-
-                if (useBoundaries)
-                {
-                    targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
-                    targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
-                }
-            }
-        }
+        ResetToIsometric();
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
-    void HandleEdgeScrolling()
+    [ContextMenu("Set Top-Down View (90°, 0°)")]
+    private void EditorSetTopDown()
     {
-        if (!useEdgeScrolling) return;
-
-        if (Mouse.current == null) return;
-
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector3 movement = Vector3.zero;
-
-        // Revisar bordes de la pantalla
-        if (mousePos.x < edgeScrollSize)
-            movement.x = -1;
-        else if (mousePos.x > Screen.width - edgeScrollSize)
-            movement.x = 1;
-
-        if (mousePos.y < edgeScrollSize)
-            movement.z = -1;
-        else if (mousePos.y > Screen.height - edgeScrollSize)
-            movement.z = 1;
-
-        if (movement != Vector3.zero)
-        {
-            Vector3 forward = new Vector3(1, 0, 1).normalized;
-            Vector3 right = new Vector3(1, 0, -1).normalized;
-
-            Vector3 finalMovement = (forward * movement.z + right * movement.x) * moveSpeed * Time.deltaTime;
-            targetPosition += finalMovement;
-
-            if (useBoundaries)
-            {
-                targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
-                targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
-            }
-        }
+        pitch = 90f;
+        yaw = 0f;
+        UpdateCameraPosition();
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
-    void UpdateCameraPosition()
+    [ContextMenu("Set Side View (0°, 0°)")]
+    private void EditorSetSideView()
     {
-        // Calcular posición de la cámara basada en el objetivo
-        Vector3 offset = Quaternion.Euler(0, currentRotation, 0) * new Vector3(-cameraDistance * 0.7f, cameraHeight, -cameraDistance * 0.7f);
-        transform.position = targetPosition + offset;
-
-        // Mirar hacia el objetivo
-        transform.LookAt(targetPosition);
+        pitch = 0f;
+        yaw = 0f;
+        UpdateCameraPosition();
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
-    public void FocusOnPosition(Vector3 position)
+    [ContextMenu("Find Map Center")]
+    private void EditorFindMapCenter()
     {
-        targetPosition = position;
-        targetPosition.y = 0;
+        target = FindMapCenter();
+        UpdateCameraPosition();
+        UnityEditor.EditorUtility.SetDirty(this);
     }
+#endif
 
-    public void FocusOnPlayer(PlayerController player)
-    {
-        if (player != null)
-        {
-            Vector2Int gridPos = player.GetPlayerData().gridPosition;
-            Vector3 worldPos = MapGenerator.Instance.GetWorldPosition(gridPos.x, gridPos.y);
-            FocusOnPosition(worldPos);
-        }
-    }
-
-    public void SetZoomLevel(float zoom)
-    {
-        cameraDistance = Mathf.Clamp(zoom, minZoom, maxZoom);
-        cameraHeight = cameraDistance * 0.66f;
-    }
+    #endregion
 }

@@ -220,7 +220,6 @@ public class LoginManager : MonoBehaviour
 
     async void OnLoginClicked()
     {
-        // ✅ Verificar si Firebase está listo
         if (auth == null)
         {
             ShowError("Firebase aún no está inicializado. Por favor espera...");
@@ -245,7 +244,8 @@ public class LoginManager : MonoBehaviour
             var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
             FirebaseUser user = result.User;
             currentUserId = user.UserId;
-            player1Name = username;
+            // ❌ NO asignar player1Name aquí, esperar datos de Firebase
+            // player1Name = username; 
 
             UpdateStatus($"¡Bienvenido {username}!");
 
@@ -263,13 +263,44 @@ public class LoginManager : MonoBehaviour
 
                 if (!string.IsNullOrEmpty(currentRoomId))
                 {
+                    // ✅ PRIMERO: Suscribirse a eventos
                     NetworkManager.Instance.OnRoomUpdated += OnRoomUpdated;
                     NetworkManager.Instance.OnGameStarted += OnGameStarted;
 
-                    // ✅ NUEVO: Marcar al jugador como listo automáticamente
+                    // ✅ CRUCIAL: Obtener estado actual de la sala ANTES de mostrar UI
+                    var currentRoomSnapshot = await NetworkManager.Instance.currentRoomRef.GetValueAsync();
+                    if (currentRoomSnapshot.Exists)
+                    {
+                        var currentRoomData = DofusRoomData.FromSnapshot(currentRoomSnapshot);
+
+                        // ✅ NUEVO: Asignar player1Name y player2Name SEGÚN EL ROL
+                        int myPlayerNumber = NetworkManager.Instance.GetPlayerNumber();
+
+                        if (myPlayerNumber == 1)
+                        {
+                            // Soy el host
+                            player1Name = currentRoomData.player1Name;
+                            player2Name = currentRoomData.player2Name;
+                        }
+                        else
+                        {
+                            // Soy Jugador 2
+                            player1Name = currentRoomData.player1Name;
+                            player2Name = currentRoomData.player2Name;
+                        }
+
+                        Debug.Log($"[LoginManager] ✅ Mi rol: Jugador {myPlayerNumber}");
+                        Debug.Log($"[LoginManager] ✅ Datos de sala: P1={player1Name}, P2={player2Name}");
+
+                        // ✅ Invocar manualmente para actualizar UI con datos correctos
+                        OnRoomUpdated(currentRoomData);
+                    }
+
+                    // ✅ Marcar al jugador como listo automáticamente
                     await NetworkManager.Instance.SetPlayerReady();
                     Debug.Log($"[LoginManager] Jugador {username} marcado como listo");
 
+                    // ✅ MOSTRAR UI DESPUÉS de tener datos correctos
                     ShowPlayerSelection();
                 }
                 else
@@ -333,17 +364,31 @@ public class LoginManager : MonoBehaviour
 
     void OnRoomUpdated(DofusRoomData roomData)
     {
-        Debug.Log($"[LoginManager] Sala actualizada: {roomData.roomId}");
+        Debug.Log($"[LoginManager] 🔄 OnRoomUpdated invocado:");
+        Debug.Log($"    - RoomId: {roomData.roomId}");
+        Debug.Log($"    - Player1: {roomData.player1Name} (Ready: {roomData.player1Ready})");
+        Debug.Log($"    - Player2: {roomData.player2Name} (Ready: {roomData.player2Ready})");
+        Debug.Log($"    - GameStarted: {roomData.gameStarted}");
 
+        // ✅ Determinar mi rol
+        int myPlayerNumber = NetworkManager.Instance != null ? NetworkManager.Instance.GetPlayerNumber() : -1;
+        Debug.Log($"    - Mi número de jugador: {myPlayerNumber}");
+
+        // ✅ Actualizar datos locales
+        player1Name = roomData.player1Name;
+        player2Name = roomData.player2Name;
+
+        // ✅ Actualizar UI - Jugador 1
         if (player1NameText != null)
+        {
             player1NameText.text = $"Jugador 1: {roomData.player1Name}";
+        }
 
+        // ✅ Actualizar UI - Jugador 2
         if (!string.IsNullOrEmpty(roomData.player2Name))
         {
             if (player2NameText != null)
                 player2NameText.text = $"Jugador 2: {roomData.player2Name}";
-
-            player2Name = roomData.player2Name;
         }
         else
         {
@@ -351,12 +396,48 @@ public class LoginManager : MonoBehaviour
                 player2NameText.text = "Jugador 2: Esperando...";
         }
 
-        // ✅ Esta parte ahora funcionará correctamente
-        if (roomData.player1Ready && roomData.player2Ready)
+        // ✅ Activar botón SOLO si ambos están listos Y soy el HOST
+        bool ambosListos = roomData.player1Ready && roomData.player2Ready;
+        bool hayDosJugadores = !string.IsNullOrEmpty(roomData.player2Name);
+        bool soyHost = NetworkManager.Instance != null && NetworkManager.Instance.isHost;
+
+        Debug.Log($"[LoginManager] 🎮 Estado del botón:");
+        Debug.Log($"    - Ambos listos: {ambosListos}");
+        Debug.Log($"    - Hay 2 jugadores: {hayDosJugadores}");
+        Debug.Log($"    - Soy host: {soyHost}");
+
+        if (ambosListos && hayDosJugadores)
+        {
+            if (soyHost)
+            {
+                if (startGameButton != null)
+                {
+                    startGameButton.interactable = true;
+                    Debug.Log("[LoginManager] ✅ Botón Iniciar Partida ACTIVADO (soy host)");
+                }
+                UpdateStatus("¡Listos! Presiona Iniciar Juego");
+            }
+            else
+            {
+                if (startGameButton != null)
+                {
+                    startGameButton.interactable = false;
+                }
+                UpdateStatus("¡Listos! Esperando que el host inicie...");
+                Debug.Log("[LoginManager] ⏳ Esperando que el host inicie (soy jugador 2)");
+            }
+        }
+        else if (hayDosJugadores && !ambosListos)
         {
             if (startGameButton != null)
-                startGameButton.interactable = true;
-            UpdateStatus("¡Listos! Presiona Iniciar Juego");
+                startGameButton.interactable = false;
+            UpdateStatus("Esperando confirmación de ambos jugadores...");
+        }
+        else
+        {
+            if (startGameButton != null)
+                startGameButton.interactable = false;
+            UpdateStatus("Esperando al oponente...");
         }
     }
 
@@ -369,15 +450,30 @@ public class LoginManager : MonoBehaviour
     void ShowPlayerSelection()
     {
         if (loginPanel != null) loginPanel.SetActive(false);
+
         if (playerSelectionPanel != null)
         {
             playerSelectionPanel.SetActive(true);
+
+            // ✅ CORREGIDO: Usar datos ya sincronizados desde OnRoomUpdated
             if (player1NameText != null)
-                player1NameText.text = $"Jugador 1: {player1Name}";
+            {
+                // Si player1Name está vacío, usar un placeholder
+                string p1DisplayName = string.IsNullOrEmpty(player1Name) ? "Esperando..." : player1Name;
+                player1NameText.text = $"Jugador 1: {p1DisplayName}";
+            }
+
             if (player2NameText != null)
-                player2NameText.text = "Jugador 2: Esperando...";
+            {
+                // Si player2Name está vacío, mostrar "Esperando..."
+                string p2DisplayName = string.IsNullOrEmpty(player2Name) ? "Esperando..." : player2Name;
+                player2NameText.text = $"Jugador 2: {p2DisplayName}";
+            }
+
             if (startGameButton != null)
                 startGameButton.interactable = false;
+
+            Debug.Log($"[LoginManager] 🎨 UI mostrada: P1={player1Name}, P2={player2Name}");
         }
 
         UpdateStatus("Esperando al oponente...");

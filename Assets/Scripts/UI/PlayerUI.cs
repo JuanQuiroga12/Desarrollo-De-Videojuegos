@@ -282,15 +282,24 @@ public class PlayerUI : MonoBehaviour
 
     void UpdateSpellAvailability(PlayerData playerData)
     {
+        if (spellButtons == null || spellButtons.Count == 0)
+        {
+            return;
+        }
+
+        // ✅ CORREGIDO: Solo habilitar botones si ES EL TURNO del jugador
         if (!playerData.isMyTurn)
         {
             foreach (Button btn in spellButtons)
             {
                 btn.interactable = false;
             }
+
+            Debug.Log($"[PlayerUI] Spells disabled for {playerData.username} (not their turn)");
             return;
         }
 
+        // ✅ Si ES su turno, verificar PA disponibles
         for (int i = 0; i < spellButtons.Count && i < playerData.spells.Count; i++)
         {
             bool canCast = playerData.currentAttackPoints >= playerData.spells[i].apCost;
@@ -300,6 +309,8 @@ public class PlayerUI : MonoBehaviour
             {
                 spellCooldownOverlays[i].gameObject.SetActive(!canCast);
             }
+
+            Debug.Log($"[PlayerUI] Spell {i} ({playerData.spells[i].spellName}): {(canCast ? "ENABLED" : "DISABLED")} (PA: {playerData.currentAttackPoints}/{playerData.spells[i].apCost})");
         }
     }
 

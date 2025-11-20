@@ -56,7 +56,7 @@ public class GridVisualizer : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.1f); // Esperar un poco más para asegurar todo está listo
+        yield return new WaitForSeconds(0.1f);
 
         CreateGridVisual();
     }
@@ -82,7 +82,7 @@ public class GridVisualizer : MonoBehaviour
 
         GameObject gridContainer = new GameObject("GridVisualizer");
         gridContainer.transform.parent = transform;
-        gridContainer.transform.position = Vector3.zero; // ← Asegurar posición en origen
+        gridContainer.transform.position = Vector3.zero;
 
         int tilesCreated = 0;
 
@@ -92,34 +92,8 @@ public class GridVisualizer : MonoBehaviour
             {
                 if (MapGenerator.Instance.IsWalkable(x, y))
                 {
-                    if (gridCellPrefab != null)
-                    {
-                        Vector3 worldPos = MapGenerator.Instance.GetWorldPosition(x, y);
-                        worldPos.y = gridHeight; // ← Usar el nuevo gridHeight
-
-                        GameObject cellObj = Instantiate(gridCellPrefab, worldPos, Quaternion.identity, gridContainer.transform);
-                        cellObj.name = $"GridCell_{x}_{y}";
-
-                        GridCell cell = new GridCell
-                        {
-                            cellObject = cellObj,
-                            meshRenderer = cellObj.GetComponent<MeshRenderer>(),
-                            gridPosition = new Vector2Int(x, y)
-                        };
-
-                        if (cell.meshRenderer != null)
-                        {
-                            cell.originalColor = cell.meshRenderer.material.color;
-                        }
-
-                        gridCells[x, y] = cell;
-                        tilesCreated++;
-                    }
-                    else
-                    {
-                        CreateGridTile(x, y, gridContainer.transform);
-                        tilesCreated++;
-                    }
+                    CreateGridTile(x, y, gridContainer.transform);
+                    tilesCreated++;
                 }
             }
         }
@@ -145,7 +119,7 @@ public class GridVisualizer : MonoBehaviour
 
         Renderer renderer = tile.GetComponent<Renderer>();
 
-        // Usar shader URP si está disponible, sino usar Standard
+        // Usar shader URP si está disponible
         Material mat;
         if (gridMaterial != null)
         {
@@ -153,7 +127,6 @@ public class GridVisualizer : MonoBehaviour
         }
         else
         {
-            // Intentar usar shader URP primero
             Shader shader = Shader.Find("Universal Render Pipeline/Lit");
             if (shader == null)
             {
@@ -163,7 +136,7 @@ public class GridVisualizer : MonoBehaviour
             mat = new Material(shader);
 
             // Configurar transparencia
-            mat.SetFloat("_Mode", 3); // Transparent mode
+            mat.SetFloat("_Mode", 3);
             mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
             mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
             mat.SetInt("_ZWrite", 0);
@@ -181,9 +154,6 @@ public class GridVisualizer : MonoBehaviour
 
         gridTiles[gridPos] = tile;
         tileRenderers[gridPos] = renderer;
-
-        // NO crear bordes por ahora para simplificar la visualización
-        // CreateBorders(tile.transform, worldPos);
 
         Debug.Log($"Tile creado en: {worldPos} con color: {defaultColor}");
     }

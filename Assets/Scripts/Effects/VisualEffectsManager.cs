@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using TMPro;
 
@@ -24,12 +24,19 @@ public class VisualEffectsManager : MonoBehaviour
     [SerializeField] private Color buffColor = Color.yellow;
     [SerializeField] private Color debuffColor = new Color(0.5f, 0, 0.5f);
 
+    // ✅ NUEVAS VARIABLES: Prefabs generados en tiempo de ejecución
+    private GameObject runtimeFireEffect;
+    private GameObject runtimeEarthEffect;
+    private GameObject runtimeWaterEffect;
+    private GameObject runtimeWindEffect;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            CreateDefaultEffects();
+            // ❌ NO LLAMAR CreateDefaultEffects() aquí
+            // CreateDefaultEffects();
         }
         else
         {
@@ -37,35 +44,19 @@ public class VisualEffectsManager : MonoBehaviour
         }
     }
 
-    void CreateDefaultEffects()
+    // ✅ NUEVO: Método llamado bajo demanda
+    void EnsureEffectsCreated()
     {
-        // Si no hay prefabs asignados, crear unos b�sicos
+        // ✅ SOLO crear efectos si no están asignados Y se necesitan
         if (damagePopupPrefab == null)
         {
             damagePopupPrefab = CreateDamagePopupPrefab();
         }
 
-        if (fireEffectPrefab == null)
-        {
-            fireEffectPrefab = CreateSpellEffectPrefab(new Color(1f, 0.3f, 0f));
-        }
+        // ✅ NO crear prefabs de spell effects por defecto
+        // En su lugar, se crearán SOLO cuando se usen
 
-        if (earthEffectPrefab == null)
-        {
-            earthEffectPrefab = CreateSpellEffectPrefab(new Color(0.6f, 0.4f, 0.2f));
-        }
-
-        if (waterEffectPrefab == null)
-        {
-            waterEffectPrefab = CreateSpellEffectPrefab(new Color(0f, 0.5f, 1f));
-        }
-
-        if (windEffectPrefab == null)
-        {
-            windEffectPrefab = CreateSpellEffectPrefab(new Color(0.7f, 1f, 0.7f));
-        }
-
-        // Configurar curva de animaci�n por defecto
+        // Configurar curva de animación por defecto
         if (popupCurve == null || popupCurve.keys.Length == 0)
         {
             popupCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -103,14 +94,18 @@ public class VisualEffectsManager : MonoBehaviour
         tmp.outlineWidth = 0.2f;
         tmp.outlineColor = Color.black;
 
+        // ✅ IMPORTANTE: Desactivar el prefab inmediatamente
+        popup.SetActive(false);
+
         return popup;
     }
 
+    // ✅ CORREGIDO: Crear efecto SOLO cuando se necesita
     GameObject CreateSpellEffectPrefab(Color color)
     {
         GameObject effect = new GameObject("SpellEffect");
 
-        // Part�culas b�sicas
+        // Partículas básicas
         ParticleSystem particles = effect.AddComponent<ParticleSystem>();
         var main = particles.main;
         main.startLifetime = 1f;
@@ -129,33 +124,50 @@ public class VisualEffectsManager : MonoBehaviour
         var renderer = particles.GetComponent<ParticleSystemRenderer>();
         renderer.material = new Material(Shader.Find("Sprites/Default"));
 
+        // ✅ CRÍTICO: DESACTIVAR inmediatamente para que no aparezca en (0,0,0)
+        effect.SetActive(false);
+
         return effect;
     }
 
     public void ShowDamage(Vector3 position, int damage)
     {
+        EnsureEffectsCreated(); // ✅ Asegurar que los efectos estén creados
         StartCoroutine(ShowPopup(position, damage.ToString(), damageColor));
     }
 
     public void ShowHeal(Vector3 position, int healing)
     {
+        EnsureEffectsCreated();
         StartCoroutine(ShowPopup(position, "+" + healing, healColor));
     }
 
     public void ShowBuff(Vector3 position, string text)
     {
+        EnsureEffectsCreated();
         StartCoroutine(ShowPopup(position, text, buffColor));
     }
 
     public void ShowDebuff(Vector3 position, string text)
     {
+        EnsureEffectsCreated();
         StartCoroutine(ShowPopup(position, text, debuffColor));
     }
 
     IEnumerator ShowPopup(Vector3 position, string text, Color color)
     {
+        if (damagePopupPrefab == null)
+        {
+            Debug.LogWarning("[VisualEffectsManager] damagePopupPrefab es null");
+            yield break;
+        }
+
         // Instanciar popup
         GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
+
+        // ✅ ACTIVAR el popup DESPUÉS de instanciarlo en la posición correcta
+        popup.SetActive(true);
+
         TextMeshProUGUI tmp = popup.GetComponentInChildren<TextMeshProUGUI>();
 
         if (tmp != null)
@@ -164,7 +176,7 @@ public class VisualEffectsManager : MonoBehaviour
             tmp.color = color;
         }
 
-        // Hacer que el popup mire a la c�mara
+        // Hacer que el popup mire a la cámara
         Canvas canvas = popup.GetComponent<Canvas>();
         if (canvas != null)
         {
@@ -202,6 +214,7 @@ public class VisualEffectsManager : MonoBehaviour
         Destroy(popup);
     }
 
+    // ✅ CORREGIDO: Crear efectos bajo demanda
     public void PlaySpellEffect(SpellElement element, Vector3 position)
     {
         GameObject effectPrefab = null;
@@ -209,29 +222,97 @@ public class VisualEffectsManager : MonoBehaviour
         switch (element)
         {
             case SpellElement.Fire:
-                effectPrefab = fireEffectPrefab;
+                // ✅ Si hay prefab asignado en el Inspector, usarlo
+                if (fireEffectPrefab != null)
+                {
+                    effectPrefab = fireEffectPrefab;
+                }
+                else
+                {
+                    // ✅ Si no, crear uno temporal SOLO cuando se necesita
+                    if (runtimeFireEffect == null)
+                    {
+                        runtimeFireEffect = CreateSpellEffectPrefab(new Color(1f, 0.3f, 0f));
+                    }
+                    effectPrefab = runtimeFireEffect;
+                }
                 break;
+
             case SpellElement.Earth:
-                effectPrefab = earthEffectPrefab;
+                if (earthEffectPrefab != null)
+                {
+                    effectPrefab = earthEffectPrefab;
+                }
+                else
+                {
+                    if (runtimeEarthEffect == null)
+                    {
+                        runtimeEarthEffect = CreateSpellEffectPrefab(new Color(0.6f, 0.4f, 0.2f));
+                    }
+                    effectPrefab = runtimeEarthEffect;
+                }
                 break;
+
             case SpellElement.Water:
-                effectPrefab = waterEffectPrefab;
+                if (waterEffectPrefab != null)
+                {
+                    effectPrefab = waterEffectPrefab;
+                }
+                else
+                {
+                    if (runtimeWaterEffect == null)
+                    {
+                        runtimeWaterEffect = CreateSpellEffectPrefab(new Color(0f, 0.5f, 1f));
+                    }
+                    effectPrefab = runtimeWaterEffect;
+                }
                 break;
+
             case SpellElement.Wind:
-                effectPrefab = windEffectPrefab;
+                if (windEffectPrefab != null)
+                {
+                    effectPrefab = windEffectPrefab;
+                }
+                else
+                {
+                    if (runtimeWindEffect == null)
+                    {
+                        runtimeWindEffect = CreateSpellEffectPrefab(new Color(0.7f, 1f, 0.7f));
+                    }
+                    effectPrefab = runtimeWindEffect;
+                }
                 break;
         }
 
         if (effectPrefab != null)
         {
+            // ✅ Instanciar en la posición correcta
             GameObject effect = Instantiate(effectPrefab, position, Quaternion.identity);
-            Destroy(effect, 2f); // Destruir despu�s de 2 segundos
+
+            // ✅ ACTIVAR después de posicionar
+            effect.SetActive(true);
+
+            // ✅ Reproducir partículas manualmente
+            ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Play();
+            }
+
+            // Destruir después de 2 segundos
+            Destroy(effect, 2f);
+
+            Debug.Log($"[VisualEffectsManager] Efecto de {element} reproducido en {position}");
+        }
+        else
+        {
+            Debug.LogWarning($"[VisualEffectsManager] No se pudo crear efecto para {element}");
         }
     }
 
     public void PlayMoveEffect(Vector3 startPos, Vector3 endPos)
     {
-        // Crear un trail o l�nea de movimiento
+        // Crear un trail o línea de movimiento
         GameObject trail = new GameObject("MoveTrail");
         LineRenderer line = trail.AddComponent<LineRenderer>();
 
