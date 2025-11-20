@@ -115,11 +115,17 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         const float PLAYER_SPAWN_HEIGHT = 0.41f;
 
         // ========== CONFIGURAR JUGADOR 1 ==========
         Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
         player1StartPos.y = PLAYER_SPAWN_HEIGHT;
+=======
+        // Instanciar jugadores
+        Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
+        player1StartPos.y = 0f;
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
         // Instanciar jugadores
         Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
@@ -162,7 +168,11 @@ public class GameManager : MonoBehaviour
         // ========== CONFIGURAR JUGADOR 2 ==========
         Vector3 player2StartPos = MapGenerator.Instance.GetWorldPosition(8, 8);
 <<<<<<< HEAD
+<<<<<<< HEAD
         player2StartPos.y = PLAYER_SPAWN_HEIGHT;
+=======
+        player2StartPos.y = 0f;
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
         player2StartPos.y = 0f;
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)

@@ -349,12 +349,15 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -3499585908753510460}
 <<<<<<< HEAD
+<<<<<<< HEAD
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
       insertIndex: -1
       addedObject: {fileID: -399111505698033774}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2369338552539754852}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
   m_SourcePrefab: {fileID: 100100000, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
@@ -507,6 +510,10 @@ MonoBehaviour:
       areaSize: 1
     isMyTurn: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  isLocalPlayer: 1
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
   isLocalPlayer: 1
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
@@ -514,6 +521,7 @@ MonoBehaviour:
   moveSpeed: 3
   rotationSpeed: 10
   animator: {fileID: -5992938291415454608}
+<<<<<<< HEAD
 <<<<<<< HEAD
   turnIndicator: {fileID: 8275216565032091523}
 --- !u!114 &-399111505698033774
@@ -546,5 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellRangeColor: {r: 1, g: 0.5, b: 0, a: 0.6}
   targetableColor: {r: 1, g: 0, b: 0, a: 0.8}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)

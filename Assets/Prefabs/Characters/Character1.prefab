@@ -345,12 +345,15 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -1888551378489097931}
 <<<<<<< HEAD
+<<<<<<< HEAD
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5920575211857952437}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1922371673662285059}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
   m_SourcePrefab: {fileID: 100100000, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
@@ -507,6 +510,7 @@ MonoBehaviour:
   rotationSpeed: 10
   animator: {fileID: 2848095624904111732}
 <<<<<<< HEAD
+<<<<<<< HEAD
   turnIndicator: {fileID: 9011072891990716891}
 --- !u!114 &5920575211857952437
 MonoBehaviour:
@@ -538,5 +542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellRangeColor: {r: 1, g: 0.5, b: 0, a: 0.6}
   targetableColor: {r: 1, g: 0, b: 0, a: 0.8}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 =======
 >>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
