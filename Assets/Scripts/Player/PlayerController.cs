@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine;
+using UnityEngine.InputSystem; // AGREGAR ESTE USING
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,10 +18,6 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator animator;
 
-    // ✅ NUEVO: Referencia al indicador visual
-    [Header("Visual Feedback")]
-    [SerializeField] private PlayerTurnIndicator turnIndicator;
-
     private readonly string ANIM_IDLE = "Idle";
     private readonly string ANIM_WALK = "Slow Run";
     private readonly string ANIM_SPELL = "Magic Spell Cast";
@@ -39,7 +35,6 @@ public class PlayerController : MonoBehaviour
             playerData = new PlayerData();
         }
 
-        // Configurar grid position según el número de jugador
         if (playerNumber == 1)
         {
             playerData.gridPosition = new Vector2Int(1, 1);
@@ -49,37 +44,19 @@ public class PlayerController : MonoBehaviour
             playerData.gridPosition = new Vector2Int(8, 8);
         }
 
+        // Validar que MapGenerator existe antes de usarlo
+        if (MapGenerator.Instance != null)
+        {
+            transform.position = MapGenerator.Instance.GetWorldPosition(playerData.gridPosition.x, playerData.gridPosition.y);
+        }
+
         if (animator == null)
         {
             animator = GetComponent<Animator>();
         }
 
-        // ✅ OBTENER O CREAR INDICADOR
-        if (turnIndicator == null)
-        {
-            turnIndicator = GetComponent<PlayerTurnIndicator>();
-
-            if (turnIndicator == null)
-            {
-                turnIndicator = gameObject.AddComponent<PlayerTurnIndicator>();
-                Debug.Log($"[PlayerController] PlayerTurnIndicator agregado automáticamente a {gameObject.name}");
-            }
-        }
-
-        // ✅ IMPORTANTE: Desactivar por defecto
-        if (turnIndicator != null)
-        {
-            turnIndicator.SetActive(false);
-            Debug.Log($"[PlayerController] Indicador desactivado inicialmente para {gameObject.name}");
-        }
-
         playerUI = Object.FindFirstObjectByType<PlayerUI>();
         PlayAnimation(ANIM_IDLE);
-
-        Debug.Log($"[PlayerController] Player {playerNumber} inicializado");
-        Debug.Log($"    - Posición: {transform.position}");
-        Debug.Log($"    - Grid Position: {playerData.gridPosition}");
-        Debug.Log($"    - Indicador: {(turnIndicator != null ? "✅ PRESENTE" : "❌ FALTA")}");
     }
 
     void Update()
@@ -95,113 +72,73 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ✅ SIMPLIFICAR HandleInput - El movimiento lo maneja PlayerMovementVisualizer
     void HandleInput()
     {
-        // ✅ VALIDACIÓN: Solo el jugador activo en su turno puede dar input
-        if (!isLocalPlayer || !playerData.isMyTurn || isMoving || isCastingSpell)
+        if (MapGenerator.Instance == null || GridVisualizer.Instance == null)
         {
             return;
         }
 
+        // USAR NEW INPUT SYSTEM
+        var mouse = Mouse.current;
         var keyboard = Keyboard.current;
-        if (keyboard == null) return;
 
-        // ✅ Solo manejar teclas de hechizos y pasar turno
-        // El movimiento lo maneja PlayerMovementVisualizer
+        if (mouse == null || keyboard == null)
+        {
+            return; // Dispositivos no disponibles
+        }
 
-        // Teclas 1-4 para hechizos
+        // Click del rat�n para movimiento
+        if (mouse.leftButton.wasPressedThisFrame)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector2Int targetPos = MapGenerator.Instance.GetGridPosition(hit.point);
+
+                if (MapGenerator.Instance.IsWalkable(targetPos.x, targetPos.y))
+                {
+                    TryMoveTo(targetPos);
+                }
+            }
+        }
+
+        // Teclas para hechizos
         if (keyboard.digit1Key.wasPressedThisFrame)
         {
-            Debug.Log($"[PlayerController] Player {playerNumber} presionó 1 (Fuego)");
-            TryCastSpell(0);
+            TryCastSpell(0); // Fuego
         }
         else if (keyboard.digit2Key.wasPressedThisFrame)
         {
-            Debug.Log($"[PlayerController] Player {playerNumber} presionó 2 (Tierra)");
-            TryCastSpell(1);
+            TryCastSpell(1); // Tierra
         }
         else if (keyboard.digit3Key.wasPressedThisFrame)
         {
-            Debug.Log($"[PlayerController] Player {playerNumber} presionó 3 (Agua)");
-            TryCastSpell(2);
+            TryCastSpell(2); // Agua
         }
         else if (keyboard.digit4Key.wasPressedThisFrame)
         {
-            Debug.Log($"[PlayerController] Player {playerNumber} presionó 4 (Viento)");
-            TryCastSpell(3);
+            TryCastSpell(3); // Viento
         }
 
-        // Pasar turno con Space
+        // Pasar turno
         if (keyboard.spaceKey.wasPressedThisFrame)
         {
-            Debug.Log($"[PlayerController] Player {playerNumber} presionó Space (End Turn)");
             EndTurn();
-        }
-
-        // Cancelar acción con Escape
-        if (keyboard.escapeKey.wasPressedThisFrame)
-        {
-            if (isCastingSpell)
-            {
-                Debug.Log($"[PlayerController] Player {playerNumber} canceló spell casting");
-                isCastingSpell = false;
-
-                if (GridVisualizer.Instance != null)
-                {
-                    GridVisualizer.Instance.ResetGridColors();
-                }
-            }
         }
     }
 
     public void TryMoveTo(Vector2Int targetPos)
     {
-        // ✅ VALIDACIONES MEJORADAS
-        if (!playerData.isMyTurn)
-        {
-            Debug.LogWarning($"[PlayerController] Player {playerNumber} tried to move, but it's not their turn!");
-            return;
-        }
-
-        if (isMoving)
-        {
-            Debug.LogWarning($"[PlayerController] Player {playerNumber} is already moving!");
-            return;
-        }
-
-        if (isCastingSpell)
-        {
-            Debug.LogWarning($"[PlayerController] Player {playerNumber} is casting a spell, can't move!");
-            return;
-        }
-
-        if (PathfindingSystem.Instance == null)
-        {
-            Debug.LogError("[PlayerController] PathfindingSystem.Instance is null!");
-            return;
-        }
-
-        Debug.Log($"[PlayerController] Player {playerNumber} trying to move from {playerData.gridPosition} to {targetPos}");
+        if (!playerData.isMyTurn || isMoving || PathfindingSystem.Instance == null) return;
 
         List<Vector2Int> path = PathfindingSystem.Instance.FindPath(playerData.gridPosition, targetPos);
 
-        if (path == null || path.Count == 0)
+        if (path != null && path.Count <= playerData.currentMovementPoints)
         {
-            Debug.LogWarning($"[PlayerController] No valid path found from {playerData.gridPosition} to {targetPos}");
-            return;
-        }
-
-        Debug.Log($"[PlayerController] Path found with {path.Count} steps. Current MP: {playerData.currentMovementPoints}");
-
-        if (path.Count <= playerData.currentMovementPoints)
-        {
-            Debug.Log($"[PlayerController] ✅ Moving! Path length: {path.Count}, MP available: {playerData.currentMovementPoints}");
-
-            if (GridVisualizer.Instance != null)
-            {
-                GridVisualizer.Instance.ShowPathToTarget(playerData.gridPosition, targetPos, playerData.currentMovementPoints);
-            }
+            GridVisualizer.Instance.ShowPathToTarget(playerData.gridPosition, targetPos, playerData.currentMovementPoints);
 
             foreach (Vector2Int pos in path)
             {
@@ -217,8 +154,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[PlayerController] ❌ Not enough movement points! Need {path.Count}, have {playerData.currentMovementPoints}");
-
+            Debug.Log("No hay suficientes puntos de movimiento o el camino est� bloqueado");
             if (GridVisualizer.Instance != null)
             {
                 GridVisualizer.Instance.ShowPathToTarget(playerData.gridPosition, targetPos, playerData.currentMovementPoints);
@@ -233,9 +169,6 @@ public class PlayerController : MonoBehaviour
 
         Vector3 startPos = transform.position;
         Vector3 endPos = MapGenerator.Instance.GetWorldPosition(targetPos.x, targetPos.y);
-
-        // ✅ CORREGIDO: Mantener la altura correcta durante el movimiento
-        endPos.y = 0.41f; // ← Mismo valor que PLAYER_SPAWN_HEIGHT en GameManager
 
         Vector3 direction = (endPos - startPos).normalized;
         if (direction != Vector3.zero)
@@ -299,23 +232,12 @@ public class PlayerController : MonoBehaviour
         isCastingSpell = true;
         bool targetSelected = false;
 
-        Debug.Log($"[PlayerController] Player {playerNumber} waiting for spell target ({spell.spellName})");
-
         var mouse = Mouse.current;
 
         while (!targetSelected && isCastingSpell && mouse != null)
         {
             if (mouse.leftButton.wasPressedThisFrame)
             {
-                // Verificar que NO estamos sobre UI
-                if (UnityEngine.EventSystems.EventSystem.current != null &&
-                    UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-                {
-                    Debug.Log("[PlayerController] Click on UI, ignoring");
-                    yield return null;
-                    continue;
-                }
-
                 Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
                 RaycastHit hit;
 
@@ -323,26 +245,17 @@ public class PlayerController : MonoBehaviour
                 {
                     Vector2Int targetPos = MapGenerator.Instance.GetGridPosition(hit.point);
 
-                    Debug.Log($"[PlayerController] Spell target clicked: {targetPos}");
-
                     if (IsInSpellRange(playerData.gridPosition, targetPos, spell))
                     {
-                        Debug.Log($"[PlayerController] ✅ Target in range, casting {spell.spellName}");
                         StartCoroutine(CastSpell(spell, targetPos));
                         targetSelected = true;
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[PlayerController] ❌ Target {targetPos} is out of range (max: {spell.range})");
                     }
                 }
             }
 
-            // Cancelar con click derecho o Escape
-            if (mouse.rightButton.wasPressedThisFrame ||
-                (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame))
+            // Cancelar con click derecho
+            if (mouse.rightButton.wasPressedThisFrame)
             {
-                Debug.Log($"[PlayerController] Spell casting cancelled by player {playerNumber}");
                 isCastingSpell = false;
                 if (GridVisualizer.Instance != null)
                 {
@@ -462,30 +375,11 @@ public class PlayerController : MonoBehaviour
         playerData.StartNewTurn();
         playerData.isMyTurn = true;
 
-        Debug.Log($"[PlayerController] ✅ Player {playerNumber} INICIA TURNO");
-        Debug.Log($"    - isMyTurn: {playerData.isMyTurn}");
-        Debug.Log($"    - PM: {playerData.currentMovementPoints}/{playerData.baseMovementPoints}");
-        Debug.Log($"    - PA: {playerData.currentAttackPoints}/{playerData.baseAttackPoints}");
-
-        // ✅ ACTIVAR INDICADOR VISUAL
-        if (turnIndicator != null)
-        {
-            turnIndicator.SetActive(true);
-            Debug.Log($"[PlayerController] ✅ Indicador ACTIVADO para Player {playerNumber}");
-        }
-        else
-        {
-            Debug.LogError($"[PlayerController] ❌ turnIndicator es NULL para Player {playerNumber}!");
-        }
-
-        // Mostrar rango de movimiento
         if (GridVisualizer.Instance != null)
         {
             GridVisualizer.Instance.ShowMovementRange(playerData.gridPosition, playerData.currentMovementPoints);
-            Debug.Log($"[PlayerController] Mostrando rango de movimiento desde {playerData.gridPosition}");
         }
 
-        // Actualizar UI
         if (playerUI != null)
         {
             playerUI.UpdatePlayerStats(playerData);
@@ -496,22 +390,11 @@ public class PlayerController : MonoBehaviour
     {
         playerData.isMyTurn = false;
 
-        Debug.Log($"[PlayerController] ⏸️ Player {playerNumber} TERMINA TURNO");
-
-        // ✅ DESACTIVAR INDICADOR VISUAL
-        if (turnIndicator != null)
-        {
-            turnIndicator.SetActive(false);
-            Debug.Log($"[PlayerController] ⏸️ Indicador DESACTIVADO para Player {playerNumber}");
-        }
-
-        // Limpiar visualización
         if (GridVisualizer.Instance != null)
         {
             GridVisualizer.Instance.ResetGridColors();
         }
 
-        // Notificar al GameManager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.EndCurrentTurn();
@@ -529,7 +412,7 @@ public class PlayerController : MonoBehaviour
 
         if (!playerData.IsAlive())
         {
-            Debug.Log($"¡Jugador {playerNumber} ha sido derrotado!");
+            Debug.Log($"�Jugador {playerNumber} ha sido derrotado!");
         }
     }
 

@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player2Prefab;
     private PlayerController player1Controller;
     private PlayerController player2Controller;
-    public PlayerUI playerUI;
 
     [Header("Turn Management")]
     [SerializeField] private float turnDuration = 60f;
@@ -115,11 +114,17 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+<<<<<<< HEAD
         const float PLAYER_SPAWN_HEIGHT = 0.41f;
 
         // ========== CONFIGURAR JUGADOR 1 ==========
         Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
         player1StartPos.y = PLAYER_SPAWN_HEIGHT;
+=======
+        // Instanciar jugadores
+        Vector3 player1StartPos = MapGenerator.Instance.GetWorldPosition(1, 1);
+        player1StartPos.y = 0f;
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 
         GameObject player1Obj = Instantiate(player1Prefab, player1StartPos, Quaternion.identity);
         player1Obj.name = "Player1";
@@ -156,7 +161,11 @@ public class GameManager : MonoBehaviour
 
         // ========== CONFIGURAR JUGADOR 2 ==========
         Vector3 player2StartPos = MapGenerator.Instance.GetWorldPosition(8, 8);
+<<<<<<< HEAD
         player2StartPos.y = PLAYER_SPAWN_HEIGHT;
+=======
+        player2StartPos.y = 0f;
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
 
         GameObject player2Obj = Instantiate(player2Prefab, player2StartPos, Quaternion.identity);
         player2Obj.name = "Player2";
@@ -293,29 +302,16 @@ public class GameManager : MonoBehaviour
         gameState.currentTurn = playerNumber;
         currentTurnTime = turnDuration;
 
-        Debug.Log($"[GameManager] ========== CAMBIANDO TURNO A JUGADOR {playerNumber} ==========");
-
         if (playerNumber == 1)
         {
             if (player1Controller != null)
             {
-                Debug.Log($"[GameManager] ✅ Activando turno de Player 1");
-                player1Controller.StartTurn(); // ← Esto activa el indicador
+                player1Controller.StartTurn();
             }
-
             if (player2Controller != null)
             {
                 player2Controller.GetPlayerData().isMyTurn = false;
-
-                // ✅ Desactivar indicador del Player 2
-                PlayerTurnIndicator p2Indicator = player2Controller.GetComponent<PlayerTurnIndicator>();
-                if (p2Indicator != null)
-                {
-                    p2Indicator.SetActive(false);
-                    Debug.Log($"[GameManager] ⏸️ Indicador de Player 2 DESACTIVADO");
-                }
             }
-
             if (currentTurnText != null)
                 currentTurnText.text = $"Turno de: {gameState.player1.username}";
         }
@@ -323,43 +319,25 @@ public class GameManager : MonoBehaviour
         {
             if (player2Controller != null)
             {
-                Debug.Log($"[GameManager] ✅ Activando turno de Player 2");
-                player2Controller.StartTurn(); // ← Esto activa el indicador
+                player2Controller.StartTurn();
             }
-
             if (player1Controller != null)
             {
                 player1Controller.GetPlayerData().isMyTurn = false;
-
-                // ✅ Desactivar indicador del Player 1
-                PlayerTurnIndicator p1Indicator = player1Controller.GetComponent<PlayerTurnIndicator>();
-                if (p1Indicator != null)
-                {
-                    p1Indicator.SetActive(false);
-                    Debug.Log($"[GameManager] ⏸️ Indicador de Player 1 DESACTIVADO");
-                }
             }
-
             if (currentTurnText != null)
                 currentTurnText.text = $"Turno de: {gameState.player2.username}";
         }
 
-        // Actualizar UI de ambos jugadores
-        if (playerUI != null)
-        {
-            if (player1Controller != null)
-                playerUI.UpdatePlayerStats(player1Controller.GetPlayerData());
-            if (player2Controller != null)
-                playerUI.UpdatePlayerStats(player2Controller.GetPlayerData());
-        }
-
-        // Sincronizar con red si aplica
+        // ✅ CORREGIDO: Usar async void o esperar el Task
         if (isNetworkGame && NetworkManager.Instance != null)
         {
+            // Opción 1: Fire and forget (no esperar)
             _ = NetworkManager.Instance.SendTurnChange(playerNumber);
-        }
 
-        Debug.Log($"[GameManager] ========== FIN CAMBIO DE TURNO ==========");
+            // O Opción 2: Crear método async
+            // SendTurnChangeAsync(playerNumber);
+        }
     }
 
     public void EndCurrentTurn()

@@ -597,31 +597,12 @@ public class NetworkManager : MonoBehaviour
     public async Task SetPlayerReady()
     {
         if (currentRoomRef == null)
-        {
-            Debug.LogError("[NetworkManager] ❌ currentRoomRef es null");
             return;
-        }
 
         string readyField = playerNumber == 1 ? "player1Ready" : "player2Ready";
-
-        Debug.Log($"[NetworkManager] 📝 Marcando {readyField} como true...");
-        Debug.Log($"    - playerId: {playerId}");
-        Debug.Log($"    - playerNumber: {playerNumber}");
-        Debug.Log($"    - isHost: {isHost}");
-
         await currentRoomRef.Child(readyField).SetValueAsync(true);
 
-        Debug.Log($"[NetworkManager] ✅ {readyField} = true guardado en Firebase");
-
-        // ✅ Verificar que se haya guardado correctamente
-        var snapshot = await currentRoomRef.GetValueAsync();
-        if (snapshot.Exists)
-        {
-            var roomData = DofusRoomData.FromSnapshot(snapshot);
-            Debug.Log($"[NetworkManager] 🔍 Verificación después de marcar listo:");
-            Debug.Log($"    - player1Ready: {roomData.player1Ready}");
-            Debug.Log($"    - player2Ready: {roomData.player2Ready}");
-        }
+        Debug.Log($"[NetworkManager] ✅ Jugador {playerNumber} listo");
     }
 
     // ✅ INICIAR JUEGO (SOLO HOST)

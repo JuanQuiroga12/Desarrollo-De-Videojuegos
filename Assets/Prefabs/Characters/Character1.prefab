@@ -18,15 +18,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -343,16 +343,16 @@ PrefabInstance:
       addedObject: {fileID: 1311389507558546723}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9011072891990716891}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
-      insertIndex: -1
       addedObject: {fileID: -1888551378489097931}
+<<<<<<< HEAD
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5920575211857952437}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1922371673662285059}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)
   m_SourcePrefab: {fileID: 100100000, guid: eb7dd570a9e7ec648a0331ba3d4b109c, type: 3}
 --- !u!1 &6046026495792925068 stripped
 GameObject:
@@ -428,30 +428,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.9
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &9011072891990716891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6046026495792925068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988a3a5dfa782aa4ca02600588c9a87c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activeColor: {r: 1, g: 0.843, b: 0, a: 0.8}
-  pulseColor: {r: 1, g: 1, b: 0.3, a: 0.9}
-  indicatorRadius: 0.6
-  ringThickness: 0.08
-  heightOffset: 0.02
-  rotationSpeed: 45
-  pulseSpeed: 1.5
-  pulseIntensity: 0.3
-  useScalePulse: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &-1888551378489097931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,6 +506,7 @@ MonoBehaviour:
   moveSpeed: 3
   rotationSpeed: 10
   animator: {fileID: 2848095624904111732}
+<<<<<<< HEAD
   turnIndicator: {fileID: 9011072891990716891}
 --- !u!114 &5920575211857952437
 MonoBehaviour:
@@ -558,3 +538,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellRangeColor: {r: 1, g: 0.5, b: 0, a: 0.6}
   targetableColor: {r: 1, g: 0, b: 0, a: 0.8}
+=======
+>>>>>>> parent of 1af902d (Login sincronizado, falta jugabilidad)

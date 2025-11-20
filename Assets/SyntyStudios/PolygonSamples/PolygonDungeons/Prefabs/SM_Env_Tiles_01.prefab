@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4871887904354259377}
   - component: {fileID: 6532361487056477580}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: SM_Env_Tiles_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

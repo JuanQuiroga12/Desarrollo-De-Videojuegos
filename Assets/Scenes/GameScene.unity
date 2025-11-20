@@ -1325,8 +1325,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Jugar de Nuevo
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 0}
+  m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1345,7 +1345,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
+  m_TextStyleHashCode: 0
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1372,13 +1372,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
+  m_isOrthographic: 0
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -1613,7 +1613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridCellPrefab: {fileID: 0}
-  gridMaterial: {fileID: 0}
+  gridMaterial: {fileID: 2100000, guid: a7c4a8ad10136274eb6480180274d31a, type: 2}
   gridHeight: 0.5
   borderWidth: 0.51
   defaultColor: {r: 1, g: 1, b: 1, a: 0.3}
@@ -1642,6 +1642,10 @@ MonoBehaviour:
   nonWalkablePrefabs:
   - {fileID: 6782521075633066499, guid: 0bb1fbc1c628425428fc1b0bec0726a7, type: 3}
   - {fileID: 2480124083720055959, guid: cdc636a3562a42f4e8a3239af172c81a, type: 3}
+  - {fileID: 685334835123513523, guid: f30c4bbde27b58c449dc95db4d176b18, type: 3}
+  - {fileID: 2099323150040591680, guid: c2e02f37d1af2164f90bc8ef72e47032, type: 3}
+  - {fileID: 3763016893004765562, guid: 74ae30ec013926c4393968ab98763288, type: 3}
+  - {fileID: 4193760707701277353, guid: f20c27c26caef9c4790b28ca88f9f843, type: 3}
   mapLayoutString: '
 
     0,0,0,0,0,0,0,0,0,0
@@ -1802,7 +1806,6 @@ MonoBehaviour:
     winner: 
   player1Prefab: {fileID: 6046026495792925068, guid: bc88c2abb292e0741b2fcae1b783bf87, type: 3}
   player2Prefab: {fileID: 9082444722670536231, guid: 3b5d469bafa32114abc5fdd57a0e3501, type: 3}
-  playerUI: {fileID: 521538853}
   turnDuration: 60
   gameOverPanel: {fileID: 912749085}
   winnerText: {fileID: 1747015614}
@@ -3631,7 +3634,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -3719,13 +3722,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03cfb9da5f566ad4d91659f73be7b66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  distance: 5
-  pitch: 45
-  yaw: 45
-  useOrthographic: 1
-  orthographicSize: 5
-  showDebugGizmos: 1
+  cameraDistance: 15
+  cameraHeight: 10
+  cameraAngle: 45
+  rotationSpeed: 50
+  moveSpeed: 10
+  zoomSpeed: 50
+  minZoom: 5
+  maxZoom: 25
+  useBoundaries: 1
+  minX: -5
+  maxX: 15
+  minZ: -5
+  maxZ: 15
+  useEdgeScrolling: 1
+  edgeScrollSize: 20
 --- !u!1 &1257146296
 GameObject:
   m_ObjectHideFlags: 0
@@ -4403,8 +4414,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Men\xFA Principal"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 0}
+  m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4423,7 +4434,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
+  m_TextStyleHashCode: 0
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -4450,13 +4461,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
+  m_isOrthographic: 0
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -5194,14 +5205,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Victoria!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 0}
+  m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278245375
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 0.843, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -5214,7 +5225,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
+  m_TextStyleHashCode: 0
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -5241,13 +5252,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
+  m_isOrthographic: 0
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0

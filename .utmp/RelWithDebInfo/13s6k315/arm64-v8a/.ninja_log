@@ -1,19 +1,10 @@
 # ninja log v5
 37	2252	7844377198513368	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	b8b39365fcd51ae2
-2714	2876	7844377204792623	D:/Unity/Desarrollo-De-Videojuegos-Clon1/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/13s6k315/obj/arm64-v8a/libgame.so	c7e7e657d67aee53
 57	2273	7844377198722501	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	c0ee708c2d3fb76d
-66	2553	7844377201545741	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	5e165195659195eb
 27	2297	7844377198969233	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	d9c36a5dd53c3972
-2	2369	7844377199728061	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e0bcb2567a23eebd
 89	2304	7844377199046158	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	9ffb1d3c9dc05fed
+2	2369	7844377199728061	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e0bcb2567a23eebd
+66	2553	7844377201545741	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	5e165195659195eb
 45	2590	7844377201932307	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e10052ac95e1811c
 19	2714	7844377203120475	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7d332b7a4f38c0dc
-35	2287	7853249818919291	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	b8b39365fcd51ae2
-8	2291	7853249818962192	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	c0ee708c2d3fb76d
-21	2323	7853249819389970	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	d9c36a5dd53c3972
-43	2359	7853249819751219	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	9ffb1d3c9dc05fed
-27	2434	7853249820499025	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e0bcb2567a23eebd
-59	2616	7853249822324136	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	5e165195659195eb
-51	2652	7853249822688835	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e10052ac95e1811c
-14	2777	7853249823874231	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7d332b7a4f38c0dc
-2778	2978	7853249825931391	D:/Unity/Desarrollo-De-Videojuegos-Clon1/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/13s6k315/obj/arm64-v8a/libgame.so	c7e7e657d67aee53
+2714	2876	7844377204792623	D:/Unity/Desarrollo-De-Videojuegos-Clon1/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/13s6k315/obj/arm64-v8a/libgame.so	c7e7e657d67aee53
