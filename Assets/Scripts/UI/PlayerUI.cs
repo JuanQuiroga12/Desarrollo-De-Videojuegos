@@ -76,7 +76,6 @@ public class PlayerUI : MonoBehaviour
 
     void SetupSpellButtons()
     {
-
         if (spellButtons == null || spellButtons.Count == 0)
             return;
 
@@ -84,7 +83,7 @@ public class PlayerUI : MonoBehaviour
         {
             int spellIndex = i;
 
-            // ✅ CONECTAR BOTÓN CON LISTENER
+            // ✅ CONECTAR BOTÓN con SpellCastingSystem
             spellButtons[i].onClick.AddListener(() => OnSpellButtonClicked(spellIndex));
 
             // Configurar colores
@@ -111,27 +110,18 @@ public class PlayerUI : MonoBehaviour
                 }
             }
 
-            // Agregar esto en SetupSpellButtons() de PlayerUI.cs
-            spellButtons[i].onClick.AddListener(() =>
-            {
-                PlayerController activePlayer = GetActivePlayer();
-                if (activePlayer != null)
-                {
-                    SpellCastingSystem spellSystem = activePlayer.GetComponent<SpellCastingSystem>();
-                    if (spellSystem != null)
-                    {
-                        spellSystem.SelectSpell(spellIndex);
-                    }
-                }
-            });
-
             AddTooltipEvents(spellButtons[i], i);
         }
     }
 
     void AddTooltipEvents(Button button, int spellIndex)
     {
-        EventTrigger trigger = button.gameObject.AddComponent<EventTrigger>();
+        EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
+
+        if (trigger == null)
+        {
+            trigger = button.gameObject.AddComponent<EventTrigger>();
+        }
 
         EventTrigger.Entry enterEntry = new EventTrigger.Entry();
         enterEntry.eventID = EventTriggerType.PointerEnter;
@@ -181,24 +171,34 @@ public class PlayerUI : MonoBehaviour
     {
         if (endTurnButton != null)
         {
-            // ✅ CONECTAR BOTÓN DE PASAR TURNO
             endTurnButton.onClick.AddListener(OnEndTurnClicked);
         }
     }
 
     void OnSpellButtonClicked(int spellIndex)
     {
-        Debug.Log($"Hechizo {spellIndex} seleccionado");
+        Debug.Log($"[PlayerUI] Botón de hechizo {spellIndex} presionado");
 
         PlayerController activePlayer = GetActivePlayer();
+
         if (activePlayer != null)
         {
-            activePlayer.TryCastSpell(spellIndex);
-            AddActionToLog($"{activePlayer.GetPlayerData().username} seleccionó hechizo {GetSpellName(spellIndex)}");
+            // ✅ USAR SpellCastingSystem
+            SpellCastingSystem spellSystem = activePlayer.GetComponent<SpellCastingSystem>();
+
+            if (spellSystem != null)
+            {
+                spellSystem.SelectSpell(spellIndex);
+                AddActionToLog($"Hechizo {GetSpellName(spellIndex)} seleccionado");
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerUI] SpellCastingSystem no encontrado");
+            }
         }
         else
         {
-            Debug.LogWarning("No hay jugador activo");
+            Debug.LogWarning("[PlayerUI] No hay jugador activo");
         }
     }
 
@@ -216,9 +216,10 @@ public class PlayerUI : MonoBehaviour
 
     void OnEndTurnClicked()
     {
-        Debug.Log("Botón de pasar turno presionado");
+        Debug.Log("[PlayerUI] Botón de pasar turno presionado");
 
         PlayerController activePlayer = GetActivePlayer();
+
         if (activePlayer != null)
         {
             AddActionToLog($"{activePlayer.GetPlayerData().username} terminó su turno");
@@ -226,18 +227,23 @@ public class PlayerUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No hay jugador activo para terminar turno");
+            Debug.LogWarning("[PlayerUI] No hay jugador activo para terminar turno");
         }
     }
 
     PlayerController GetActivePlayer()
     {
         PlayerController[] players = Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+
         foreach (var player in players)
         {
-            if (player.GetPlayerData() != null && player.GetPlayerData().isMyTurn)
+            // ✅ CORREGIDO: Verificar isLocalPlayer Y isMyTurn
+            if (player.isLocalPlayer && player.GetPlayerData() != null && player.GetPlayerData().isMyTurn)
+            {
                 return player;
+            }
         }
+
         return null;
     }
 
@@ -245,7 +251,8 @@ public class PlayerUI : MonoBehaviour
     {
         if (playerData == null) return;
 
-        bool isPlayer1 = playerData.username == GameManager.Instance.GetGameState().player1.username;
+        bool isPlayer1 = GameManager.Instance != null &&
+                         playerData.username == GameManager.Instance.GetGameState().player1.username;
 
         if (isPlayer1)
         {
@@ -302,19 +309,22 @@ public class PlayerUI : MonoBehaviour
             return;
         }
 
-        // ✅ CORREGIDO: Solo habilitar botones si ES EL TURNO del jugador
-        if (!playerData.isMyTurn)
+        // ✅ CORREGIDO: Verificar isMyTurn Y que sea jugador local
+        PlayerController activePlayer = GetActivePlayer();
+
+        if (activePlayer == null || activePlayer.GetPlayerData() != playerData)
         {
+            // No es el jugador activo, deshabilitar botones
             foreach (Button btn in spellButtons)
             {
                 btn.interactable = false;
             }
 
-            Debug.Log($"[PlayerUI] Spells disabled for {playerData.username} (not their turn)");
+            Debug.Log($"[PlayerUI] Spells disabled for {playerData.username} (no es el jugador activo)");
             return;
         }
 
-        // ✅ Si ES su turno, verificar PA disponibles
+        // Es el jugador activo, verificar PA disponibles
         for (int i = 0; i < spellButtons.Count && i < playerData.spells.Count; i++)
         {
             bool canCast = playerData.currentAttackPoints >= playerData.spells[i].apCost;

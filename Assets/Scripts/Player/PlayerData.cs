@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -86,16 +86,16 @@ public class PlayerData
 
     void InitializeSpells()
     {
-        // Fuego: 3 PA, 40 daño
+        // Fuego: 3 PA, 40 daÃ±o
         spells.Add(new SpellData("Fuego", SpellElement.Fire, SpellType.SingleTarget, 3, 40, 0, 0, 0, 0, 0, 4));
 
-        // Tierra: 2 PA, 30 daño
+        // Tierra: 2 PA, 30 daÃ±o
         spells.Add(new SpellData("Tierra", SpellElement.Earth, SpellType.SingleTarget, 2, 30, 0, 0, 0, 0, 0, 3));
 
-        // Agua: 3 PA, 20 cura, +1 PM (solo a sí mismo)
+        // Agua: 3 PA, 20 cura, +1 PM (solo a sÃ­ mismo)
         spells.Add(new SpellData("Agua", SpellElement.Water, SpellType.Self, 3, 0, 20, 1, 0, 0, 0, 0));
 
-        // Viento: 2 PA, efectos variables en área
+        // Viento: 2 PA, efectos variables en Ã¡rea
         spells.Add(new SpellData("Viento", SpellElement.Wind, SpellType.Area, 2, 0, 0, 0, 0, 0, 0, 3, 1));
     }
 
@@ -103,6 +103,7 @@ public class PlayerData
     {
         currentMovementPoints = baseMovementPoints;
         currentAttackPoints = baseAttackPoints;
+        isMyTurn = true;  // âœ… AGREGAR ESTA LÃNEA
     }
 
     public bool CanCastSpell(SpellData spell)
@@ -153,7 +154,7 @@ public class PlayerData
         return currentHealth > 0;
     }
 
-    // Serialización JSON
+    // SerializaciÃ³n JSON
     public string ToJson()
     {
         return JsonUtility.ToJson(this, true);

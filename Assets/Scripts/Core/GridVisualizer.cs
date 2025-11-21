@@ -114,8 +114,27 @@ public class GridVisualizer : MonoBehaviour
         tile.transform.localScale = new Vector3(0.95f, 0.95f, 1f);
         tile.transform.parent = parent;
 
-        // ← ASEGURAR QUE EL TILE SEA VISIBLE
         tile.layer = 0; // Default layer
+
+        // ✅ ELIMINAR TODOS LOS COLLIDERS EXISTENTES
+        MeshCollider meshCollider = tile.GetComponent<MeshCollider>();
+        if (meshCollider != null)
+        {
+            Destroy(meshCollider);
+        }
+
+        BoxCollider boxCollider = tile.GetComponent<BoxCollider>();
+        if (boxCollider != null)
+        {
+            Destroy(boxCollider);
+        }
+
+        // ✅ AGREGAR SOLO UN BoxCollider con tamaño correcto
+        BoxCollider newBoxCollider = tile.AddComponent<BoxCollider>();
+        newBoxCollider.size = new Vector3(1f, 1f, 0.3f); // ← ALTURA MUY PEQUEÑA (0.01f) para que no interfiera visualmente
+        newBoxCollider.center = Vector3.zero;
+
+        Debug.Log($"[GridVisualizer] ✅ Tile con collider creado en: {worldPos}");
 
         Renderer renderer = tile.GetComponent<Renderer>();
 
@@ -148,8 +167,6 @@ public class GridVisualizer : MonoBehaviour
 
         mat.color = defaultColor;
         renderer.material = mat;
-
-        // ← ASEGURAR QUE EL RENDERER ESTÉ HABILITADO
         renderer.enabled = true;
 
         gridTiles[gridPos] = tile;

@@ -1,294 +1,385 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
-using System.Collections.Generic;
-using System.Collections;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
+/// <summary>
+/// Sistema de movimiento basado en taps/clicks para jugadores locales.
+/// ✅ CORREGIDO: Detecta correctamente raycasts en cámara ortográfica
+/// </summary>
 public class PlayerMovementSystem : MonoBehaviour
 {
-    [Header("Referencias")]
-    private PlayerController playerController;
-    private Camera mainCamera;
-
-    [Header("Estado de Selección")]
-    private Vector2Int? selectedTile = null;
-    private List<Vector2Int> currentPath = null;
-    private bool isWaitingForConfirmation = false;
-
     [Header("Colores de Visualización")]
-    [SerializeField] private Color reachableColor = new Color(0f, 1f, 0f, 0.8f);
-    [SerializeField] private Color unreachableColor = new Color(1f, 0f, 0f, 0.8f);
-    [SerializeField] private Color selectedColor = new Color(1f, 1f, 0f, 0.9f);
+    [SerializeField] private Color reachableColor = Color.green;
+    [SerializeField] private Color unreachableColor = Color.red;
+    [SerializeField] private Color selectedColor = Color.yellow;
 
     [Header("Configuración Touch")]
     [SerializeField] private float doubleTapTime = 0.5f;
+
+    // Estado
+    private PlayerController playerController;
+    private Vector2Int? selectedTarget = null;
+    private List<Vector2Int> currentPath = null;
     private float lastTapTime = 0f;
     private Vector2Int lastTappedTile = Vector2Int.zero;
 
-    void Awake()
+    void OnEnable()
     {
-        // Habilitar el sistema de touch mejorado
+        Debug.Log("[PlayerMovementSystem] 🟢 OnEnable - Habilitando Enhanced Touch");
+        TouchSimulation.Enable();
         EnhancedTouchSupport.Enable();
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        // Deshabilitar cuando se destruye
+        Debug.Log("[PlayerMovementSystem] 🔴 OnDisable - Deshabilitando Enhanced Touch");
+        TouchSimulation.Disable();
         EnhancedTouchSupport.Disable();
+
+        if (GridVisualizer.Instance != null)
+        {
+            GridVisualizer.Instance.ResetGridColors();
+        }
+
+        selectedTarget = null;
+        currentPath = null;
     }
 
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-        mainCamera = Camera.main;
 
         if (playerController == null)
         {
-            Debug.LogError($"[PlayerMovementSystem] No se encontró PlayerController en {gameObject.name}");
+            Debug.LogError("[PlayerMovementSystem] ❌ No se encontró PlayerController");
+            enabled = false;
+            return;
         }
+
+        Debug.Log($"[PlayerMovementSystem] ✅ Inicializado para {gameObject.name}");
     }
 
     void Update()
     {
-        // Solo procesar input si es nuestro jugador local y es su turno
-        if (!playerController.GetPlayerData().isMyTurn)
+        PlayerData playerData = playerController.GetPlayerData();
+
+        if (playerData == null)
         {
-            ClearVisualization();
+            Debug.LogError("[PlayerMovementSystem] ❌ PlayerData es null");
             return;
         }
 
-        if (!playerController.isLocalPlayer)
+        if (!playerData.isMyTurn || !playerController.isLocalPlayer)
         {
+            if (Time.frameCount % 60 == 0)
+            {
+                Debug.Log($"[PlayerMovementSystem] ⏳ {gameObject.name} - isMyTurn: {playerData.isMyTurn}, isLocalPlayer: {playerController.isLocalPlayer}");
+            }
             return;
         }
 
-        // Detectar input táctil o mouse
-        HandleInput();
+        SpellCastingSystem spellSystem = GetComponent<SpellCastingSystem>();
+        if (spellSystem != null && spellSystem.IsSelectingTarget())
+        {
+            Debug.Log("[PlayerMovementSystem] 🔮 Sistema de casteo activo - Ignorando movimiento");
+            return;
+        }
+
+        HandleMovementInput();
     }
 
-    void HandleInput()
+    void HandleMovementInput()
     {
-        // Verificar si estamos sobre UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
+        Vector2Int? tappedTile = null;
 
-        // Para touch en móvil, verificar si estamos sobre UI
         if (Touch.activeTouches.Count > 0)
         {
-            if (EventSystem.current.IsPointerOverGameObject(Touch.activeTouches[0].touchId))
-            {
-                return;
-            }
-        }
-
-        bool inputDetected = false;
-        Vector2 inputPosition = Vector2.zero;
-
-        // Detectar input táctil usando el nuevo Input System
-        if (Touch.activeTouches.Count > 0)
-        {
+            Debug.Log($"[PlayerMovementSystem] 📱 TOQUE DETECTADO - Cantidad: {Touch.activeTouches.Count}");
             var touch = Touch.activeTouches[0];
+
+            Debug.Log($"[PlayerMovementSystem] 📱 Touch info - Phase: {touch.phase}, Position: {touch.screenPosition}");
+
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                inputDetected = true;
-                inputPosition = touch.screenPosition;
+                Debug.Log($"[PlayerMovementSystem] 📱 Touch BEGAN - Obteniendo tile desde: {touch.screenPosition}");
+                tappedTile = GetTileFromScreenPosition(touch.screenPosition);
+                if (tappedTile.HasValue)
+                {
+                    Debug.Log($"[PlayerMovementSystem] ✅ Tile obtenido: {tappedTile.Value}");
+                }
+                else
+                {
+                    Debug.Log("[PlayerMovementSystem] ❌ No se pudo obtener tile (raycast falló)");
+                }
             }
         }
-        // Detectar click del mouse usando el nuevo Input System
         else if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            inputDetected = true;
-            inputPosition = Mouse.current.position.ReadValue();
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Debug.Log($"[PlayerMovementSystem] 🖱️ CLICK DEL MOUSE DETECTADO - Posición: {mousePos}");
+            tappedTile = GetTileFromScreenPosition(mousePos);
+            if (tappedTile.HasValue)
+            {
+                Debug.Log($"[PlayerMovementSystem] ✅ Tile obtenido: {tappedTile.Value}");
+            }
+            else
+            {
+                Debug.Log("[PlayerMovementSystem] ❌ No se pudo obtener tile (raycast falló)");
+            }
         }
 
-        if (inputDetected)
+        if (tappedTile.HasValue)
         {
-            ProcessTap(inputPosition);
+            Debug.Log($"[PlayerMovementSystem] 🎯 Procesando tap en: {tappedTile.Value}");
+            ProcessTileTap(tappedTile.Value);
         }
     }
 
-    void ProcessTap(Vector2 screenPosition)
+    /// <summary>
+    /// ✅ CORREGIDO: Convierte posición de pantalla a coordenadas de grid usando ORTHOGRAPHIC RAYCAST
+    /// </summary>
+    Vector2Int? GetTileFromScreenPosition(Vector2 screenPos)
     {
-        // Convertir posición de pantalla a tile del grid
-        Vector2Int? tappedTile = GetTileFromScreenPosition(screenPosition);
+        Debug.Log($"[PlayerMovementSystem] 🔍 GetTileFromScreenPosition - screenPos: {screenPos}");
 
-        if (!tappedTile.HasValue)
+        if (Camera.main == null)
         {
-            ClearVisualization();
-            return;
+            Debug.LogError("[PlayerMovementSystem] ❌ Camera.main es null");
+            return null;
         }
 
-        Vector2Int tile = tappedTile.Value;
-
-        // Verificar si es el mismo tile que el tap anterior (doble tap)
-        if (tile == lastTappedTile && Time.time - lastTapTime < doubleTapTime)
+        // ✅ MÉTODO CORRECTO PARA CÁMARA ORTHOGRAPHIC
+        if (Camera.main.orthographic)
         {
-            // Doble tap detectado - confirmar movimiento
-            if (isWaitingForConfirmation && currentPath != null)
+            Debug.Log("[PlayerMovementSystem] 📐 Usando raycast para cámara ORTHOGRAPHIC");
+
+            // Crear un plano en Y = 0.55 (altura del grid)
+            Plane gridPlane = new Plane(Vector3.up, new Vector3(0, 0.55f, 0));
+
+            // Crear rayo desde la cámara
+            Ray ray = Camera.main.ScreenPointToRay(screenPos);
+            Debug.Log($"[PlayerMovementSystem] 🔍 Ray - Origin: {ray.origin}, Direction: {ray.direction}");
+
+            // Verificar intersección con el plano
+            if (gridPlane.Raycast(ray, out float enter))
             {
-                ConfirmMovement(tile);
+                Vector3 hitPoint = ray.GetPoint(enter);
+                Debug.Log($"[PlayerMovementSystem] ✅ Plano intersectado en: {hitPoint}");
+
+                // Convertir a coordenadas de grid
+                if (MapGenerator.Instance != null)
+                {
+                    Vector2Int gridPos = MapGenerator.Instance.GetGridPosition(hitPoint);
+                    Debug.Log($"[PlayerMovementSystem] ✅ Grid Position: {gridPos}");
+
+                    // Verificar si es una casilla válida
+                    if (MapGenerator.Instance.IsWalkable(gridPos.x, gridPos.y))
+                    {
+                        return gridPos;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[PlayerMovementSystem] ⚠️ Casilla {gridPos} no es caminable");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerMovementSystem] ⚠️ Rayo no intersecta el plano del grid");
             }
         }
         else
         {
-            // Primer tap - mostrar preview del camino
-            ShowPathPreview(tile);
-            lastTappedTile = tile;
-            lastTapTime = Time.time;
-        }
-    }
+            // Método original para cámara en perspectiva
+            Debug.Log("[PlayerMovementSystem] 📐 Usando raycast para cámara PERSPECTIVE");
+            Ray ray = Camera.main.ScreenPointToRay(screenPos);
+            Debug.Log($"[PlayerMovementSystem] 🔍 Ray - Origin: {ray.origin}, Direction: {ray.direction}");
 
-    Vector2Int? GetTileFromScreenPosition(Vector2 screenPos)
-    {
-        if (mainCamera == null || MapGenerator.Instance == null)
-            return null;
-
-        Ray ray = mainCamera.ScreenPointToRay(screenPos);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000f))
-        {
-            Vector2Int gridPos = MapGenerator.Instance.GetGridPosition(hit.point);
-
-            if (MapGenerator.Instance.IsWalkable(gridPos.x, gridPos.y))
+            if (Physics.Raycast(ray, out RaycastHit hit, 500f))
             {
-                return gridPos;
+                Debug.Log($"[PlayerMovementSystem] ✅ Raycast HIT - Objeto: {hit.collider.gameObject.name}, Punto: {hit.point}");
+
+                if (MapGenerator.Instance != null)
+                {
+                    Vector2Int gridPos = MapGenerator.Instance.GetGridPosition(hit.point);
+                    Debug.Log($"[PlayerMovementSystem] ✅ Grid Position: {gridPos}");
+                    return gridPos;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerMovementSystem] ❌ Raycast NO HIT");
             }
         }
 
         return null;
     }
 
-    void ShowPathPreview(Vector2Int targetTile)
+    void ProcessTileTap(Vector2Int tappedTile)
     {
-        if (PathfindingSystem.Instance == null || GridVisualizer.Instance == null)
+        PlayerData playerData = playerController.GetPlayerData();
+        Debug.Log($"[PlayerMovementSystem] 🎯 ProcessTileTap - Tile: {tappedTile}");
+
+        Vector2Int currentPos = playerData.gridPosition;
+
+        bool isDoubleTap = (tappedTile == lastTappedTile) && (Time.time - lastTapTime < doubleTapTime);
+        Debug.Log($"[PlayerMovementSystem] 🔄 DoubleTap: {isDoubleTap}");
+
+        lastTappedTile = tappedTile;
+        lastTapTime = Time.time;
+
+        if (tappedTile == currentPos)
+        {
+            Debug.Log("[PlayerMovementSystem] ⚠️ Tap en posición actual - Ignorando");
             return;
+        }
 
-        // Limpiar visualización anterior
-        ClearVisualization();
+        if (!MapGenerator.Instance.IsWalkable(tappedTile.x, tappedTile.y))
+        {
+            Debug.Log($"[PlayerMovementSystem] ❌ Casilla {tappedTile} no es caminable");
+            return;
+        }
 
-        Vector2Int currentPos = playerController.GetPlayerData().gridPosition;
-        int availableMP = playerController.GetPlayerData().currentMovementPoints;
+        if (!isDoubleTap || selectedTarget != tappedTile)
+        {
+            Debug.Log($"[PlayerMovementSystem] 📍 Visualizando camino a {tappedTile}");
+            VisualizePathTo(tappedTile);
+            selectedTarget = tappedTile;
+        }
+        else
+        {
+            Debug.Log($"[PlayerMovementSystem] ✅ DoubleTap confirmado - Confirmando movimiento");
+            ConfirmMovement();
+        }
+    }
 
-        // Calcular camino
-        List<Vector2Int> path = PathfindingSystem.Instance.FindPath(currentPos, targetTile);
+    void VisualizePathTo(Vector2Int target)
+    {
+        PlayerData playerData = playerController.GetPlayerData();
+        Vector2Int currentPos = playerData.gridPosition;
+
+        List<Vector2Int> path = PathfindingSystem.Instance.FindPath(currentPos, target);
 
         if (path == null || path.Count == 0)
         {
-            Debug.Log($"[PlayerMovementSystem] No hay camino válido a {targetTile}");
+            Debug.Log($"[PlayerMovementSystem] ❌ No se encontró camino a {target}");
+            GridVisualizer.Instance.ResetGridColors();
+            currentPath = null;
             return;
         }
 
         currentPath = path;
-        selectedTile = targetTile;
-        isWaitingForConfirmation = true;
+        int availablePM = playerData.currentMovementPoints;
 
-        // Visualizar el camino
+        GridVisualizer.Instance.ResetGridColors();
+
         for (int i = 0; i < path.Count; i++)
         {
-            Color tileColor;
-
-            if (i < availableMP)
+            if (i < availablePM)
             {
-                // Tiles alcanzables con PM actuales - VERDE
-                tileColor = reachableColor;
+                GridVisualizer.Instance.SetTileColor(path[i], reachableColor);
             }
             else
             {
-                // Tiles que requieren más PM - ROJO
-                tileColor = unreachableColor;
+                GridVisualizer.Instance.SetTileColor(path[i], unreachableColor);
             }
-
-            GridVisualizer.Instance.SetTileColor(path[i], tileColor);
         }
 
-        // Resaltar el tile objetivo
-        GridVisualizer.Instance.SetTileColor(targetTile, selectedColor);
-
-        Debug.Log($"[PlayerMovementSystem] Path preview: {path.Count} tiles, MP disponible: {availableMP}");
+        GridVisualizer.Instance.SetTileColor(target, selectedColor);
     }
 
-    void ConfirmMovement(Vector2Int targetTile)
+    void ConfirmMovement()
     {
-        if (currentPath == null || !isWaitingForConfirmation)
+        PlayerData playerData = playerController.GetPlayerData();
+
+        if (!selectedTarget.HasValue || currentPath == null || currentPath.Count == 0)
+        {
+            Debug.LogWarning("[PlayerMovementSystem] ⚠️ No hay objetivo seleccionado");
             return;
+        }
 
-        int availableMP = playerController.GetPlayerData().currentMovementPoints;
+        int requiredPM = currentPath.Count;
+        int availablePM = playerData.currentMovementPoints;
 
-        // Solo mover si tenemos suficientes PM
-        if (currentPath.Count <= availableMP)
+        if (requiredPM > availablePM)
         {
-            Debug.Log($"[PlayerMovementSystem] ✅ Confirmando movimiento a {targetTile}");
-            playerController.TryMoveTo(targetTile);
+            Debug.Log($"[PlayerMovementSystem] ⚠️ PM insuficientes");
 
-            // Si es juego online, sincronizar
-            if (NetworkManager.Instance != null && NetworkManager.Instance.IsOnlineMode())
+            if (availablePM > 0)
             {
-                StartCoroutine(SyncMovement(targetTile));
+                currentPath = currentPath.GetRange(0, Mathf.Min(availablePM, currentPath.Count));
+                selectedTarget = currentPath[currentPath.Count - 1];
             }
-        }
-        else
-        {
-            Debug.LogWarning($"[PlayerMovementSystem] ❌ No hay suficientes PM. Necesario: {currentPath.Count}, Disponible: {availableMP}");
-
-            // Efecto visual de rechazo
-            StartCoroutine(ShowRejectionEffect());
-        }
-
-        ClearVisualization();
-    }
-
-    IEnumerator ShowRejectionEffect()
-    {
-        // Parpadeo rojo para indicar que no se puede mover
-        for (int i = 0; i < 3; i++)
-        {
-            if (selectedTile.HasValue)
+            else
             {
-                GridVisualizer.Instance.SetTileColor(selectedTile.Value, Color.white);
-                yield return new WaitForSeconds(0.1f);
-                GridVisualizer.Instance.SetTileColor(selectedTile.Value, unreachableColor);
-                yield return new WaitForSeconds(0.1f);
+                GridVisualizer.Instance.ResetGridColors();
+                selectedTarget = null;
+                currentPath = null;
+                return;
             }
         }
 
-        ClearVisualization();
-    }
+        Debug.Log($"[PlayerMovementSystem] ✅ Iniciando movimiento");
+        StartCoroutine(MoveAlongPath(currentPath));
 
-    IEnumerator SyncMovement(Vector2Int targetPos)
-    {
-        // Esperar un frame para asegurar que el movimiento local se procese
-        yield return null;
-
-        // Sincronizar con Firebase
-        if (GameManager.Instance != null)
-        {
-            var gameState = GameManager.Instance.GetGameState();
-            if (NetworkManager.Instance != null && NetworkManager.Instance.currentRoomRef != null)
-            {
-                _ = NetworkManager.Instance.SendGameState(gameState);
-            }
-        }
-    }
-
-    void ClearVisualization()
-    {
-        if (GridVisualizer.Instance != null)
-        {
-            GridVisualizer.Instance.ResetGridColors();
-        }
-
-        selectedTile = null;
+        GridVisualizer.Instance.ResetGridColors();
+        selectedTarget = null;
         currentPath = null;
-        isWaitingForConfirmation = false;
     }
 
-    void OnDisable()
+    IEnumerator MoveAlongPath(List<Vector2Int> path)
     {
-        ClearVisualization();
+        if (path == null || path.Count == 0) yield break;
+
+        enabled = false;
+        float moveSpeed = 3f;
+
+        foreach (Vector2Int gridPos in path)
+        {
+            PlayerData playerData = playerController.GetPlayerData();
+
+            if (playerData.currentMovementPoints <= 0)
+            {
+                Debug.Log("[PlayerMovementSystem] ⚠️ PM agotados");
+                break;
+            }
+
+            playerData.gridPosition = gridPos;
+            playerData.Move(1);
+
+            Vector3 targetWorldPos = MapGenerator.Instance.GetWorldPosition(gridPos.x, gridPos.y);
+            targetWorldPos.y = transform.position.y;
+
+            playerController.PlayAnimation("Slow Run");
+
+            while (Vector3.Distance(transform.position, targetWorldPos) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime);
+
+                Vector3 direction = (targetWorldPos - transform.position).normalized;
+                if (direction.magnitude > 0.1f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
+                }
+
+                yield return null;
+            }
+
+            transform.position = targetWorldPos;
+        }
+
+        playerController.PlayAnimation("Idle");
+
+        PlayerUI playerUI = Object.FindFirstObjectByType<PlayerUI>();
+        if (playerUI != null)
+        {
+            playerUI.UpdatePlayerStats(playerController.GetPlayerData());
+        }
+
+        enabled = true;
     }
 }

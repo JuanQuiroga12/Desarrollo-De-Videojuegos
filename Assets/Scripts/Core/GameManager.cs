@@ -272,14 +272,15 @@ public class GameManager : MonoBehaviour
         isGameActive = true;
         currentTurnTime = turnDuration;
 
-        if (player1Controller != null)
-        {
-            player1Controller.StartTurn();
-        }
+        // ❌ ELIMINADO: Esta línea causaba que StartTurn() se llamara DENTRO de SetupPlayers()
+        // if (player1Controller != null)
+        // {
+        //     player1Controller.StartTurn();
+        // }
 
+        // ✅ ÚNICA LLAMADA - maneja todo el setup del primer turno
         StartTurn(1);
 
-        // ✅ NUEVO: Iniciar sincronización de tiempo
         if (isNetworkGame)
         {
             StartCoroutine(SyncTurnTimer());
@@ -297,17 +298,18 @@ public class GameManager : MonoBehaviour
 
         if (playerNumber == 1)
         {
+            // ✅ ESTABLECER isMyTurn = true ANTES de cualquier otra cosa
+            gameState.player1.isMyTurn = true;
+            gameState.player2.isMyTurn = false;
+
             if (player1Controller != null)
             {
                 Debug.Log($"[GameManager] ✅ Activando turno de Player 1");
-                player1Controller.StartTurn(); // ← Esto activa el indicador
+                player1Controller.StartTurn();
             }
 
             if (player2Controller != null)
             {
-                player2Controller.GetPlayerData().isMyTurn = false;
-
-                // ✅ Desactivar indicador del Player 2
                 PlayerTurnIndicator p2Indicator = player2Controller.GetComponent<PlayerTurnIndicator>();
                 if (p2Indicator != null)
                 {
@@ -321,17 +323,18 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // ✅ ESTABLECER isMyTurn = true ANTES de cualquier otra cosa
+            gameState.player2.isMyTurn = true;
+            gameState.player1.isMyTurn = false;
+
             if (player2Controller != null)
             {
                 Debug.Log($"[GameManager] ✅ Activando turno de Player 2");
-                player2Controller.StartTurn(); // ← Esto activa el indicador
+                player2Controller.StartTurn();
             }
 
             if (player1Controller != null)
             {
-                player1Controller.GetPlayerData().isMyTurn = false;
-
-                // ✅ Desactivar indicador del Player 1
                 PlayerTurnIndicator p1Indicator = player1Controller.GetComponent<PlayerTurnIndicator>();
                 if (p1Indicator != null)
                 {
@@ -353,7 +356,6 @@ public class GameManager : MonoBehaviour
                 playerUI.UpdatePlayerStats(player2Controller.GetPlayerData());
         }
 
-        // Sincronizar con red si aplica
         if (isNetworkGame && NetworkManager.Instance != null)
         {
             _ = NetworkManager.Instance.SendTurnChange(playerNumber);

@@ -47,11 +47,8 @@ public class PlayerTurnIndicator : MonoBehaviour
         CreateIndicatorVisual();
     }
 
-    void Start()
-    {
-        // Por defecto, ocultar el indicador
-        SetActive(false);
-    }
+    // ❌ ELIMINADO: Ya no desactivamos en Start()
+    // El estado lo controla GameManager.StartTurn()
 
     void Update()
     {
@@ -138,6 +135,9 @@ public class PlayerTurnIndicator : MonoBehaviour
         indicatorRenderer.material = indicatorMaterial;
         indicatorRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         indicatorRenderer.receiveShadows = false;
+
+        // ✅ IMPORTANTE: Por defecto DESACTIVADO hasta que GameManager lo active
+        indicatorObject.SetActive(false);
 
         Debug.Log($"[PlayerTurnIndicator] Indicador creado para {gameObject.name}");
     }

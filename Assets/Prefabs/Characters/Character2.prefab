@@ -347,10 +347,10 @@ PrefabInstance:
       addedObject: {fileID: -3539464789529657139}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8275216565032091523}
+      addedObject: {fileID: -3499585908753510460}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -3499585908753510460}
+      addedObject: {fileID: 8275216565032091523}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9211e118f2fd6d64c8ef937e09db8281, type: 3}
       insertIndex: -1
       addedObject: {fileID: -399111505698033774}
@@ -435,27 +435,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &8275216565032091523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9082444722670536231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988a3a5dfa782aa4ca02600588c9a87c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activeColor: {r: 1, g: 0.843, b: 0, a: 0.8}
-  pulseColor: {r: 1, g: 1, b: 0.3, a: 0.9}
-  indicatorRadius: 0.6
-  ringThickness: 0.08
-  heightOffset: 0.02
-  rotationSpeed: 45
-  pulseSpeed: 1.5
-  pulseIntensity: 0.3
-  useScalePulse: 1
 --- !u!114 &-3499585908753510460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,11 +506,31 @@ MonoBehaviour:
       range: 3
       areaSize: 1
     isMyTurn: 0
-  playerNumber: 1
-  moveSpeed: 3
-  rotationSpeed: 10
+  isLocalPlayer: 0
+  playerNumber: 2
   animator: {fileID: -5992938291415454608}
   turnIndicator: {fileID: 8275216565032091523}
+--- !u!114 &8275216565032091523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9082444722670536231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988a3a5dfa782aa4ca02600588c9a87c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeColor: {r: 1, g: 0.843, b: 0, a: 0.8}
+  pulseColor: {r: 1, g: 1, b: 0.3, a: 0.9}
+  indicatorRadius: 0.6
+  ringThickness: 0.08
+  heightOffset: 0.02
+  rotationSpeed: 45
+  pulseSpeed: 1.5
+  pulseIntensity: 0.3
+  useScalePulse: 1
 --- !u!114 &-399111505698033774
 MonoBehaviour:
   m_ObjectHideFlags: 0
