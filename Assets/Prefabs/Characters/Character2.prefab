@@ -506,7 +506,7 @@ MonoBehaviour:
       range: 3
       areaSize: 1
     isMyTurn: 0
-  isLocalPlayer: 0
+  isLocalPlayer: 1
   playerNumber: 2
   animator: {fileID: -5992938291415454608}
   turnIndicator: {fileID: 8275216565032091523}

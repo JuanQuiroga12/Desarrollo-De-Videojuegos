@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.EventSystems;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
-/// <summary>
-/// Sistema de movimiento basado en taps/clicks para jugadores locales.
-/// ✅ CORREGIDO: Detecta correctamente raycasts en cámara ortográfica
-/// </summary>
 public class PlayerMovementSystem : MonoBehaviour
 {
     [Header("Colores de Visualización")]
@@ -19,12 +16,14 @@ public class PlayerMovementSystem : MonoBehaviour
     [Header("Configuración Touch")]
     [SerializeField] private float doubleTapTime = 0.5f;
 
-    // Estado
     private PlayerController playerController;
     private Vector2Int? selectedTarget = null;
     private List<Vector2Int> currentPath = null;
     private float lastTapTime = 0f;
     private Vector2Int lastTappedTile = Vector2Int.zero;
+
+    // ✅ NUEVO: Flag para verificar si el sistema está listo
+    private bool isSystemReady = false;
 
     void OnEnable()
     {
@@ -60,31 +59,71 @@ public class PlayerMovementSystem : MonoBehaviour
         }
 
         Debug.Log($"[PlayerMovementSystem] ✅ Inicializado para {gameObject.name}");
+
+        // ✅ Esperar a que el juego esté inicializado
+        StartCoroutine(WaitForGameInitialization());
+    }
+
+    // ✅ NUEVO: Esperar inicialización completa
+    private IEnumerator WaitForGameInitialization()
+    {
+        Debug.Log($"[PlayerMovementSystem] ⏳ Esperando inicialización del juego...");
+
+        // Esperar a que GameInitializationManager exista
+        while (GameInitializationManager.Instance == null)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // Esperar a que todo esté listo
+        while (!GameInitializationManager.Instance.IsInitialized())
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        isSystemReady = true;
+        Debug.Log($"[PlayerMovementSystem] ✅ Sistema listo para {gameObject.name}");
     }
 
     void Update()
     {
+        // ✅ NUEVO: No procesar input si el sistema no está listo
+        if (!isSystemReady)
+        {
+            return;
+        }
+
         PlayerData playerData = playerController.GetPlayerData();
 
         if (playerData == null)
         {
-            Debug.LogError("[PlayerMovementSystem] ❌ PlayerData es null");
             return;
         }
 
-        if (!playerData.isMyTurn || !playerController.isLocalPlayer)
+        // ✅ LOGS DE DEBUGGING (comentar en producción)
+        if (Time.frameCount % 300 == 0) // Log cada 5 segundos
         {
-            if (Time.frameCount % 60 == 0)
-            {
-                Debug.Log($"[PlayerMovementSystem] ⏳ {gameObject.name} - isMyTurn: {playerData.isMyTurn}, isLocalPlayer: {playerController.isLocalPlayer}");
-            }
-            return;
+            Debug.Log($"[PlayerMovementSystem] Estado de {gameObject.name}:");
+            Debug.Log($"    - isMyTurn: {playerData.isMyTurn}");
+            Debug.Log($"    - isLocalPlayer: {playerController.isLocalPlayer}");
+            Debug.Log($"    - enabled: {enabled}");
+            Debug.Log($"    - isSystemReady: {isSystemReady}");
+        }
+
+        // ✅ VERIFICACIÓN MEJORADA: Confirmar que es el turno del jugador
+        if (!playerData.isMyTurn)
+        {
+            return; // ← Salir silenciosamente si no es su turno
+        }
+
+        if (!playerController.isLocalPlayer)
+        {
+            return; // ← Salir silenciosamente si no es jugador local
         }
 
         SpellCastingSystem spellSystem = GetComponent<SpellCastingSystem>();
         if (spellSystem != null && spellSystem.IsSelectingTarget())
         {
-            Debug.Log("[PlayerMovementSystem] 🔮 Sistema de casteo activo - Ignorando movimiento");
             return;
         }
 
@@ -94,41 +133,40 @@ public class PlayerMovementSystem : MonoBehaviour
     void HandleMovementInput()
     {
         Vector2Int? tappedTile = null;
+        Vector2 inputPosition = Vector2.zero;
 
+        // 📱 TOUCH INPUT
         if (Touch.activeTouches.Count > 0)
         {
-            Debug.Log($"[PlayerMovementSystem] 📱 TOQUE DETECTADO - Cantidad: {Touch.activeTouches.Count}");
             var touch = Touch.activeTouches[0];
-
-            Debug.Log($"[PlayerMovementSystem] 📱 Touch info - Phase: {touch.phase}, Position: {touch.screenPosition}");
 
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                Debug.Log($"[PlayerMovementSystem] 📱 Touch BEGAN - Obteniendo tile desde: {touch.screenPosition}");
-                tappedTile = GetTileFromScreenPosition(touch.screenPosition);
-                if (tappedTile.HasValue)
+                inputPosition = touch.screenPosition;
+
+                if (IsPointerOverUI(inputPosition))
                 {
-                    Debug.Log($"[PlayerMovementSystem] ✅ Tile obtenido: {tappedTile.Value}");
+                    Debug.Log("[PlayerMovementSystem] 🛑 Toque sobre UI - ignorando");
+                    return;
                 }
-                else
-                {
-                    Debug.Log("[PlayerMovementSystem] ❌ No se pudo obtener tile (raycast falló)");
-                }
+
+                Debug.Log($"[PlayerMovementSystem] 📱 Toque FUERA de UI en: {inputPosition}");
+                tappedTile = GetTileFromScreenPosition(inputPosition);
             }
         }
+        // 🖱️ MOUSE INPUT
         else if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            Debug.Log($"[PlayerMovementSystem] 🖱️ CLICK DEL MOUSE DETECTADO - Posición: {mousePos}");
-            tappedTile = GetTileFromScreenPosition(mousePos);
-            if (tappedTile.HasValue)
+            inputPosition = Mouse.current.position.ReadValue();
+
+            if (IsPointerOverUI(inputPosition))
             {
-                Debug.Log($"[PlayerMovementSystem] ✅ Tile obtenido: {tappedTile.Value}");
+                Debug.Log("[PlayerMovementSystem] 🛑 Click sobre UI - ignorando");
+                return;
             }
-            else
-            {
-                Debug.Log("[PlayerMovementSystem] ❌ No se pudo obtener tile (raycast falló)");
-            }
+
+            Debug.Log($"[PlayerMovementSystem] 🖱️ Click FUERA de UI en: {inputPosition}");
+            tappedTile = GetTileFromScreenPosition(inputPosition);
         }
 
         if (tappedTile.HasValue)
@@ -138,46 +176,55 @@ public class PlayerMovementSystem : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ✅ CORREGIDO: Convierte posición de pantalla a coordenadas de grid usando ORTHOGRAPHIC RAYCAST
-    /// </summary>
+    bool IsPointerOverUI(Vector2 screenPosition)
+    {
+        if (EventSystem.current == null)
+        {
+            Debug.LogWarning("[PlayerMovementSystem] ⚠️ EventSystem.current es NULL");
+            return false;
+        }
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = screenPosition
+        };
+
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        if (results.Count > 0)
+        {
+            Debug.Log($"[PlayerMovementSystem] 📍 UI detectada: {results[0].gameObject.name}");
+            return true;
+        }
+
+        return false;
+    }
+
     Vector2Int? GetTileFromScreenPosition(Vector2 screenPos)
     {
-        Debug.Log($"[PlayerMovementSystem] 🔍 GetTileFromScreenPosition - screenPos: {screenPos}");
-
         if (Camera.main == null)
         {
             Debug.LogError("[PlayerMovementSystem] ❌ Camera.main es null");
             return null;
         }
 
-        // ✅ MÉTODO CORRECTO PARA CÁMARA ORTHOGRAPHIC
         if (Camera.main.orthographic)
         {
-            Debug.Log("[PlayerMovementSystem] 📐 Usando raycast para cámara ORTHOGRAPHIC");
-
-            // Crear un plano en Y = 0.55 (altura del grid)
             Plane gridPlane = new Plane(Vector3.up, new Vector3(0, 0.55f, 0));
-
-            // Crear rayo desde la cámara
             Ray ray = Camera.main.ScreenPointToRay(screenPos);
-            Debug.Log($"[PlayerMovementSystem] 🔍 Ray - Origin: {ray.origin}, Direction: {ray.direction}");
 
-            // Verificar intersección con el plano
             if (gridPlane.Raycast(ray, out float enter))
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
-                Debug.Log($"[PlayerMovementSystem] ✅ Plano intersectado en: {hitPoint}");
 
-                // Convertir a coordenadas de grid
                 if (MapGenerator.Instance != null)
                 {
                     Vector2Int gridPos = MapGenerator.Instance.GetGridPosition(hitPoint);
-                    Debug.Log($"[PlayerMovementSystem] ✅ Grid Position: {gridPos}");
 
-                    // Verificar si es una casilla válida
                     if (MapGenerator.Instance.IsWalkable(gridPos.x, gridPos.y))
                     {
+                        Debug.Log($"[PlayerMovementSystem] ✅ Grid Position: {gridPos}");
                         return gridPos;
                     }
                     else
@@ -193,25 +240,16 @@ public class PlayerMovementSystem : MonoBehaviour
         }
         else
         {
-            // Método original para cámara en perspectiva
-            Debug.Log("[PlayerMovementSystem] 📐 Usando raycast para cámara PERSPECTIVE");
             Ray ray = Camera.main.ScreenPointToRay(screenPos);
-            Debug.Log($"[PlayerMovementSystem] 🔍 Ray - Origin: {ray.origin}, Direction: {ray.direction}");
 
             if (Physics.Raycast(ray, out RaycastHit hit, 500f))
             {
-                Debug.Log($"[PlayerMovementSystem] ✅ Raycast HIT - Objeto: {hit.collider.gameObject.name}, Punto: {hit.point}");
-
                 if (MapGenerator.Instance != null)
                 {
                     Vector2Int gridPos = MapGenerator.Instance.GetGridPosition(hit.point);
                     Debug.Log($"[PlayerMovementSystem] ✅ Grid Position: {gridPos}");
                     return gridPos;
                 }
-            }
-            else
-            {
-                Debug.LogWarning("[PlayerMovementSystem] ❌ Raycast NO HIT");
             }
         }
 
@@ -221,12 +259,9 @@ public class PlayerMovementSystem : MonoBehaviour
     void ProcessTileTap(Vector2Int tappedTile)
     {
         PlayerData playerData = playerController.GetPlayerData();
-        Debug.Log($"[PlayerMovementSystem] 🎯 ProcessTileTap - Tile: {tappedTile}");
 
         Vector2Int currentPos = playerData.gridPosition;
-
         bool isDoubleTap = (tappedTile == lastTappedTile) && (Time.time - lastTapTime < doubleTapTime);
-        Debug.Log($"[PlayerMovementSystem] 🔄 DoubleTap: {isDoubleTap}");
 
         lastTappedTile = tappedTile;
         lastTapTime = Time.time;
@@ -251,7 +286,7 @@ public class PlayerMovementSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log($"[PlayerMovementSystem] ✅ DoubleTap confirmado - Confirmando movimiento");
+            Debug.Log($"[PlayerMovementSystem] ✅ DoubleTap confirmado - Iniciando movimiento");
             ConfirmMovement();
         }
     }
@@ -306,7 +341,7 @@ public class PlayerMovementSystem : MonoBehaviour
 
         if (requiredPM > availablePM)
         {
-            Debug.Log($"[PlayerMovementSystem] ⚠️ PM insuficientes");
+            Debug.Log($"[PlayerMovementSystem] ⚠️ PM insuficientes. Moviendo hasta donde sea posible.");
 
             if (availablePM > 0)
             {

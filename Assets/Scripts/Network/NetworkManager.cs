@@ -654,7 +654,17 @@ public class NetworkManager : MonoBehaviour
         if (currentRoomRef == null)
             return;
 
-        await currentRoomRef.Child("gameState").Child("currentTurn").SetValueAsync(nextPlayer);
+        Debug.Log($"[NetworkManager] 📡 Enviando cambio de turno a jugador {nextPlayer}");
+
+        var updates = new Dictionary<string, object>
+    {
+        { "gameState/currentTurn", nextPlayer },
+        { "gameState/turnChangeTimestamp", ServerValue.Timestamp }
+    };
+
+        await currentRoomRef.UpdateChildrenAsync(updates);
+
+        Debug.Log($"[NetworkManager] ✅ Turno sincronizado en Firebase");
     }
 
     // ✅ SALIR DE SALA

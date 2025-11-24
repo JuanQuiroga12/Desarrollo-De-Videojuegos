@@ -216,19 +216,23 @@ public class PlayerUI : MonoBehaviour
 
     void OnEndTurnClicked()
     {
-        Debug.Log("[PlayerUI] Botón de pasar turno presionado");
+        Debug.Log("[PlayerUI] 🔴 Botón END TURN presionado");
 
-        PlayerController activePlayer = GetActivePlayer();
+        // ✅ CORREGIDO: Buscar directamente el jugador local activo
+        PlayerController[] players = Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
 
-        if (activePlayer != null)
+        foreach (var player in players)
         {
-            AddActionToLog($"{activePlayer.GetPlayerData().username} terminó su turno");
-            activePlayer.EndTurn();
+            if (player.isLocalPlayer && player.GetPlayerData().isMyTurn)
+            {
+                Debug.Log($"[PlayerUI] ✅ Terminando turno de {player.GetPlayerData().username}");
+                AddActionToLog($"{player.GetPlayerData().username} terminó su turno");
+                player.EndTurnFromUI();
+                return;
+            }
         }
-        else
-        {
-            Debug.LogWarning("[PlayerUI] No hay jugador activo para terminar turno");
-        }
+
+        Debug.LogWarning("[PlayerUI] ❌ No se encontró jugador local con turno activo");
     }
 
     PlayerController GetActivePlayer()
@@ -302,29 +306,44 @@ public class PlayerUI : MonoBehaviour
             player2PAText.text = $"PA: {data.currentAttackPoints}/{data.baseAttackPoints}";
     }
 
+    // ✅ CORREGIR UpdateSpellAvailability para que siempre funcione correctamente
     void UpdateSpellAvailability(PlayerData playerData)
     {
         if (spellButtons == null || spellButtons.Count == 0)
-        {
             return;
+
+        // Buscar si este jugador es el local y tiene el turno
+        bool isActiveLocalPlayer = false;
+
+        PlayerController[] players = Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+        foreach (var player in players)
+        {
+            if (player.GetPlayerData() == playerData && player.isLocalPlayer && playerData.isMyTurn)
+            {
+                isActiveLocalPlayer = true;
+                break;
+            }
         }
 
-        // ✅ CORREGIDO: Verificar isMyTurn Y que sea jugador local
-        PlayerController activePlayer = GetActivePlayer();
+        Debug.Log($"[PlayerUI] Actualizando hechizos para {playerData.username} - Activo: {isActiveLocalPlayer}");
 
-        if (activePlayer == null || activePlayer.GetPlayerData() != playerData)
+        if (!isActiveLocalPlayer)
         {
-            // No es el jugador activo, deshabilitar botones
+            // No es el jugador local activo
             foreach (Button btn in spellButtons)
             {
                 btn.interactable = false;
             }
 
-            Debug.Log($"[PlayerUI] Spells disabled for {playerData.username} (no es el jugador activo)");
+            foreach (var overlay in spellCooldownOverlays)
+            {
+                if (overlay != null)
+                    overlay.gameObject.SetActive(true);
+            }
             return;
         }
 
-        // Es el jugador activo, verificar PA disponibles
+        // ES el jugador local activo - habilitar según PA
         for (int i = 0; i < spellButtons.Count && i < playerData.spells.Count; i++)
         {
             bool canCast = playerData.currentAttackPoints >= playerData.spells[i].apCost;
@@ -334,8 +353,6 @@ public class PlayerUI : MonoBehaviour
             {
                 spellCooldownOverlays[i].gameObject.SetActive(!canCast);
             }
-
-            Debug.Log($"[PlayerUI] Spell {i} ({playerData.spells[i].spellName}): {(canCast ? "ENABLED" : "DISABLED")} (PA: {playerData.currentAttackPoints}/{playerData.spells[i].apCost})");
         }
     }
 
@@ -378,4 +395,62 @@ public class PlayerUI : MonoBehaviour
     {
         AddActionToLog($"Curación recibida: {healing}");
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Validar Referencias UI")]
+    void ValidateUIReferences()
+    {
+        int errors = 0;
+
+        if (spellPanel == null) { Debug.LogError("❌ Spell Panel no asignado"); errors++; }
+        if (endTurnButton == null) { Debug.LogError("❌ End Turn Button no asignado"); errors++; }
+
+        if (spellButtons == null || spellButtons.Count != 4)
+        {
+            Debug.LogError($"❌ spellButtons debe tener 4 elementos (tiene {spellButtons?.Count ?? 0})");
+            errors++;
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (spellButtons[i] == null)
+                {
+                    Debug.LogError($"❌ spellButtons[{i}] es null");
+                    errors++;
+                }
+            }
+        }
+
+        if (spellCooldownOverlays == null || spellCooldownOverlays.Count != 4)
+        {
+            Debug.LogError($"❌ spellCooldownOverlays debe tener 4 elementos");
+            errors++;
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (spellCooldownOverlays[i] == null)
+                {
+                    Debug.LogError($"❌ spellCooldownOverlays[{i}] es null");
+                    errors++;
+                }
+                else if (spellCooldownOverlays[i].raycastTarget)
+                {
+                    Debug.LogWarning($"⚠️ spellCooldownOverlays[{i}] tiene Raycast Target = true (debe ser false)");
+                }
+            }
+        }
+
+        if (errors == 0)
+        {
+            Debug.Log("✅ Todas las referencias UI están correctamente asignadas");
+        }
+        else
+        {
+            Debug.LogError($"❌ Se encontraron {errors} errores en las referencias UI");
+        }
+    }
+#endif
 }

@@ -76,11 +76,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void InitializeGame()
+
+
+    async void InitializeGame()
     {
         gameState = new GameStateData();
 
-        // Obtener datos desde PlayerPrefs
         string player1Name = PlayerPrefs.GetString("Player1Name", "Jugador 1");
         string player2Name = PlayerPrefs.GetString("Player2Name", "Jugador 2");
         isNetworkGame = PlayerPrefs.GetString("IsOnlineMode", "false") == "True";
@@ -90,14 +91,88 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"[GameManager] Modo: {(isNetworkGame ? "Online" : "Offline")}");
 
-        // Suscribirse a eventos de red
+        // ✅ NUEVO: Esperar sincronización completa antes de continuar
         if (isNetworkGame && NetworkManager.Instance != null)
         {
             NetworkManager.Instance.OnTurnChanged += HandleTurnChanged;
             NetworkManager.Instance.OnGameStateUpdated += HandleGameStateUpdate;
+
+            // Esperar a que se sincronicen los nombres
+            await WaitForPlayersSync();
         }
 
         StartCoroutine(SetupPlayers());
+    }
+
+    // ✅ NUEVO MÉTODO: Retornar lista de todos los jugadores
+    public List<PlayerController> GetAllPlayers()
+    {
+        List<PlayerController> players = new List<PlayerController>();
+
+        if (player1Controller != null)
+        {
+            players.Add(player1Controller);
+        }
+
+        if (player2Controller != null)
+        {
+            players.Add(player2Controller);
+        }
+
+        return players;
+    }
+
+    // ✅ NUEVO MÉTODO: Verificar si todos los jugadores están listos
+    public bool ArePlayersInitialized()
+    {
+        return player1Controller != null &&
+               player2Controller != null &&
+               player1Controller.GetPlayerData() != null &&
+               player2Controller.GetPlayerData() != null;
+    }
+
+    // ✅ NUEVO MÉTODO: Esperar sincronización completa
+    async System.Threading.Tasks.Task WaitForPlayersSync()
+    {
+        if (NetworkManager.Instance == null || NetworkManager.Instance.currentRoomRef == null)
+            return;
+
+        Debug.Log("[GameManager] Esperando sincronización de jugadores...");
+
+        int attempts = 0;
+        while (attempts < 20) // Máximo 10 segundos
+        {
+            try
+            {
+                var snapshot = await NetworkManager.Instance.currentRoomRef.GetValueAsync();
+
+                if (snapshot.Exists)
+                {
+                    var roomData = DofusRoomData.FromSnapshot(snapshot);
+
+                    if (!string.IsNullOrEmpty(roomData.player1Name))
+                    {
+                        gameState.player1.username = roomData.player1Name;
+                    }
+
+                    if (!string.IsNullOrEmpty(roomData.player2Name))
+                    {
+                        gameState.player2.username = roomData.player2Name;
+                        Debug.Log($"[GameManager] ✅ Player2 sincronizado: {roomData.player2Name}");
+                        break; // Ambos nombres están listos
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[GameManager] Error sincronizando: {e.Message}");
+            }
+
+            await System.Threading.Tasks.Task.Delay(500);
+            attempts++;
+        }
+
+        Debug.Log($"[GameManager] Jugadores sincronizados - P1: {gameState.player1.username}, P2: {gameState.player2.username}");
     }
 
     IEnumerator SetupPlayers()
@@ -111,6 +186,16 @@ public class GameManager : MonoBehaviour
         while (GridVisualizer.Instance == null)
         {
             yield return null;
+        }
+
+        // ✅ NUEVO: Esperar a GameInitializationManager
+        if (GameInitializationManager.Instance != null)
+        {
+            while (!GameInitializationManager.Instance.IsInitialized())
+            {
+                Debug.Log("[GameManager] ⏳ Esperando inicialización completa...");
+                yield return new WaitForSeconds(0.5f);
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
@@ -130,27 +215,25 @@ public class GameManager : MonoBehaviour
             player1Controller.SetPlayerData(gameState.player1);
             player1Controller.SetPlayerNumber(1);
 
-            // ✅ CORREGIDO: Configurar isLocalPlayer correctamente
             if (isNetworkGame && NetworkManager.Instance != null)
             {
-                // Modo Online: jugador local según número de red
                 int myPlayerNumber = NetworkManager.Instance.GetPlayerNumber();
                 player1Controller.SetIsLocalPlayer(myPlayerNumber == 1);
                 player1Controller.isLocalPlayer = (myPlayerNumber == 1);
-                Debug.Log($"[GameManager] Player1 isLocalPlayer = {myPlayerNumber == 1} (Mi número: {myPlayerNumber})");
             }
             else
             {
-                // Modo Offline: Player 1 siempre es local
                 player1Controller.SetIsLocalPlayer(true);
                 player1Controller.isLocalPlayer = true;
-                Debug.Log("[GameManager] Modo Offline: Player1 isLocalPlayer = true");
             }
 
-            // Agregar sistema de movimiento
             if (player1Obj.GetComponent<PlayerMovementSystem>() == null)
             {
                 player1Obj.AddComponent<PlayerMovementSystem>();
+            }
+            if (player1Obj.GetComponent<SpellCastingSystem>() == null)
+            {
+                player1Obj.AddComponent<SpellCastingSystem>();
             }
         }
 
@@ -167,31 +250,33 @@ public class GameManager : MonoBehaviour
             player2Controller.SetPlayerData(gameState.player2);
             player2Controller.SetPlayerNumber(2);
 
-            // ✅ CORREGIDO: Configurar isLocalPlayer correctamente
             if (isNetworkGame && NetworkManager.Instance != null)
             {
-                // Modo Online: jugador local según número de red
                 int myPlayerNumber = NetworkManager.Instance.GetPlayerNumber();
                 player2Controller.SetIsLocalPlayer(myPlayerNumber == 2);
                 player2Controller.isLocalPlayer = (myPlayerNumber == 2);
-                Debug.Log($"[GameManager] Player2 isLocalPlayer = {myPlayerNumber == 2} (Mi número: {myPlayerNumber})");
             }
             else
             {
-                // Modo Offline: Player 2 NO es local (CPU)
                 player2Controller.SetIsLocalPlayer(false);
                 player2Controller.isLocalPlayer = false;
-                Debug.Log("[GameManager] Modo Offline: Player2 isLocalPlayer = false (CPU)");
             }
 
-            // Agregar sistema de movimiento
             if (player2Obj.GetComponent<PlayerMovementSystem>() == null)
             {
                 player2Obj.AddComponent<PlayerMovementSystem>();
             }
+            if (player2Obj.GetComponent<SpellCastingSystem>() == null)
+            {
+                player2Obj.AddComponent<SpellCastingSystem>();
+            }
         }
 
         SetupCameras();
+
+        // ✅ ESPERAR UN FRAME ADICIONAL para que los sistemas se inicialicen
+        yield return null;
+
         StartGame();
 
         Debug.Log("[GameManager] ✅ Jugadores configurados correctamente");
@@ -291,63 +376,84 @@ public class GameManager : MonoBehaviour
 
     void StartTurn(int playerNumber)
     {
+        if (playerNumber != 1 && playerNumber != 2)
+        {
+            Debug.LogError($"[GameManager] Número de jugador inválido: {playerNumber}");
+            playerNumber = 1;
+        }
+
         gameState.currentTurn = playerNumber;
         currentTurnTime = turnDuration;
 
-        Debug.Log($"[GameManager] ========== CAMBIANDO TURNO A JUGADOR {playerNumber} ==========");
+        Debug.Log($"[GameManager] ========== INICIANDO TURNO JUGADOR {playerNumber} ==========");
 
-        if (playerNumber == 1)
+        if (GridVisualizer.Instance != null)
         {
-            // ✅ ESTABLECER isMyTurn = true ANTES de cualquier otra cosa
-            gameState.player1.isMyTurn = true;
-            gameState.player2.isMyTurn = false;
-
-            if (player1Controller != null)
-            {
-                Debug.Log($"[GameManager] ✅ Activando turno de Player 1");
-                player1Controller.StartTurn();
-            }
-
-            if (player2Controller != null)
-            {
-                PlayerTurnIndicator p2Indicator = player2Controller.GetComponent<PlayerTurnIndicator>();
-                if (p2Indicator != null)
-                {
-                    p2Indicator.SetActive(false);
-                    Debug.Log($"[GameManager] ⏸️ Indicador de Player 2 DESACTIVADO");
-                }
-            }
-
-            if (currentTurnText != null)
-                currentTurnText.text = $"Turno de: {gameState.player1.username}";
-        }
-        else
-        {
-            // ✅ ESTABLECER isMyTurn = true ANTES de cualquier otra cosa
-            gameState.player2.isMyTurn = true;
-            gameState.player1.isMyTurn = false;
-
-            if (player2Controller != null)
-            {
-                Debug.Log($"[GameManager] ✅ Activando turno de Player 2");
-                player2Controller.StartTurn();
-            }
-
-            if (player1Controller != null)
-            {
-                PlayerTurnIndicator p1Indicator = player1Controller.GetComponent<PlayerTurnIndicator>();
-                if (p1Indicator != null)
-                {
-                    p1Indicator.SetActive(false);
-                    Debug.Log($"[GameManager] ⏸️ Indicador de Player 1 DESACTIVADO");
-                }
-            }
-
-            if (currentTurnText != null)
-                currentTurnText.text = $"Turno de: {gameState.player2.username}";
+            GridVisualizer.Instance.ResetGridColors();
         }
 
-        // Actualizar UI de ambos jugadores
+        PlayerController playerToActivate = GetPlayerController(playerNumber);
+        PlayerController playerToDeactivate = GetPlayerController(playerNumber == 1 ? 2 : 1);
+
+        // ✅ PASO 1: Desactivar jugador anterior PRIMERO
+        if (playerToDeactivate != null)
+        {
+            playerToDeactivate.GetPlayerData().isMyTurn = false;
+
+            PlayerTurnIndicator indicator = playerToDeactivate.GetComponent<PlayerTurnIndicator>();
+            if (indicator != null)
+            {
+                indicator.SetActive(false);
+            }
+
+            // ✅ DESHABILITAR sistemas de input explícitamente
+            PlayerMovementSystem moveSystem = playerToDeactivate.GetComponent<PlayerMovementSystem>();
+            if (moveSystem != null)
+            {
+                moveSystem.enabled = false;
+            }
+
+            SpellCastingSystem spellSystem = playerToDeactivate.GetComponent<SpellCastingSystem>();
+            if (spellSystem != null)
+            {
+                spellSystem.enabled = false;
+                spellSystem.CancelSpellSelection();
+            }
+
+            Debug.Log($"[GameManager] ❌ Desactivado: {playerToDeactivate.GetPlayerData().username}");
+        }
+
+        // ✅ PASO 2: Activar jugador actual
+        if (playerToActivate != null)
+        {
+            // ✅ CRÍTICO: Asegurar que isMyTurn esté en TRUE ANTES de StartTurn()
+            playerToActivate.GetPlayerData().isMyTurn = true;
+
+            // Esperar un frame para que el estado se propague
+            StartCoroutine(ActivatePlayerNextFrame(playerToActivate, playerNumber));
+        }
+
+        // Actualizar UI
+        if (currentTurnText != null)
+        {
+            string playerName = (playerNumber == 1) ? gameState.player1.username : gameState.player2.username;
+            currentTurnText.text = $"Turno de: {playerName}";
+        }
+
+        // Sincronizar con red
+        if (isNetworkGame && NetworkManager.Instance != null)
+        {
+            _ = NetworkManager.Instance.SendTurnChange(playerNumber);
+        }
+    }
+
+    // ✅ NUEVO: Activar jugador en el siguiente frame
+    private IEnumerator ActivatePlayerNextFrame(PlayerController player, int playerNumber)
+    {
+        yield return null; // Esperar un frame
+
+        player.StartTurn();
+
         if (playerUI != null)
         {
             if (player1Controller != null)
@@ -356,22 +462,45 @@ public class GameManager : MonoBehaviour
                 playerUI.UpdatePlayerStats(player2Controller.GetPlayerData());
         }
 
-        if (isNetworkGame && NetworkManager.Instance != null)
-        {
-            _ = NetworkManager.Instance.SendTurnChange(playerNumber);
-        }
-
-        Debug.Log($"[GameManager] ========== FIN CAMBIO DE TURNO ==========");
+        Debug.Log($"[GameManager] ✅ Activado: {player.GetPlayerData().username}");
+        Debug.Log($"    - isMyTurn: {player.GetPlayerData().isMyTurn}");
+        Debug.Log($"    - isLocalPlayer: {player.isLocalPlayer}");
     }
 
     public void EndCurrentTurn()
     {
-        int nextPlayer = gameState.currentTurn == 1 ? 2 : 1;
+        Debug.Log($"[GameManager] Terminando turno del jugador {gameState.currentTurn}");
+
+        // ✅ CORREGIDO: Cambiar turno ANTES de llamar StartTurn
+        int currentPlayer = gameState.currentTurn;
+        int nextPlayer = (currentPlayer == 1) ? 2 : 1;
+
+        // Terminar turno del jugador actual
+        PlayerController currentController = GetPlayerController(currentPlayer);
+        if (currentController != null)
+        {
+            currentController.GetPlayerData().isMyTurn = false;
+            PlayerTurnIndicator indicator = currentController.GetComponent<PlayerTurnIndicator>();
+            if (indicator != null)
+            {
+                indicator.SetActive(false);
+            }
+        }
+
+        // Actualizar estado del juego
+        gameState.currentTurn = nextPlayer;
+
+        // Iniciar turno del siguiente jugador
         StartTurn(nextPlayer);
+
+        Debug.Log($"[GameManager] ✅ Turno cambiado a jugador {nextPlayer}");
     }
 
+    // ✅ REEMPLAZAR UpdateTurnTimer() con sincronización mejorada
     void UpdateTurnTimer()
     {
+        if (!isGameActive) return;
+
         currentTurnTime -= Time.deltaTime;
 
         if (turnTimerText != null)
@@ -382,6 +511,54 @@ public class GameManager : MonoBehaviour
         if (currentTurnTime <= 0)
         {
             EndCurrentTurn();
+        }
+
+        // ✅ Sincronizar tiempo cada 2 segundos
+        if (isNetworkGame && NetworkManager.Instance != null)
+        {
+            timeSyncCounter += Time.deltaTime;
+            if (timeSyncCounter >= 2f)
+            {
+                timeSyncCounter = 0f;
+                _ = SyncTimeWithNetwork();
+            }
+        }
+    }
+
+    // ✅ NUEVO: Variable para contador de sincronización
+    private float timeSyncCounter = 0f;
+
+    // ✅ NUEVO: Método de sincronización de tiempo
+    async System.Threading.Tasks.Task SyncTimeWithNetwork()
+    {
+        if (NetworkManager.Instance == null || NetworkManager.Instance.currentRoomRef == null)
+            return;
+
+        if (NetworkManager.Instance.isHost)
+        {
+            // Host envía el tiempo actual
+            var updates = new Dictionary<string, object>
+        {
+            { "gameState/turnTimeRemaining", currentTurnTime },
+            { "gameState/currentTurn", gameState.currentTurn }
+        };
+
+            await NetworkManager.Instance.currentRoomRef.UpdateChildrenAsync(updates);
+        }
+        else
+        {
+            // Cliente lee el tiempo del host
+            var snapshot = await NetworkManager.Instance.currentRoomRef.Child("gameState/turnTimeRemaining").GetValueAsync();
+
+            if (snapshot.Exists)
+            {
+                float serverTime = System.Convert.ToSingle(snapshot.Value);
+                // Solo sincronizar si la diferencia es mayor a 1 segundo
+                if (Mathf.Abs(currentTurnTime - serverTime) > 1f)
+                {
+                    currentTurnTime = serverTime;
+                }
+            }
         }
     }
 

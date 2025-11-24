@@ -132,30 +132,67 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void StartTurn()
     {
-        Debug.Log($"[PlayerController] {playerData.username} inicia turno");
+        Debug.Log($"[PlayerController] ========== {playerData.username} INICIA TURNO ==========");
+        Debug.Log($"    - isLocalPlayer: {isLocalPlayer}");
+        Debug.Log($"    - playerNumber: {playerNumber}");
+        Debug.Log($"    - isMyTurn (antes): {playerData.isMyTurn}");
 
-        // ✅ PRIMERO: Actualizar el estado del turno
+        // ✅ ASEGURAR que isMyTurn esté en TRUE
+        if (!playerData.isMyTurn)
+        {
+            Debug.LogWarning($"[PlayerController] ⚠️ isMyTurn era FALSE, forzando a TRUE");
+            playerData.isMyTurn = true;
+        }
+
+        // Restaurar puntos
         playerData.StartNewTurn();
 
-        // SEGUNDO: Activar indicador visual
+        Debug.Log($"    - PM: {playerData.currentMovementPoints}/{playerData.baseMovementPoints}");
+        Debug.Log($"    - PA: {playerData.currentAttackPoints}/{playerData.baseAttackPoints}");
+
+        // Activar indicador visual
         if (turnIndicator != null)
         {
             turnIndicator.SetActive(true);
         }
 
-        // TERCERO: Habilitar sistemas de entrada
+        // ✅ HABILITAR sistemas SOLO si es jugador local
         if (isLocalPlayer)
         {
+            Debug.Log($"[PlayerController] ✅ Habilitando sistemas de input para {playerData.username}");
+
             if (movementSystem != null)
             {
                 movementSystem.enabled = true;
+                Debug.Log($"    - PlayerMovementSystem.enabled = true");
+            }
+            else
+            {
+                Debug.LogWarning($"    - ⚠️ PlayerMovementSystem es NULL");
             }
 
             if (spellCastingSystem != null)
             {
                 spellCastingSystem.enabled = true;
+                Debug.Log($"    - SpellCastingSystem.enabled = true");
+            }
+            else
+            {
+                Debug.LogWarning($"    - ⚠️ SpellCastingSystem es NULL");
             }
         }
+        else
+        {
+            Debug.Log($"[PlayerController] ⚠️ NO es jugador local, sistemas deshabilitados");
+        }
+
+        // Actualizar UI
+        if (playerUI != null)
+        {
+            playerUI.UpdatePlayerStats(playerData);
+        }
+
+        Debug.Log($"[PlayerController] ========== FIN StartTurn() ==========");
     }
 
     /// <summary>
@@ -196,6 +233,18 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.EndCurrentTurn();
         }
+    }
+
+    // ✅ Agregar método público para terminar turno desde UI
+    public void EndTurnFromUI()
+    {
+        if (!isLocalPlayer || !playerData.isMyTurn)
+        {
+            Debug.LogWarning($"[PlayerController] No se puede terminar turno - isLocal: {isLocalPlayer}, isMyTurn: {playerData.isMyTurn}");
+            return;
+        }
+
+        EndTurn();
     }
 
     /// <summary>
